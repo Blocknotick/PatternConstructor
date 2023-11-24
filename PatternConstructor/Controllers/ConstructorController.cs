@@ -209,7 +209,8 @@ namespace PatternConstructor.Controllers
             Aspose.Svg.SVGDocument document = new Aspose.Svg.SVGDocument(documentContent, ".");
 
             ConvertPatternToPDF(new Aspose.Svg.SVGDocument[] {document, document}, dataDir + FileName);
-            GenerateDescription(new string[] { "wwwroot/test.html", "wwwroot/test.html" }, "wwwroot/descr/" + FileName);
+            //логика генерации описания пошива
+            GenerateDescription(new string[] { "wwwroot/DescriptionUnits/interfacing.html", "wwwroot/DescriptionUnits/zipper.html" }, "wwwroot/descr/" + FileName);
             createdFile.PatternLink = "/skirts/" + FileName;
             createdFile.DescribtionLink = "/descr/" + FileName;
             createdFile.Name = skirtConstructModel.Name;
@@ -223,7 +224,7 @@ namespace PatternConstructor.Controllers
 
         void GenerateDescription(string[] htmldocs, string outputpath)
         {
-            //replace to a for-cycle
+            //изначально объявить арреем, Боже!
             var doc = new List<Aspose.Html.HTMLDocument>();
             for (int i = 0; i < htmldocs.Length; i++)
             {
@@ -231,7 +232,7 @@ namespace PatternConstructor.Controllers
             }
             //var document1 = new Aspose.Html.HTMLDocument("wwwroot/test.html");
 
-
+            //поля бы добавить
             var renderer1 = new Aspose.Html.Rendering.HtmlRenderer();
             //renderer1.Render(new Aspose.Html.Rendering.Pdf.PdfDevice(dataDir + "output.pdf"), document1, document1);
             //renderer1.Render(new Aspose.Html.Rendering.Pdf.PdfDevice(outputpath), document1, document1);

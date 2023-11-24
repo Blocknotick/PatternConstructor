@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Size Charts";
+}
+@model StandartMeasure
+<h1>Таблицы размеров</h1>
+
+ 
+<form>
+    <select class="form-select" aria-label="Выбор размера" id="ddltype" name="type" asp-items="ViewBag.Types" >
+    </select>
+    <div id="sizecontainer"> 
+        <partial name="_ShowTablePartialView.cshtml" model="@Model" />
+    </div> 
+</form>
+
+
+@section Scripts{ 
+<script>  
+    $(function () {
+        $("#ddltype").change(function () {
+            $.ajax({
+                type: "Get",
+                url: "/Home/ShowSizeTable?type=" + $(this).val(),
+                success: function (data) {
+                    $("#sizecontainer").html("");
+                    $("#sizecontainer").html(data);
+                },
+                error: function (response) {
+                    console.log(response.responseText);
+                }
+            });
+        });
+    });
+</script>
+}

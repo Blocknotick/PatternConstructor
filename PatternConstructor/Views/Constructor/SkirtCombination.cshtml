@@ -1,0 +1,75 @@
+﻿@model PatternConstructor.ViewModels.SkirtCombinationModel
+﻿@using PatternConstructor.Data.Enum
+
+@{
+    ViewData["Title"] = "SkirtCombination";
+}
+
+<h1>Комбинация выкройки юбки</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="SkirtCombination">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Length" class="control-label" ></label>
+                <div>
+                    @foreach (var l in Model.Lengths)
+                    {
+                        <input type="radio" asp-for="Length" value="@l" /> @l
+                    }
+                </div>
+                
+                <span asp-validation-for="Length" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Type" class="control-label"></label>
+                <div>
+                    @foreach (var l in Model.Types)
+                    {
+                        <input type="radio" asp-for="Type" value="@l" /> @l
+                    }
+                </div>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Belt" class="control-label"></label>
+                <div>
+                    @foreach (var l in Model.Belts)
+                    {
+                        <input type="radio" asp-for="Belt" value="@l" /> @l
+                    }
+                </div>
+                <span asp-validation-for="Belt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Clasp" class="control-label"></label>
+                <div>
+                    @foreach (var l in Model.Clasps)
+                    {
+                        <input type="radio" asp-for="Clasp" value="@l" /> @l
+                    }
+                </div>
+                <span asp-validation-for="Clasp" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="DoubleContour" /> @Html.DisplayNameFor(model => model.DoubleContour)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

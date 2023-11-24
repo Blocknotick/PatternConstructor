@@ -1,0 +1,97 @@
+﻿@using PatternConstructor.ViewModels
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model PatternConstructor.ViewModels.SkirtConstructModel
+
+<h1>Генератор базовой выкройки юбки-солнца</h1>
+
+
+<img src="~/sunskirt.png"/>
+
+<div class="row">
+    <div class="col-md-4">
+        <form>
+        <select class="form-select" aria-label="Выбор размера" id="ddltype" name="type" asp-items="ViewBag.Types" >
+            <option>Выберите размер</option>
+        </select>
+
+        </form>
+
+        <div>
+            <ul>
+                <li>Длина: @Model.SkirtCombinationModel.Length</li>
+                <li>Тип: @Model.SkirtCombinationModel.Type</li>
+                <li>Пояс: @Model.SkirtCombinationModel.Belt</li>
+                <li>Застежка: @Model.SkirtCombinationModel.Clasp</li>
+                @if (Model.SkirtCombinationModel.DoubleContour)
+                {
+                    <li>Двойные контуры</li>
+                }
+                else
+                {
+                    <li>Нет двойных контуров</li>
+                }
+                
+            </ul>
+        </div>
+        <form asp-action="Skirt">
+            <input hidden asp-for="SkirtCombinationModel.Length" class="form-control"/>
+            <input hidden asp-for="SkirtCombinationModel.Type" class="form-control"/>
+            <input hidden asp-for="SkirtCombinationModel.Belt" class="form-control"/>
+            <input hidden asp-for="SkirtCombinationModel.Clasp" class="form-control"/>
+            <input hidden asp-for="SkirtCombinationModel.DoubleContour" class="form-control"/>
+                        
+            <div class="form-group">
+                <label asp-for="WaistGirth" class="control-label"></label>
+                <input asp-for="WaistGirth" class="form-control"/>
+                @*<span asp-validation-for="WaistGirth" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <label asp-for="HipHeight" class="control-label"></label>
+                <input asp-for="HipHeight" class="form-control"/>
+                @*<span asp-validation-for="HipHeight" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <label asp-for="HipsGirth" class="control-label"></label>
+                <input asp-for="HipsGirth" class="form-control"/>
+                @*<span asp-validation-for="HipsGirth" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <label asp-for="LegLength" class="control-label"></label>
+                <input asp-for="LegLength" class="form-control"/>
+                @*<span asp-validation-for="LegLength" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <label asp-for="WaistFloorBackLength" class="control-label"></label>
+                <input asp-for="WaistFloorBackLength" class="form-control"/>
+                @*<span asp-validation-for="WaistFloorBackLength" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <label asp-for="WaistFloorFrontLength" class="control-label"></label>
+                <input asp-for="WaistFloorFrontLength" class="form-control"/>
+                @*<span asp-validation-for="WaistFloorFrontLength" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <label asp-for="WaistFloorSideLength" class="control-label"></label>
+                <input asp-for="WaistFloorSideLength" class="form-control"/>
+                <span asp-validation-for="WaistFloorSideLength" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Создать" class="btn btn-primary" />
+            </div>
+        </form>
+
+        
+    </div>
+</div>

@@ -1,0 +1,36 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<Article>
+
+<h1>Уроки моделирования</h1>
+
+<div class="album py-5">
+    <div class="container">
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        
+      @foreach (var item in Model)
+      {
+          <a class="nav-link text-dark" asp-area="" asp-controller="Articles" asp-action="DetailArticle" asp-route-id=@item.Id>
+              <div class="col">
+                    <div class="card shadow-sm">
+                        <img src = @item.Image height="225">
+
+                        <div class="card-body">
+                            <p class="card-text">@item.Title</p>
+                        </div>
+                    </div>
+               </div>
+           </a>   
+      }
+
+        
+
+        
+        
+      </div>
+    </div>
+  </div>

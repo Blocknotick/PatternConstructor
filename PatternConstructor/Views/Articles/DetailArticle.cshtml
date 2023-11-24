@@ -1,0 +1,28 @@
+﻿@using PatternConstructor.ViewModels
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model ArticleViewModel
+
+<h1>@Model.article.Title</h1>
+
+<span>
+    @if (!Model.isFavorite)
+{
+    <form asp-area="" asp-controller="Account" asp-action="AddFavorite" asp-route-id="@Model.article.Id">
+        <button class="btn btn-outline-secondary btn-toolbar">Добавить в избранное</button>
+    </form>
+}
+else
+{
+    <form asp-action="DeleteFavorite" asp-controller="Account" asp-route-id="@Model.article.Id">
+        <button class="btn btn-outline-secondary">Удалить из избранного</button>
+    </form>
+}
+</span>
+
+<div id="mainText">
+    @Html.Raw(Model.article.Text)
+</div>

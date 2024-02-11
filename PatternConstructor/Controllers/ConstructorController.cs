@@ -13,6 +13,7 @@ using iText.Kernel.Geom;
 using iText.Svg.Processors;
 using iText.Svg.Processors.Impl;
 using iText.Svg.Converter;
+using System.Text;
 //using Aspose.Svg;
 //using Aspose.Svg.Saving;
 //using Aspose.Imaging;
@@ -217,15 +218,17 @@ namespace PatternConstructor.Controllers
                     belt = i + 3;
             }
             string documentContent="";
+            SunSkirtPattern sunSkirtPattern = new SunSkirtPattern();
             if (skirtConstructModel.SkirtCombinationModel.Type == "Солнце" || skirtConstructModel.SkirtCombinationModel.Type == "Полусолнце")
             {
                 int deg = 180;
                 if (skirtConstructModel.SkirtCombinationModel.Type == "Солнце")
                     deg = 360;
-                SunSkirtPattern sunSkirtPattern = new(50, skirtConstructModel.WaistGirth, belt, false, deg);
+                sunSkirtPattern = new(50, skirtConstructModel.WaistGirth, belt, false, deg);
                 documentContent = sunSkirtPattern.GenerateContent();
             }
-                
+
+
             //string documentContent = "<svg xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"50\" r=\"40\" /></svg>";
             // Initialize an object of SVGDocument class from the string content
             //Aspose.Svg.SVGDocument document = new Aspose.Svg.SVGDocument(documentContent, ".");
@@ -235,11 +238,36 @@ namespace PatternConstructor.Controllers
                 new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfWriter(new FileStream("wwwroot/skirts/" + FileName, FileMode.OpenOrCreate),
                                                                                 new WriterProperties().SetCompressionLevel(0))))
             {
-                doc.AddNewPage(PageSize.A4);
-                //ISvgConverterProperties properties = new SvgConverterProperties().SetBaseUri(SVG_FILE);
+                //doc.AddNewPage(PageSize.A4);
+                doc.AddNewPage(new PageSize((float)(0.75*sunSkirtPattern.width),(float)(0.75*sunSkirtPattern.height)));
+                //doc.AddNewPage(size);
+                //ISvgConverterProperties properties = new SvgConverterProperties().SetBaseUri("wwwroot/skirts/temp.svg");
+                //SvgConverter.DrawOnDocument(new FileStream("wwwroot/skirts/temp.svg", FileMode.Open, FileAccess.Read, FileShare.Read), doc, 1, properties);
                 SvgConverter.DrawOnDocument(documentContent, doc, 1);
 
             }
+
+            //using (FileStream outputStream = new FileStream("wwwroot/skirts/" + FileName, FileMode.Create))
+            //{
+            //    iTextSharp.text.pdf.PdfDocument document = new iTextSharp.text.pdf.PdfDocument();
+            //    //document.SetMargins(40, 40, 40, 40);
+                
+            //        iTextSharp.text.pdf.PdfWriter writer = iTextSharp.text.pdf.PdfWriter.GetInstance(document, outputStream);
+            //    writer.SetPageSize(new iTextSharp.text.Rectangle(595f,842f));
+            //    writer.SetMargins(40, 40, 40, 40);
+
+            //    document.AddWriter(writer);
+            //        iTextSharp.text.pdf.PdfReader reader = new iTextSharp.text.pdf.PdfReader("wwwroot/skirts/" + user.Id + createdFile.Id.ToString() + "big.pdf");
+                    
+            //    reader.ConsolidateNamedDestinations(); // Assuming 'editedPageNo' is related to named destinations
+            //        document.Open();
+            //        PdfImportedPage page = writer.GetImportedPage(reader, 1);
+            //        PdfContentByte cb = writer.DirectContent;
+            //        cb.AddTemplate(page, 1.4f, 0, 0, 1.19f, -13, 7);
+            //        document.Close();
+                    
+                
+            //}
 
 
             //ConvertPatternToPDF(new Aspose.Svg.SVGDocument[] {document, document}, dataDir + FileName);

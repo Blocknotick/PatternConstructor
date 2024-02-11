@@ -210,7 +210,23 @@ namespace PatternConstructor.Controllers
             string FileName = user.Id + createdFile.Id.ToString() + ".pdf";
 
             //Здесь должна быть функция, которая генерирует выкройку
-            string documentContent = "<svg xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"50\" r=\"40\" /></svg>";
+            double belt=0;
+            for (int i = 0; i< skirtConstructModel.SkirtCombinationModel.Belts.Length; i++)
+            {
+                if (skirtConstructModel.SkirtCombinationModel.Belt == skirtConstructModel.SkirtCombinationModel.Belts[i])
+                    belt = i + 3;
+            }
+            string documentContent="";
+            if (skirtConstructModel.SkirtCombinationModel.Type == "Солнце" || skirtConstructModel.SkirtCombinationModel.Type == "Полусолнце")
+            {
+                int deg = 180;
+                if (skirtConstructModel.SkirtCombinationModel.Type == "Солнце")
+                    deg = 360;
+                SunSkirtPattern sunSkirtPattern = new(50, skirtConstructModel.WaistGirth, belt, false, deg);
+                documentContent = sunSkirtPattern.GenerateContent();
+            }
+                
+            //string documentContent = "<svg xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"50\" r=\"40\" /></svg>";
             // Initialize an object of SVGDocument class from the string content
             //Aspose.Svg.SVGDocument document = new Aspose.Svg.SVGDocument(documentContent, ".");
 
@@ -222,6 +238,7 @@ namespace PatternConstructor.Controllers
                 doc.AddNewPage(PageSize.A4);
                 //ISvgConverterProperties properties = new SvgConverterProperties().SetBaseUri(SVG_FILE);
                 SvgConverter.DrawOnDocument(documentContent, doc, 1);
+
             }
 
 

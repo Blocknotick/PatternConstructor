@@ -19,7 +19,7 @@ namespace PatternConstructor.ViewModels
         public string Clasp { get; set; }
         public bool DoubleContour { get; set; }
 
-        public string[] Lengths = new[] { "Мини", "Выше колена", "До колена", "Миди" };
+        public string[] Lengths = new[] { "Мини", "До колена", "Миди" };
         public string[] Types = new[] { "Прямая", "Тюльпан", "Солнце", "Полусолнце" };
         public string[] Belts = new[] { "Узкий", "Средний", "Широкий" };
         public string[] Clasps = new[] { "Пуговицы и молния", "Потайная молния"};

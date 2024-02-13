@@ -217,21 +217,23 @@ namespace PatternConstructor.Controllers
                 if (skirtConstructModel.SkirtCombinationModel.Belt == skirtConstructModel.SkirtCombinationModel.Belts[i])
                     belt = i + 3;
             }
-            string documentContent="";
-            SunSkirtPattern sunSkirtPattern = new SunSkirtPattern();
+
+            Pattern skirtPattern = new Pattern();
             if (skirtConstructModel.SkirtCombinationModel.Type == "Солнце" || skirtConstructModel.SkirtCombinationModel.Type == "Полусолнце")
             {
-                int deg = 180;
-                if (skirtConstructModel.SkirtCombinationModel.Type == "Солнце")
-                    deg = 360;
-                sunSkirtPattern = new(50, skirtConstructModel.WaistGirth, belt, false, deg);
-                documentContent = sunSkirtPattern.GenerateContent();
+                //int deg = 180;
+                //if (skirtConstructModel.SkirtCombinationModel.Type == "Солнце")
+                //    deg = 360;
+                //sunSkirtPattern = new SunSkirtPattern(50, skirtConstructModel.WaistGirth, belt, false, deg, true);
+                skirtPattern = new SunSkirtPattern(skirtConstructModel);
             }
 
-
+            string documentContent = skirtPattern.GenerateContent();
             //string documentContent = "<svg xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"50\" r=\"40\" /></svg>";
             // Initialize an object of SVGDocument class from the string content
             //Aspose.Svg.SVGDocument document = new Aspose.Svg.SVGDocument(documentContent, ".");
+
+
 
 
             using (iText.Kernel.Pdf.PdfDocument doc =
@@ -239,7 +241,7 @@ namespace PatternConstructor.Controllers
                                                                                 new WriterProperties().SetCompressionLevel(0))))
             {
                 //doc.AddNewPage(PageSize.A4);
-                doc.AddNewPage(new PageSize((float)(0.75*sunSkirtPattern.width),(float)(0.75*sunSkirtPattern.height)));
+                doc.AddNewPage(new PageSize((float)(0.75*skirtPattern.widthcm),(float)(0.75*skirtPattern.heightcm)));
                 //doc.AddNewPage(size);
                 //ISvgConverterProperties properties = new SvgConverterProperties().SetBaseUri("wwwroot/skirts/temp.svg");
                 //SvgConverter.DrawOnDocument(new FileStream("wwwroot/skirts/temp.svg", FileMode.Open, FileAccess.Read, FileShare.Read), doc, 1, properties);
@@ -247,26 +249,49 @@ namespace PatternConstructor.Controllers
 
             }
 
+            //using (iText.Kernel.Pdf.PdfDocument doc =
+            //    new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfWriter(new FileStream("wwwroot/skirts/" + FileName, FileMode.OpenOrCreate),
+            //                                                                    new WriterProperties().SetCompressionLevel(0))))
+            //{
+            //    iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(documentContent);
+            //    float width = image.Width;
+            //    float height = image.Height;
+
+
+            //    PdfContentByte canvas;
+            //    SvgConverter.DrawOnPage(documentContent, doc.AddNewPage(0, PageSize.A4), 100, 100);
+            //    SvgConverter.DrawOnPage(documentContent, doc.AddNewPage(1, PageSize.A4), 200, 200);
+            //    canvas.AddImage(image, width, 0, 0, height, 0, -height / 2);
+            //    document.NewPage();
+            //    canvas.AddImage(image, width, 0, 0, height, 0, 0);
+            //    document.NewPage();
+            //    canvas.AddImage(image, width, 0, 0, height, -width / 2, -height / 2);
+            //    document.NewPage();
+            //    canvas.AddImage(image, width, 0, 0, height, -width / 2, 0);
+
+            //}
+            
+
             //using (FileStream outputStream = new FileStream("wwwroot/skirts/" + FileName, FileMode.Create))
             //{
             //    iTextSharp.text.pdf.PdfDocument document = new iTextSharp.text.pdf.PdfDocument();
             //    //document.SetMargins(40, 40, 40, 40);
-                
+
             //        iTextSharp.text.pdf.PdfWriter writer = iTextSharp.text.pdf.PdfWriter.GetInstance(document, outputStream);
             //    writer.SetPageSize(new iTextSharp.text.Rectangle(595f,842f));
             //    writer.SetMargins(40, 40, 40, 40);
 
             //    document.AddWriter(writer);
             //        iTextSharp.text.pdf.PdfReader reader = new iTextSharp.text.pdf.PdfReader("wwwroot/skirts/" + user.Id + createdFile.Id.ToString() + "big.pdf");
-                    
+
             //    reader.ConsolidateNamedDestinations(); // Assuming 'editedPageNo' is related to named destinations
             //        document.Open();
             //        PdfImportedPage page = writer.GetImportedPage(reader, 1);
             //        PdfContentByte cb = writer.DirectContent;
             //        cb.AddTemplate(page, 1.4f, 0, 0, 1.19f, -13, 7);
             //        document.Close();
-                    
-                
+
+
             //}
 
 

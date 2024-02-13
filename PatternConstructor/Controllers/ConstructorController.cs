@@ -311,11 +311,20 @@ namespace PatternConstructor.Controllers
             //else
             //    htmldocs.Add("wwwroot/DescriptionUnits/button.html");
 
-            htmldocs.Add("wwwroot/DescriptionUnits/bottomseam.pdf");
+            htmldocs.Add("wwwroot/DescriptionUnits/skirts/decatification.pdf");
+            htmldocs.Add("wwwroot/DescriptionUnits/skirts/cutting.pdf");
+            htmldocs.Add("wwwroot/DescriptionUnits/skirts/interfacing.pdf");
+            if (skirtConstructModel.SkirtCombinationModel.Type=="Прямая" || skirtConstructModel.SkirtCombinationModel.Type == "Тюльпан")
+                htmldocs.Add("wwwroot/DescriptionUnits/skirts/darts.pdf");
+            if (skirtConstructModel.SkirtCombinationModel.Type == "Солнце")
+                htmldocs.Add("wwwroot/DescriptionUnits/skirts/sideSeams.pdf");
+            else htmldocs.Add("wwwroot/DescriptionUnits/skirts/middleSeam.pdf");
+            
             if (skirtConstructModel.SkirtCombinationModel.Clasp == "Потайная молния")
-                htmldocs.Add("wwwroot/DescriptionUnits/zipper.pdf");
+                htmldocs.Add("wwwroot/DescriptionUnits/skirts/beltbeforezipper.pdf");
             else
-                htmldocs.Add("wwwroot/DescriptionUnits/button.pdf");
+                htmldocs.Add("wwwroot/DescriptionUnits/skirts/zipperbeforebelt.pdf");
+            htmldocs.Add("wwwroot/DescriptionUnits/skirts/BottomSeam.pdf");
 
             createPdf("wwwroot/descr/" + FileName, htmldocs);
             //GenerateDescription(htmldocs, "wwwroot/descr/" + FileName);

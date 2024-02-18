@@ -56,7 +56,7 @@ namespace PatternConstructor.Data
             double height = 3 + beltwitdth + bigradius;
             if (isLecal)
             {
-                width += 2;
+                width += 3;
                 height += 4;
             }
 
@@ -103,18 +103,18 @@ namespace PatternConstructor.Data
 
                     <path d = ""M {(int)pixelsizeincm * 2} {(int)(pixelsizeincm * (1 + beltwitdth + 1 + bigradius + 4))} A {(int)(pixelsizeincm * (2 + bigradius))} {(int)(pixelsizeincm * (2 + bigradius))} 90 0 0 {(int)(pixelsizeincm * (1 + bigradius + 3))} {(int)(pixelsizeincm * (1 + beltwitdth + 1 + 2))}"" fill-opacity = ""0"" stroke-width = ""1"" stroke = ""black"" />
 
-                    <text x=""{(int)(pixelsizeincm * 3)}"" y=""{(int)(pixelsizeincm * 4)}"" font-size=""32"" font-family=""Verdana"">Belt of the {skirtType} skirt,{"\n"} waist = {waist - 2}, skirt length = {Math.Round(skirtlength, 2)} x1</text>
+                    <text x=""{(int)(pixelsizeincm * 3)}"" y=""{(int)(pixelsizeincm * 4)}"" font-size=""32"" font-family=""Verdana"">Belt of the {skirtType} skirt, waist = {waist - 2}cm, skirt length = {Math.Round(skirtlength, 2)}cm x1, interfacing</text>
                     <text x=""{(int)(pixelsizeincm * ((waist + beltadd) / 2 + 2))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth / 2 + 2))}"" font-size=""32"" font-family=""Verdana"">fold</text>
                     <text x=""{(int)(pixelsizeincm * (bigradius / 2 + 2))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth + 4))}"" font-size=""32"" font-family=""Verdana"">fold</text>
                 ";
 
                 if (degrees == 360)
                     s += @$"
-<text x=""{(int)(pixelsizeincm * (2 + smallradius +1))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth + 3 + 2))}"" font-size=""32"" font-family=""Verdana"">Width of the {skirtType} skirt,{"\n"} waist = {waist - 2},{"\n"} skirt length = {Math.Round(skirtlength, 2)}, {"\n"} x2</text>
+<text x=""{(int)(pixelsizeincm * (2 + smallradius +1))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth + 3 + 2))}"" font-size=""32"" font-family=""Verdana"">Width of the {skirtType} skirt, waist = {waist - 2}cm, skirt length = {Math.Round(skirtlength, 2)}cm, x2</text>
                     ";
 
                 if (degrees == 180)
-                    s += @$"<text x=""{(int)(pixelsizeincm * (2 + smallradius +1))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth + 3 +2))}"" font-size=""32"" font-family=""Verdana"">Width of the {skirtType} skirt,{"\n"} waist = {waist - 2},{"\n"} skirt length = {Math.Round(skirtlength, 2)}, {"\n"} x1</text>";
+                    s += @$"<text x=""{(int)(pixelsizeincm * (2 + smallradius +1))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth + 3 +2))}"" font-size=""32"" font-family=""Verdana"">Width of the {skirtType} skirt,{"\n"} waist = {waist - 2},{"\n"}cm skirt length = {Math.Round(skirtlength, 2)}cm, x1</text>";
 
                 if (hasButtons)
                     s += @$"<path d=""M {(int)(pixelsizeincm * (waist + 1 +1))} {(int)pixelsizeincm} v  {(int)(pixelsizeincm*2)}""  stroke-width=""2"" stroke=""black""/>
@@ -134,18 +134,18 @@ namespace PatternConstructor.Data
                     <path d=""M {(int)pixelsizeincm} {(int)(pixelsizeincm * (1 + beltwitdth + 1 + smallradius))} A {(int)(pixelsizeincm * smallradius)} {(int)(pixelsizeincm * smallradius)} 90 0 0 {(int)(pixelsizeincm * (1 + smallradius))} {(int)(pixelsizeincm * (1 + beltwitdth + 1))}"" fill-opacity=""0"" stroke-width=""3"" stroke=""black""/>
                     <path d = ""M {(int)pixelsizeincm} {(int)(pixelsizeincm * (1 + beltwitdth + 1 + bigradius))} A {(int)(pixelsizeincm * bigradius)} {(int)(pixelsizeincm * bigradius)} 90 0 0 {(int)(pixelsizeincm * (1 + bigradius))} {(int)(pixelsizeincm * (1 + beltwitdth + 1))}"" fill-opacity = ""0"" stroke-width = ""3"" stroke = ""black"" />
                     
-                    <text x=""{(int)(pixelsizeincm * 2)}"" y=""{(int)(pixelsizeincm * 3)}"" font-size=""32"" font-family=""Verdana"">Belt of the {skirtType} skirt,{"\n"} waist = {waist - 2}, skirt length = {Math.Round(skirtlength, 2)} x1</text>
+                    <text x=""{(int)(pixelsizeincm * 2)}"" y=""{(int)(pixelsizeincm * 3)}"" font-size=""32"" font-family=""Verdana"">Belt of the {skirtType} skirt, waist = {waist - 2}cm, skirt length = {Math.Round(skirtlength, 2)}cm x1, interfacing</text>
                     <text x=""{(int)(pixelsizeincm * ((waist + beltadd)/2+1))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth / 2+1))}"" font-size=""32"" font-family=""Verdana"">fold</text>
                     <text x=""{(int)(pixelsizeincm * (bigradius / 2 + 1))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth + 2))}"" font-size=""32"" font-family=""Verdana"">fold</text>
                 ";
 
                 if (degrees == 360)
                     s += @$"
-<text x=""{(int)(pixelsizeincm * (2 + smallradius))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth + 3))}"" font-size=""32"" font-family=""Verdana"">Width of the {skirtType} skirt,{"\n"} waist = {waist - 2},{"\n"} skirt length = {Math.Round(skirtlength, 2)}, {"\n"} x2</text>
+<text x=""{(int)(pixelsizeincm * (2 + smallradius))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth + 3))}"" font-size=""32"" font-family=""Verdana"">Width of the {skirtType} skirt, waist = {waist - 2}cm, skirt length = {Math.Round(skirtlength, 2)}cm, x2</text>
                     ";
 
                 if (degrees == 180)
-                    s += @$"<text x=""{(int)(pixelsizeincm * (2 + smallradius))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth + 3))}"" font-size=""32"" font-family=""Verdana"">Width of the {skirtType} skirt,{"\n"} waist = {waist - 2},{"\n"} skirt length = {Math.Round(skirtlength, 2)}, {"\n"} x1</text>";
+                    s += @$"<text x=""{(int)(pixelsizeincm * (2 + smallradius))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth + 3))}"" font-size=""32"" font-family=""Verdana"">Width of the {skirtType} skirt,{"\n"} waist = {waist - 2}cm, skirt length = {Math.Round(skirtlength, 2)}cm, x1</text>";
                 
                 if (hasButtons)
                     s += @$"<path d=""M {(int)(pixelsizeincm * (waist + 1))} {(int)pixelsizeincm} v  {(int)(pixelsizeincm)}""  stroke-width=""2"" stroke=""black""/>

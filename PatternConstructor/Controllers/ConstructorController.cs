@@ -227,6 +227,8 @@ namespace PatternConstructor.Controllers
                 //sunSkirtPattern = new SunSkirtPattern(50, skirtConstructModel.WaistGirth, belt, false, deg, true);
                 skirtPattern = new SunSkirtPattern(skirtConstructModel);
             }
+            else
+                skirtPattern = new PencilSkirt(skirtConstructModel);
 
             string documentContent = skirtPattern.GenerateContent();
             //string documentContent = "<svg xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"50\" r=\"40\" /></svg>";

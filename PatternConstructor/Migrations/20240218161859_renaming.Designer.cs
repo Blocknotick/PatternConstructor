@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PatternConstructor.Data;
 
@@ -11,9 +12,11 @@ using PatternConstructor.Data;
 namespace PatternConstructor.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240218161859_renaming")]
+    partial class renaming
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -303,13 +306,13 @@ namespace PatternConstructor.Migrations
                     b.Property<double>("SeatHeight")
                         .HasColumnType("float");
 
-                    b.Property<double>("ShoulderHeight")
-                        .HasColumnType("float");
-
                     b.Property<double>("ShoulderToNeck")
                         .HasColumnType("float");
 
                     b.Property<double>("ShoulderToWrist")
+                        .HasColumnType("float");
+
+                    b.Property<double>("SleeveWidthBottom")
                         .HasColumnType("float");
 
                     b.Property<double>("UpperArm")

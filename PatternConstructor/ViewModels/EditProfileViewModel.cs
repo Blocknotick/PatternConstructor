@@ -96,20 +96,20 @@ namespace PatternConstructor.ViewModels
         [Required]
         public double BustWidth { get; set; }
 
-        [Display(Name = "Ширина низа")]
-        [Range(30, 65)]
+        [Display(Name = "Обхват груди с учетом лопаток (ОГ2)")]
+        [Range(70, 130)]
         [Required]
-        public double BottomWidth { get; set; }
+        public double BustGirthSecond { get; set; }
 
-        [Display(Name = "Обхват груди над грудью")]
+        [Display(Name = "Обхват груди над грудью (ОГ1)")]
         [Range(70, 120)]
         [Required]
         public double BustGirthUp { get; set; }
 
-        [Display(Name = "Ширина рукава внизу")]
-        [Range(15, 30)]
+        [Display(Name = "Высота плеча косая")]
+        [Range(35, 50)]
         [Required]
-        public double SleeveWidthBottom { get; set; }
+        public double ShoulderHeight { get; set; }
 
         [Display(Name = "Ширина спинки")]
         [Range(25, 50)]

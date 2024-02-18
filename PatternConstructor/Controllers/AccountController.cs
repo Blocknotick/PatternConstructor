@@ -121,7 +121,7 @@ namespace PatternConstructor.Controllers
                 BackArmholeDepth = measure.BackArmholeDepth,
                 BackWaistLength = measure.BackWaistLength,
                 BackWidth = measure.BackWidth,
-                BottomWidth = measure.BottomWidth,
+                BustGirthSecond = measure.BurstGirthSecond,
                 BustCenter = measure.BustCenter,
                 BustGirth = measure.BustGirth,
                 BustGirthUp = measure.BustGirthUp,
@@ -136,7 +136,7 @@ namespace PatternConstructor.Controllers
                 SeatHeight = measure.SeatHeight,
                 ShoulderToNeck = measure.ShoulderToNeck,
                 ShoulderToWrist = measure.ShoulderToWrist,
-                SleeveWidthBottom = measure.SleeveWidthBottom,
+                ShoulderHeight = measure.ShoulderHeight,
                 UpperArm = measure.UpperArm,
                 WaistFloorBackLength = measure.WaistFloorBackLength,
                 WaistFloorFrontLength = measure.WaistFloorFrontLength,
@@ -170,7 +170,7 @@ namespace PatternConstructor.Controllers
                 user.Measure.BackArmholeDepth = sm.Measure.BackArmholeDepth;
                 user.Measure.BackWaistLength = sm.Measure.BackWaistLength;
                 user.Measure.BackWidth = sm.Measure.BackWidth;
-                user.Measure.BottomWidth = sm.Measure.BottomWidth;
+                user.Measure.BurstGirthSecond = sm.Measure.BurstGirthSecond;
 
                 user.Measure.BustCenter = sm.Measure.BustCenter;
                 user.Measure.BustGirth = sm.Measure.BustGirth;
@@ -189,7 +189,7 @@ namespace PatternConstructor.Controllers
                 user.Measure.ShoulderToNeck = sm.Measure.ShoulderToNeck;
 
                 user.Measure.ShoulderToWrist = sm.Measure.ShoulderToWrist;
-                user.Measure.SleeveWidthBottom = sm.Measure.SleeveWidthBottom;
+                user.Measure.ShoulderHeight = sm.Measure.ShoulderHeight;
                 user.Measure.UpperArm = sm.Measure.UpperArm;
                 user.Measure.WaistFloorBackLength = sm.Measure.WaistFloorBackLength;
 
@@ -223,7 +223,7 @@ namespace PatternConstructor.Controllers
             user.Measure.BackArmholeDepth = editProfileVM.BackArmholeDepth;
             user.Measure.BackWaistLength = editProfileVM.BackWaistLength;
             user.Measure.BackWidth = editProfileVM.BackWidth;
-            user.Measure.BottomWidth = editProfileVM.BottomWidth;
+            user.Measure.BurstGirthSecond = editProfileVM.BustGirthSecond;
 
             user.Measure.BustCenter = editProfileVM.BustCenter;
             user.Measure.BustGirth = editProfileVM.BustGirth;
@@ -242,7 +242,7 @@ namespace PatternConstructor.Controllers
             user.Measure.ShoulderToNeck = editProfileVM.ShoulderToNeck;
 
             user.Measure.ShoulderToWrist = editProfileVM.ShoulderToWrist;
-            user.Measure.SleeveWidthBottom = editProfileVM.SleeveWidthBottom;
+            user.Measure.ShoulderHeight = editProfileVM.ShoulderHeight;
             user.Measure.UpperArm = editProfileVM.UpperArm;
             user.Measure.WaistFloorBackLength = editProfileVM.WaistFloorBackLength;
 

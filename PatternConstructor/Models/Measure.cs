@@ -24,9 +24,9 @@ namespace PatternConstructor.Models
         public double BackArmholeDepth { get; set; } // глубина проймы спинки 17-45
         public double NeckGirth { get; set; } // обхват шеи 31-43
         public double BustWidth { get; set; } // ширина груди 28-43
-        public double BottomWidth { get; set; } // ширина низа 36-64
+        public double BurstGirthSecond { get; set; } // ОГ2 70-130
         public double BustGirthUp { get; set; } // обхват груди над грудью 71-117
-        public double SleeveWidthBottom { get; set; } // Ширина рукава внизу 19-25
+        public double ShoulderHeight { get; set; } // Высота плеча косая 35 - 50
         public double BackWidth { get; set; } // ширина спины 30-44
         public double WaistFloorSideLength { get; set; } // Длина от талии до пола сбоку 96-121
         public double WaistFloorFrontLength { get; set; } // Длина от талии до пола спереди 95-119

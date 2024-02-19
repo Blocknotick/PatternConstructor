@@ -316,8 +316,11 @@ namespace PatternConstructor.Controllers
             htmldocs.Add("wwwroot/DescriptionUnits/skirts/decatification.pdf");
             htmldocs.Add("wwwroot/DescriptionUnits/skirts/cutting.pdf");
             htmldocs.Add("wwwroot/DescriptionUnits/skirts/interfacing.pdf");
-            if (skirtConstructModel.SkirtCombinationModel.Type=="Прямая" || skirtConstructModel.SkirtCombinationModel.Type == "Тюльпан")
+            if (skirtConstructModel.SkirtCombinationModel.Type == "Прямая" || skirtConstructModel.SkirtCombinationModel.Type == "Тюльпан")
+            {
                 htmldocs.Add("wwwroot/DescriptionUnits/skirts/darts.pdf");
+                htmldocs.Add("wwwroot/DescriptionUnits/skirts/sideSeams.pdf");
+            }
             if (skirtConstructModel.SkirtCombinationModel.Type == "Солнце")
                 htmldocs.Add("wwwroot/DescriptionUnits/skirts/sideSeams.pdf");
             else htmldocs.Add("wwwroot/DescriptionUnits/skirts/middleSeam.pdf");

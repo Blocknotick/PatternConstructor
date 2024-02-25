@@ -211,30 +211,16 @@ namespace PatternConstructor.Controllers
             string FileName = user.Id + createdFile.Id.ToString() + ".pdf";
 
             //Здесь должна быть функция, которая генерирует выкройку
-            double belt=0;
-            for (int i = 0; i< skirtConstructModel.SkirtCombinationModel.Belts.Length; i++)
-            {
-                if (skirtConstructModel.SkirtCombinationModel.Belt == skirtConstructModel.SkirtCombinationModel.Belts[i])
-                    belt = i + 3;
-            }
 
             Pattern skirtPattern = new Pattern();
             if (skirtConstructModel.SkirtCombinationModel.Type == "Солнце" || skirtConstructModel.SkirtCombinationModel.Type == "Полусолнце")
             {
-                //int deg = 180;
-                //if (skirtConstructModel.SkirtCombinationModel.Type == "Солнце")
-                //    deg = 360;
-                //sunSkirtPattern = new SunSkirtPattern(50, skirtConstructModel.WaistGirth, belt, false, deg, true);
                 skirtPattern = new SunSkirtPattern(skirtConstructModel);
             }
             else
                 skirtPattern = new PencilSkirt(skirtConstructModel);
 
             string documentContent = skirtPattern.GenerateContent();
-            //string documentContent = "<svg xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"50\" r=\"40\" /></svg>";
-            // Initialize an object of SVGDocument class from the string content
-            //Aspose.Svg.SVGDocument document = new Aspose.Svg.SVGDocument(documentContent, ".");
-
 
 
 
@@ -357,24 +343,7 @@ namespace PatternConstructor.Controllers
             document.Close();
 
         }
-        //void GenerateDescription(List<string> htmldocs, string outputpath)
-        //{
-        //    var doc = new List<Aspose.Html.HTMLDocument>();
-        //    //Aspose.Html.HTMLDocument [] doc = new Aspose.Html.HTMLDocument[0];
-        //    for (int i = 0; i < htmldocs.Count; i++)
-        //    {
-        //        doc.Add(new Aspose.Html.HTMLDocument(htmldocs[i]));
-        //    }
-        //    //var document1 = new Aspose.Html.HTMLDocument("wwwroot/test.html");
 
-        //    //поля бы добавить
-        //    var renderer1 = new Aspose.Html.Rendering.HtmlRenderer();
-        //    //renderer1.Render(new Aspose.Html.Rendering.Pdf.PdfDevice(dataDir + "output.pdf"), document1, document1);
-        //    //renderer1.Render(new Aspose.Html.Rendering.Pdf.PdfDevice(outputpath), document1, document1);
-        //    //var options = new Aspose.Html.Rendering.Pdf.PdfRenderingOptions();
-        //    //options.PageSetup.AnyPage = new Page(new Margin(10));
-        //    renderer1.Render(new Aspose.Html.Rendering.Pdf.PdfDevice(outputpath),doc.ToArray());
-        //}
 
         //void ConvertPatternToPDF(Aspose.Svg.SVGDocument[] svgfiles, string outputpath)
         //{
@@ -391,5 +360,110 @@ namespace PatternConstructor.Controllers
         //    renderer.Render(device, svgfiles);
 
         //}
+
+        [Authorize]
+        public ActionResult DressCombination()
+        {
+            DressCombinationModel dressCombination = new DressCombinationModel();
+            return View(dressCombination);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult DressCombination(DressCombinationModel skirtCombination)
+        {
+            //проверка на реализуемость
+            if (!ModelState.IsValid) return View(skirtCombination);
+
+            return RedirectToAction("Dress", skirtCombination);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> DressAsync(DressCombinationModel skirtCombination)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            Measure measure;
+            measure = _context.Measures.FirstOrDefault(m => m.MeasureId == user.MeasureId); ;
+
+            DressConstructModel skirtConstructModel = new DressConstructModel
+            {
+                WaistGirth = measure.WaistGirth,
+                BustGirth = measure.BustGirth,
+                HipsGirth = measure.HipsGirth,
+                NeckGirth = measure.NeckGirth,
+                BustGirthUp = measure.BustGirthUp,
+                BustGirthSecond = measure.BurstGirthSecond,
+                BackWaistLength = measure.BackWaistLength,
+                BustHeight = measure.BustHeight,
+                ShoulderHeight = measure.ShoulderHeight,
+                FrontWaistLength = measure.FrontWaistLength,
+                BackWidth = measure.BackWidth,
+                ShoulderToNeck = measure.ShoulderToNeck,
+                BackArmholeDepth = measure.BackArmholeDepth,
+                BustCenter = measure.BustCenter,
+                ShoulderToWrist = measure.ShoulderToWrist,
+                UpperArm = measure.UpperArm,
+                BustWidth = measure.BustWidth,
+                WaistFloorFrontLength = measure.WaistFloorFrontLength,
+                DressCombinationModel = skirtCombination
+            };
+
+            var s_measures = _context.standartMeasures.ToList();
+            ViewBag.Types = s_measures.Select(c => new SelectListItem { Text = "Размер " + c.Size + " Рост " + c.Height, Value = c.Id.ToString() }).ToList();
+
+            return View(skirtConstructModel);
+        }
+
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> DressAsync(DressConstructModel skirtConstructModel)
+        {
+            if (!ModelState.IsValid) return RedirectToAction("Dress", skirtConstructModel.DressCombinationModel);
+            var user = await _userManager.GetUserAsync(User);
+            var createdFile = new CreatedFile
+            {
+                UserId = user.Id,
+            };
+            await _context.AddAsync(createdFile);
+            _context.SaveChanges();
+
+
+            string FileName = user.Id + createdFile.Id.ToString() + ".pdf";
+
+
+            Pattern skirtPattern = new DressPattern(skirtConstructModel);
+            
+
+            string documentContent = skirtPattern.GenerateContent();
+
+            using (iText.Kernel.Pdf.PdfDocument doc =
+                new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfWriter(new FileStream("wwwroot/dresses/" + FileName, FileMode.OpenOrCreate),
+                                                                                new WriterProperties().SetCompressionLevel(0))))
+            {
+                doc.AddNewPage(new PageSize((float)(0.75 * skirtPattern.widthcm), (float)(0.75 * skirtPattern.heightcm)));
+                SvgConverter.DrawOnDocument(documentContent, doc, 1);
+
+            }
+
+
+            var htmldocs = new List<string>();
+
+            htmldocs.Add("wwwroot/DescriptionUnits/skirts/decatification.pdf");
+            htmldocs.Add("wwwroot/DescriptionUnits/skirts/cutting.pdf");
+            htmldocs.Add("wwwroot/DescriptionUnits/skirts/interfacing.pdf");
+            
+
+            createPdf("wwwroot/descr/" + FileName, htmldocs);
+            createdFile.PatternLink = "/dresses/" + FileName;
+            createdFile.DescribtionLink = "/descr/" + FileName;
+            createdFile.Name = skirtConstructModel.Name;
+            _context.Update(createdFile);
+            _context.SaveChanges();
+
+            //переход к странице созданных файлов
+            return RedirectToAction("History", "Account");
+        }
     }
 }

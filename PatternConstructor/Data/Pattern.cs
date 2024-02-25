@@ -43,6 +43,22 @@ namespace PatternConstructor.Data
 
             return new Vector2((b1 * c2 - b2 * c1) / (a1 * b2 - a2 * b1), (a2 * c1 - a1 * c2) / (a1 * b2 - a2 * b1));
         }
+        //пересечение двух окружностей, заданных точками
+        public Vector2[] CirclesIntersec(Vector2 O1, double r1, Vector2 O2, double r2)
+        {
+            double d = Vector2.Distance(O1, O2);
+            if (d==0 && r1==r2 || d>r1+r2 || d<Math.Abs(r1-r2)) return Array.Empty<Vector2>();
+            double a = (r1 * r1 - r2 * r2 + d * d) / (2 * d);
+            double h = Math.Sqrt(r1 * r1 - a * a);
+            Vector2 P3 = O1 + (float)(a / d) * (O2 - O1);
+            Vector2 P1 = new Vector2(P3.X + (float)(h / d) * (O2.Y - O1.Y),
+                P3.Y-(float)(h/d)*(O2.X-O1.X));
+            Vector2 P2 = new Vector2(P3.X - (float)(h / d) * (O2.Y - O1.Y),
+                P3.Y + (float)(h / d) * (O2.X - O1.X));
+            Vector2[] arr = new Vector2[2];
+            arr[0] = P1; arr[1] = P2;
+            return arr;
+        }
         public virtual string GenerateContent() { return ""; }
     }
 }

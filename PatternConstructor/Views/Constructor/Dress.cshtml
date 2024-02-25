@@ -1,0 +1,188 @@
+﻿@using PatternConstructor.ViewModels
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model PatternConstructor.ViewModels.DressConstructModel
+
+<h1>Генератор выкройки платья</h1>
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form>
+        <select class="form-select" aria-label="Выбор размера" id="ddltype" name="type" asp-items="ViewBag.Types" >
+            <option>Выберите размер</option>
+        </select>
+
+        </form>
+
+        <div>
+            <ul>
+                <li>Силуэт: @Model.DressCombinationModel.Silhouette</li>
+                <li>Длина: @Model.DressCombinationModel.Length</li>
+                <li>Горловина: @Model.DressCombinationModel.Neck</li>
+                <li>Воротник: @Model.DressCombinationModel.Collar</li>
+                <li>Застежка полочки: @Model.DressCombinationModel.Clasp</li>
+                <li>Талия: @Model.DressCombinationModel.Waist</li>
+                <li>Рукав: @Model.DressCombinationModel.Sleeve</li>
+                @if (Model.DressCombinationModel.DoubleContour)
+                {
+                    <li>Двойные контуры</li>
+                }
+                else
+                {
+                    <li>Нет двойных контуров</li>
+                }
+                
+            </ul>
+        </div>
+        <form asp-action="Dress">
+            <input hidden asp-for="DressCombinationModel.Length" class="form-control"/>
+            <input hidden asp-for="DressCombinationModel.Silhouette" class="form-control"/>
+            <input hidden asp-for="DressCombinationModel.Neck" class="form-control"/>
+            <input hidden asp-for="DressCombinationModel.Collar" class="form-control"/>
+            <input hidden asp-for="DressCombinationModel.Waist" class="form-control"/>
+            <input hidden asp-for="DressCombinationModel.Sleeve" class="form-control"/>
+            <input hidden asp-for="DressCombinationModel.Clasp" class="form-control"/>
+            <input hidden asp-for="DressCombinationModel.DoubleContour" class="form-control"/>
+                        
+            <div class="form-group">
+                <label asp-for="WaistGirth" class="control-label"></label>
+                <input asp-for="WaistGirth" class="form-control"/>
+                @*<span asp-validation-for="WaistGirth" class="text-danger"></span>*@
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="BustGirth" class="control-label"></label>
+                <input asp-for="BustGirth" class="form-control"/>
+                @*<span asp-validation-for="BustGirth" class="text-danger"></span>*@
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="HipsGirth" class="control-label"></label>
+                <input asp-for="HipsGirth" class="form-control"/>
+                @*<span asp-validation-for="HipsGirth" class="text-danger"></span>*@
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="NeckGirth" class="control-label"></label>
+                <input asp-for="NeckGirth" class="form-control"/>
+                @*<span asp-validation-for="NeckGirth" class="text-danger"></span>*@
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="BustGirthUp" class="control-label"></label>
+                <input asp-for="BustGirthUp" class="form-control"/>
+                @*<span asp-validation-for="BustGirthUp" class="text-danger"></span>*@
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="BustGirthSecond" class="control-label"></label>
+                <input asp-for="BustGirthSecond" class="form-control"/>
+                @*<span asp-validation-for="BustGirthSecond" class="text-danger"></span>*@
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="BackWaistLength" class="control-label"></label>
+                <input asp-for="BackWaistLength" class="form-control"/>
+                @*<span asp-validation-for="BackWaistLength" class="text-danger"></span>*@
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="BustHeight" class="control-label"></label>
+                <input asp-for="BustHeight" class="form-control"/>
+                @*<span asp-validation-for="BustHeight" class="text-danger"></span>*@
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="ShoulderHeight" class="control-label"></label>
+                <input asp-for="ShoulderHeight" class="form-control"/>
+                @*<span asp-validation-for="ShoulderHeight" class="text-danger"></span>*@
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="FrontWaistLength" class="control-label"></label>
+                <input asp-for="FrontWaistLength" class="form-control"/>
+                @*<span asp-validation-for="FrontWaistLength" class="text-danger"></span>*@
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="BackWidth" class="control-label"></label>
+                <input asp-for="BackWidth" class="form-control"/>
+                @*<span asp-validation-for="BackWidth" class="text-danger"></span>*@
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="ShoulderToNeck" class="control-label"></label>
+                <input asp-for="ShoulderToNeck" class="form-control"/>
+                @*<span asp-validation-for="ShoulderToNeck" class="text-danger"></span>*@
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="BackArmholeDepth" class="control-label"></label>
+                <input asp-for="BackArmholeDepth" class="form-control"/>
+                @*<span asp-validation-for="BackArmholeDepth" class="text-danger"></span>*@
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="BustCenter" class="control-label"></label>
+                <input asp-for="BustCenter" class="form-control"/>
+                @*<span asp-validation-for="BustCenter" class="text-danger"></span>*@
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="ShoulderToWrist" class="control-label"></label>
+                <input asp-for="ShoulderToWrist" class="form-control"/>
+                @*<span asp-validation-for="ShoulderToWrist" class="text-danger"></span>*@
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="UpperArm" class="control-label"></label>
+                <input asp-for="UpperArm" class="form-control"/>
+                @*<span asp-validation-for="UpperArm" class="text-danger"></span>*@
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="BustWidth" class="control-label"></label>
+                <input asp-for="BustWidth" class="form-control"/>
+                @*<span asp-validation-for="BustWidth" class="text-danger"></span>*@
+            </div>
+
+            <div class="form-group">
+                <label asp-for="WaistFloorFrontLength" class="control-label"></label>
+                <input asp-for="WaistFloorFrontLength" class="form-control"/>
+                @*<span asp-validation-for="WaistFloorFrontLength" class="text-danger"></span>*@
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Создать" class="btn btn-primary" />
+            </div>
+        </form>
+
+        
+    </div>
+</div>

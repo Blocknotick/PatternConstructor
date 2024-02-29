@@ -1,4 +1,5 @@
-﻿using PatternConstructor.ViewModels;
+﻿using PatternConstructor.Data.Enum;
+using PatternConstructor.ViewModels;
 using System.Numerics;
 
 namespace PatternConstructor.Data
@@ -168,11 +169,62 @@ namespace PatternConstructor.Data
             back.Add(new Vector2(a + vG3, g - vG3));
 
 
+            Vector2 G6 = new Vector2(a1 - tsg - 0.5f, g);
+            Vector2 A3 = new Vector2(a1, t-dtp-pdts);
+            front.Add(new Vector2(a1, A3.Y + back[3].X + 1)); //A5
+            front.Add(new Vector2(a1 - back[3].X, A3.Y)); // A4
+            float G7y = front[1].Y + (float)Math.Sqrt(vg*vg - (G6.X - front[1].X) * (G6.X - front[1].X));
+            front.Add(new Vector2(G6.X, G7y)); //G7
+            front.Add(back[9]);//G3
+
+            float cG4 = (float)(0.2 * G3G4 / Math.Sqrt(2));
+            front.Add(new Vector2(a2 - cG4, g - cG4)); //c
+
+            float P4y = back[4].Y + 1;
+            front.Add(new Vector2(a2, P4y + 2f / 3f * (g - P4y))); //P6
+
+            arr = CirclesIntersec(front[2], vg, front[1], 2*(cg2-cg1)+2);
+            Vector2 A9;
+            if (arr[0].X < arr[1].X) A9 = arr[0];
+            else A9 = arr[1];
+
+            arr = CirclesIntersec(front[5], front[5].Y-P4y, A9, shp);
+            Vector2 P5;
+            if (arr[0].X < arr[1].X) P5 = arr[0];
+            else P5 = arr[1];
+
+            front.Add(P5); //P5
+
+            Vector2 D = (front[6] + front[5])/2;
+            float sin = (front[5].Y - front[6].Y)/ (front[5].X - front[6].X);
+            float c = 1/sin;
+            front.Add(new Vector2(D.X + sin, D.Y - c)); //e
+
+            float d1 = Vector2.Distance(back[3], back[5]);
+            float P5P7 = Vector2.Distance(A9, P5)-d1;
+
+            float px = P5P7 * Math.Abs(P5.X - A9.X) / Vector2.Distance(A9, P5);
+            float py = P5P7 * Math.Abs(P5.Y - A9.Y) / Vector2.Distance(A9, P5);
+
+            front.Add(new Vector2(P5.X + px, P5.Y - py)); //P7
+
+            arr = CirclesIntersec(front[2], Vector2.Distance(front[2], front[8]), front[1], Vector2.Distance(back[3], back[5]));
+            Vector2 A8;
+            if (arr[0].X < arr[1].X) A8 = arr[0];
+            else A8 = arr[1];
+            front.Add(A8); //A8
+
+
+            Vector2 offs = new Vector2(0, -front[1].Y);
             widthcm = a1 * pixelsizeincm;
             heightcm = di * pixelsizeincm;
             for (int i = 0; i < back.Count; i++)
             {
-                back[i] = (float)pixelsizeincm * back[i];
+                back[i] = (float)pixelsizeincm * (back[i]+offs);
+            }
+            for (int i = 0;i < front.Count;i++)
+            {
+                front[i] = (float)pixelsizeincm * (front[i] + offs);
             }
             string s = $"<svg version=\"1.1\" width = \"{(int)a1 * 10}mm\" height = \"{(int)di * 10}mm\" xmlns =\"http://www.w3.org/2000/svg\">";
             s += @$"
@@ -185,6 +237,18 @@ namespace PatternConstructor.Data
                     <path d=""M {(int)back[4].X} {(int)back[4].Y} L {(int)back[8].X} {(int)back[8].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)back[8].X} {(int)back[8].Y} L {(int)back[10].X} {(int)back[10].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)back[10].X} {(int)back[10].Y} L {(int)back[9].X} {(int)back[9].Y}""  stroke-width=""3"" stroke=""black""/>
+                ";
+
+            s += @$"
+                    <path d=""M {(int)front[0].X} {(int)front[0].Y} L {(int)front[1].X} {(int)front[1].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)front[1].X} {(int)front[1].Y} L {(int)front[9].X} {(int)front[9].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)front[9].X} {(int)front[9].Y} L {(int)front[2].X} {(int)front[2].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)front[2].X} {(int)front[2].Y} L {(int)front[8].X} {(int)front[8].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)front[8].X} {(int)front[8].Y} L {(int)front[6].X} {(int)front[6].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)front[6].X} {(int)front[6].Y} L {(int)front[7].X} {(int)front[7].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)front[7].X} {(int)front[7].Y} L {(int)front[5].X} {(int)front[5].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)front[5].X} {(int)front[5].Y} L {(int)front[4].X} {(int)front[4].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)front[4].X} {(int)front[4].Y} L {(int)front[3].X} {(int)front[3].Y}""  stroke-width=""3"" stroke=""black""/>
                 ";
 
             return s;

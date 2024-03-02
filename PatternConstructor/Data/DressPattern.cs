@@ -109,6 +109,10 @@ namespace PatternConstructor.Data
         {
             List<Vector2> back = new List<Vector2>();
             List<Vector2> front = new List<Vector2>();
+
+            List<Vector2> skirtback = new List<Vector2>();
+            List<Vector2> skirtfront = new List<Vector2>();
+
             List<Vector2> sleeve = new List<Vector2>();
             List<Vector2> collar = new List<Vector2>();
             List<Vector2> cuff = new List<Vector2>();
@@ -214,21 +218,61 @@ namespace PatternConstructor.Data
             else A8 = arr[1];
             front.Add(A8); //A8
 
+            float sb = (cg3 + pg) - (ct + pt); // сумма талиевых вытачек 
+            back.Add(new Vector2(back[9].X - sb / 4f, t));// T3
+            front.Add(new Vector2(front[3].X + sb / 4f, t)); // T4
+            skirtback.Add(back[11]); // T3
+            skirtfront.Add(front[10]); // T4
 
-            Vector2 offs = new Vector2(0, -front[1].Y);
+            float gbdif = ((cb + pb)- (cg3 + pg)) /2;
+            skirtback.Add(new Vector2(back[9].X + gbdif, b)); //Б3
+            skirtfront.Add(new Vector2(front[3].X - gbdif, b)); // Б4
+            skirtback.Add(new Vector2(skirtback[1].X, di)); //H3
+            skirtfront.Add(new Vector2(skirtfront[1].X, di)); // H4
+            skirtback.Add(new Vector2(0, di)); //H
+
+            float FRONT_DIF = 1f;
+            skirtfront.Add(new Vector2(front[0].X, di+FRONT_DIF)); // H11
+
+            skirtback.Add(back[1]); //T
+            skirtfront.Add(new Vector2(front[0].X, t+FRONT_DIF)); // T11
+
+            float T5 = (back[1].X + back[11].X) / 2;
+            back.Add(new Vector2(T5 - sb / 6, t));
+            back.Add(new Vector2(T5,g+3));
+            back.Add(new Vector2(T5 + sb / 6, t));
+            skirtback.Add(back[12]);
+            skirtback.Add(new Vector2(T5, b-5));
+            skirtback.Add(back[14]);
+
+            front.Add(skirtfront[4]);
+            Vector2 T6 = Intersec(front[2],G6,front[10],front[11]);
+            front.Add(new Vector2(T6.X + sb / 12, T6.Y));
+            front.Add(new Vector2(T6.X, front[2].Y+3));
+            front.Add(new Vector2(T6.X - sb / 12, T6.Y));
+            skirtfront.Add(front[12]);
+            skirtfront.Add(new Vector2(T6.X, b - 5));
+            skirtfront.Add(front[14]);
+
+            Vector2 offsetFront = new Vector2(0, Math.Max(-front[1].Y,0));
+            Vector2 offsetB = new Vector2(Math.Max(gbdif*2,0), 0);
             widthcm = a1 * pixelsizeincm;
             heightcm = di * pixelsizeincm;
             for (int i = 0; i < back.Count; i++)
-            {
-                back[i] = (float)pixelsizeincm * (back[i]+offs);
-            }
+                back[i] = (float)pixelsizeincm * (back[i]+offsetFront);
+            
             for (int i = 0;i < front.Count;i++)
-            {
-                front[i] = (float)pixelsizeincm * (front[i] + offs);
-            }
+                front[i] = (float)pixelsizeincm * (front[i] + offsetFront + offsetB);
+
+            for (int i = 0; i < skirtback.Count; i++)
+                skirtback[i] = (float)pixelsizeincm * (skirtback[i] + offsetFront);
+
+            for (int i = 0; i < skirtfront.Count; i++)
+                skirtfront[i] = (float)pixelsizeincm * (skirtfront[i] + offsetFront + offsetB);
+
             string s = $"<svg version=\"1.1\" width = \"{(int)a1 * 10}mm\" height = \"{(int)di * 10}mm\" xmlns =\"http://www.w3.org/2000/svg\">";
             s += @$"
-                    <path d=""M {(int)back[0].X} {(int)back[0].Y} L {(int)back[2].X} {(int)back[2].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)back[0].X} {(int)back[0].Y} L {(int)back[1].X} {(int)back[1].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)back[0].X} {(int)back[0].Y} L {(int)back[3].X} {(int)back[3].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)back[3].X} {(int)back[3].Y} L {(int)back[5].X} {(int)back[5].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)back[5].X} {(int)back[5].Y} L {(int)back[6].X} {(int)back[6].Y}""  stroke-width=""3"" stroke=""black""/>
@@ -237,6 +281,22 @@ namespace PatternConstructor.Data
                     <path d=""M {(int)back[4].X} {(int)back[4].Y} L {(int)back[8].X} {(int)back[8].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)back[8].X} {(int)back[8].Y} L {(int)back[10].X} {(int)back[10].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)back[10].X} {(int)back[10].Y} L {(int)back[9].X} {(int)back[9].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)back[9].X} {(int)back[9].Y} L {(int)back[11].X} {(int)back[11].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)back[11].X} {(int)back[11].Y} L {(int)back[14].X} {(int)back[14].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)back[14].X} {(int)back[14].Y} L {(int)back[13].X} {(int)back[13].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)back[13].X} {(int)back[13].Y} L {(int)back[12].X} {(int)back[12].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)back[12].X} {(int)back[12].Y} L {(int)back[1].X} {(int)back[1].Y}""  stroke-width=""3"" stroke=""black""/>
+                ";
+
+            s += @$"
+                    <path d=""M {(int)skirtback[0].X} {(int)skirtback[0].Y} L {(int)skirtback[1].X} {(int)skirtback[1].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)skirtback[1].X} {(int)skirtback[1].Y} L {(int)skirtback[2].X} {(int)skirtback[2].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)skirtback[2].X} {(int)skirtback[2].Y} L {(int)skirtback[3].X} {(int)skirtback[3].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)skirtback[3].X} {(int)skirtback[3].Y} L {(int)skirtback[4].X} {(int)skirtback[4].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)skirtback[4].X} {(int)skirtback[4].Y} L {(int)skirtback[5].X} {(int)skirtback[5].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)skirtback[5].X} {(int)skirtback[5].Y} L {(int)skirtback[6].X} {(int)skirtback[6].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)skirtback[6].X} {(int)skirtback[6].Y} L {(int)skirtback[7].X} {(int)skirtback[7].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)skirtback[7].X} {(int)skirtback[7].Y} L {(int)skirtback[0].X} {(int)skirtback[0].Y}""  stroke-width=""3"" stroke=""black""/>
                 ";
 
             s += @$"
@@ -249,6 +309,22 @@ namespace PatternConstructor.Data
                     <path d=""M {(int)front[7].X} {(int)front[7].Y} L {(int)front[5].X} {(int)front[5].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)front[5].X} {(int)front[5].Y} L {(int)front[4].X} {(int)front[4].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)front[4].X} {(int)front[4].Y} L {(int)front[3].X} {(int)front[3].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)front[3].X} {(int)front[3].Y} L {(int)front[10].X} {(int)front[10].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)front[10].X} {(int)front[10].Y} L {(int)front[14].X} {(int)front[14].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)front[14].X} {(int)front[14].Y} L {(int)front[13].X} {(int)front[13].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)front[13].X} {(int)front[13].Y} L {(int)front[12].X} {(int)front[12].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)front[12].X} {(int)front[12].Y} L {(int)front[11].X} {(int)front[11].Y}""  stroke-width=""3"" stroke=""black""/>
+                ";
+
+            s += @$"
+                    <path d=""M {(int)skirtfront[0].X} {(int)skirtfront[0].Y} L {(int)skirtfront[1].X} {(int)skirtfront[1].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)skirtfront[1].X} {(int)skirtfront[1].Y} L {(int)skirtfront[2].X} {(int)skirtfront[2].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)skirtfront[2].X} {(int)skirtfront[2].Y} L {(int)skirtfront[3].X} {(int)skirtfront[3].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)skirtfront[3].X} {(int)skirtfront[3].Y} L {(int)skirtfront[4].X} {(int)skirtfront[4].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)skirtfront[4].X} {(int)skirtfront[4].Y} L {(int)skirtfront[5].X} {(int)skirtfront[5].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)skirtfront[5].X} {(int)skirtfront[5].Y} L {(int)skirtfront[6].X} {(int)skirtfront[6].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)skirtfront[6].X} {(int)skirtfront[6].Y} L {(int)skirtfront[7].X} {(int)skirtfront[7].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)skirtfront[7].X} {(int)skirtfront[7].Y} L {(int)skirtfront[0].X} {(int)skirtfront[0].Y}""  stroke-width=""3"" stroke=""black""/>
                 ";
 
             return s;

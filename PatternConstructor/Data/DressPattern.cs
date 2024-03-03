@@ -41,40 +41,40 @@ namespace PatternConstructor.Data
             switch (model.DressCombinationModel.Silhouette)
             {
                 case "Среднее":
-                    pg = 4;
-                    pshs = 1;
-                    pshp = 0.6f;
-                    ppr = 2.4f;
+                    pg = 5;
+                    pshs = 0.25f * pg;
+                    pshp = 0.15f * pg;
+                    ppr = 0.6f * pg;
                     pt = 3;
-                    pb = 2;
-                    pdts = 0.5f;
-                    pspr = 1.5f;
-                    pshgor = 0.5f;
-                    pop = 4;
-                    break;
-                case "Плотное":
-                    pg = 3;
-                    pshs = 0.6f;
-                    pshp = 0.3f;
-                    ppr = 2.1f;
-                    pt = 1;
-                    pb = 1.5f;
+                    pb = 3;
                     pdts = 0.5f;
                     pspr = 1.5f;
                     pshgor = 0.5f;
                     pop = 3;
                     break;
-                case "Свободное":
-                    pg = 6;
-                    pshs = 1.8f;
-                    pshp = 1.2f;
-                    ppr = 3;
-                    pt = 5;
-                    pb = 5;
+                case "Плотное":
+                    pg = 3;
+                    pshs = 0.2f*pg;
+                    pshp = 0.1f * pg;
+                    ppr = 0.7f * pg;
+                    pt = 1;
+                    pb = 2;
                     pdts = 0.5f;
                     pspr = 1.5f;
                     pshgor = 0.5f;
-                    pop = 6;
+                    pop = 2;
+                    break;
+                case "Свободное":
+                    pg = 7;
+                    pshs = 0.3f * pg;
+                    pshp = 0.2f * pg;
+                    ppr = 0.5f * pg;
+                    pt = 5;
+                    pb = 6;
+                    pdts = 0.5f;
+                    pspr = 1.5f;
+                    pshgor = 0.5f;
+                    pop = 5;
                     break;
                 default:
                     break;
@@ -124,7 +124,7 @@ namespace PatternConstructor.Data
             float a = shs + pshs;
             float a2 = a1 - (shg + cg2 - cg1 + pshp);
 
-            float II1 = 1;
+            float II1 = 2;
             float A2I = 4;
             Vector2 A1 = new Vector2(csh / 3 + pshgor, (csh / 3 + pshgor) / 3);
 
@@ -141,7 +141,7 @@ namespace PatternConstructor.Data
             P1.X -= back[3].X;
             Vector2 I;
             I.Y = A2I * P1.Y / P1.X;
-            I.X = (float)Math.Sqrt(A2I* A2I - I.Y * I.Y);
+            I.X = (float)Math.Sqrt(A2I* A2I - I.Y * I.Y); 
 
             Vector2 I1;
             I1.Y = (A2I+ II1) * P1.Y / P1.X;
@@ -272,13 +272,63 @@ namespace PatternConstructor.Data
             else I10 = arr[1];
             back.Add(I10); //I11
 
+            back.Add(new Vector2(back[8].X - 0.5f, back[8].Y)); //отметки для рукава (17)
+            front.Add(new Vector2(front[5].X + 0.5f, front[5].Y)); // отметки для рукава (16)
+
+
+            //sleeve
+
+            if (sleevetype!= "Без рукава")
+            {
+                Vector2 O = (back[4] + front[6]) / 2;
+                sleeve.Add(new Vector2(O.X, O.Y + 2f)); //O2
+                float shruk = (op + pop) / 2;
+                sleeve.Add(new Vector2(sleeve[0].X + shruk/2 + 0.5f, front[5].Y)); //P62
+                sleeve.Add(new Vector2(sleeve[0].X + shruk, back[9].Y)); //P2
+                sleeve.Add(new Vector2(sleeve[0].X - shruk / 2 - 0.5f, back[8].Y)); //P31
+                sleeve.Add(new Vector2(sleeve[0].X - shruk, back[9].Y)); //P1
+                sleeve.Add(new Vector2(sleeve[0].X + shruk / 4 + 2, sleeve[0].Y)); // O5
+                sleeve.Add(new Vector2(sleeve[0].X - shruk / 4, sleeve[0].Y)); // O6
+                sleeve.Add(new Vector2((float)(sleeve[5].X - 2.25 * Math.Sqrt((1 - (sleeve[1].X - sleeve[5].X) / Vector2.Distance(sleeve[5], sleeve[1])) / 2)),
+                    (float)(sleeve[5].Y + 2.25 * Math.Sqrt((1 + (sleeve[1].X - sleeve[5].X) / Vector2.Distance(sleeve[5], sleeve[1])) / 2)))); // O51
+                sleeve.Add(new Vector2((float)(sleeve[6].X + 1.5 * Math.Sqrt((1 - (sleeve[6].X - sleeve[3].X) / Vector2.Distance(sleeve[3], sleeve[6])) / 2)),
+                    (float)(sleeve[6].Y + 1.5 * Math.Sqrt((1 + (sleeve[6].X - sleeve[3].X) / Vector2.Distance(sleeve[3], sleeve[6])) / 2)))); // O61
+                Vector2 Six = (sleeve[3] + sleeve[4]) / 2;
+                sin = (float)((sleeve[4].Y - sleeve[3].Y) / Vector2.Distance(sleeve[3], sleeve[4]));
+                c = (float)((-sleeve[4].X + sleeve[3].X) / Vector2.Distance(sleeve[3], sleeve[4]));
+                sleeve.Add(new Vector2(Six.X + 0.5f * sin, Six.Y + 0.5f * c)); // 7
+                cG4 = (float)((0.2 * G3G4 + 1) / Math.Sqrt(2));
+                sleeve.Add(new Vector2(sleeve[0].X + shruk / 2 + cG4, sleeve[2].Y-cG4)); // P81
+                Vector2 L = new Vector2(sleeve[0].X, sleeve[0].Y + dr / 2 + 3);
+                if (sleevetype== "Короткий")
+                {
+                    sleeve.Add(new Vector2(sleeve[0].X, sleeve[0].Y + (L.Y - sleeve[0].Y) / 3 * 2));
+                    sin = 10.25f; //это тангенс донт майнд зе нейм
+                    float slevelen = sleeve[11].Y - sleeve[4].Y + 0.5f;
+                    sleeve.Add(new Vector2(sleeve[4].X + slevelen / sin, sleeve[4].Y + slevelen));
+                    sleeve.Add(new Vector2(sleeve[2].X - slevelen / sin, sleeve[2].Y + slevelen));
+                    sleeve.Add(new Vector2(sleeve[3].X + 0.5f, sleeve[3].Y));
+                    sleeve.Add(new Vector2(sleeve[1].X - 0.5f, sleeve[1].Y));
+
+                }
+            }
+
             Vector2 offsetFront = new Vector2(0, Math.Max(-front[1].Y,0));
             Vector2 offsetB = new Vector2(Math.Max(gbdif*2,0), 0);
+            Vector2 sleeveoff = new Vector2(0,0);
+            
 
             widthcm = (front[0].X+offsetB.X) * pixelsizeincm;
             heightcm = (skirtfront[3].Y+offsetFront.Y) * pixelsizeincm;
             int width = (int)((front[0].X + offsetB.X) * 10);
             int height = (int)((skirtfront[3].Y + offsetFront.Y) * 10);
+
+            if (sleevetype != "Без рукава")
+            {
+                sleeveoff = new Vector2(offsetB.X + front[0].X - sleeve[4].X, -(sleeve[0].Y));
+                widthcm = (sleeve[2].X + sleeveoff.X) * pixelsizeincm;
+                width = (int)((sleeve[2].X + sleeveoff.X) * 10);
+            }
 
             for (int i = 0; i < back.Count; i++)
                 back[i] = (float)pixelsizeincm * (back[i]+offsetFront);
@@ -292,7 +342,9 @@ namespace PatternConstructor.Data
             for (int i = 0; i < skirtfront.Count; i++)
                 skirtfront[i] = (float)pixelsizeincm * (skirtfront[i] + offsetFront + offsetB);
 
-            
+            for (int i = 0; i < sleeve.Count; i++)
+                sleeve[i] = (float)pixelsizeincm * (sleeve[i] + sleeveoff + offsetFront);
+
 
             string s = $"<svg version=\"1.1\" width = \"{width}mm\" height = \"{height}mm\" xmlns =\"http://www.w3.org/2000/svg\">";
             s += @$"
@@ -310,6 +362,8 @@ namespace PatternConstructor.Data
                     <path d=""M {(int)back[14].X} {(int)back[14].Y} L {(int)back[13].X} {(int)back[13].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)back[13].X} {(int)back[13].Y} L {(int)back[12].X} {(int)back[12].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)back[12].X} {(int)back[12].Y} L {(int)back[1].X} {(int)back[1].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)back[17].X} {(int)back[17].Y} L {(int)back[8].X} {(int)back[8].Y}""  stroke-width=""1"" stroke=""black""/>
+
                 ";
 
             s += @$"
@@ -339,6 +393,8 @@ namespace PatternConstructor.Data
                     <path d=""M {(int)front[13].X} {(int)front[13].Y} L {(int)front[12].X} {(int)front[12].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)front[12].X} {(int)front[12].Y} L {(int)front[11].X} {(int)front[11].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)front[11].X} {(int)front[11].Y} L {(int)front[0].X} {(int)front[0].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)front[5].X} {(int)front[5].Y} L {(int)front[16].X} {(int)front[16].Y}""  stroke-width=""3"" stroke=""black""/>
+
                 ";
 
             s += @$"
@@ -351,6 +407,37 @@ namespace PatternConstructor.Data
                     <path d=""M {(int)skirtfront[6].X} {(int)skirtfront[6].Y} L {(int)skirtfront[7].X} {(int)skirtfront[7].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)skirtfront[7].X} {(int)skirtfront[7].Y} L {(int)skirtfront[0].X} {(int)skirtfront[0].Y}""  stroke-width=""3"" stroke=""black""/>
                 ";
+
+            if (sleevetype=="Короткий")
+            {
+                s += @$"
+                    <path d=""M {(int)sleeve[0].X} {(int)sleeve[0].Y} L {(int)sleeve[7].X} {(int)sleeve[7].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)sleeve[7].X} {(int)sleeve[7].Y} L {(int)sleeve[1].X} {(int)sleeve[1].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)sleeve[1].X} {(int)sleeve[1].Y} L {(int)sleeve[10].X} {(int)sleeve[10].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)sleeve[10].X} {(int)sleeve[10].Y} L {(int)sleeve[2].X} {(int)sleeve[2].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)sleeve[2].X} {(int)sleeve[2].Y} L {(int)sleeve[13].X} {(int)sleeve[13].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)sleeve[13].X} {(int)sleeve[13].Y} L {(int)sleeve[11].X} {(int)sleeve[11].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)sleeve[11].X} {(int)sleeve[11].Y} L {(int)sleeve[12].X} {(int)sleeve[12].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)sleeve[12].X} {(int)sleeve[12].Y} L {(int)sleeve[4].X} {(int)sleeve[4].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)sleeve[4].X} {(int)sleeve[4].Y} L {(int)sleeve[9].X} {(int)sleeve[9].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)sleeve[9].X} {(int)sleeve[9].Y} L {(int)sleeve[3].X} {(int)sleeve[3].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)sleeve[3].X} {(int)sleeve[3].Y} L {(int)sleeve[8].X} {(int)sleeve[8].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)sleeve[8].X} {(int)sleeve[8].Y} L {(int)sleeve[0].X} {(int)sleeve[0].Y}""  stroke-width=""3"" stroke=""black""/>
+
+                    <path d=""M {(int)sleeve[3].X} {(int)sleeve[3].Y} L {(int)sleeve[14].X} {(int)sleeve[14].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)sleeve[1].X} {(int)sleeve[1].Y} L {(int)sleeve[15].X} {(int)sleeve[15].Y}""  stroke-width=""1"" stroke=""black""/>
+
+                    <path d=""M {(int)sleeve[0].X} {(int)sleeve[0].Y} L {(int)sleeve[6].X} {(int)sleeve[6].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)sleeve[6].X} {(int)sleeve[6].Y} L {(int)sleeve[3].X} {(int)sleeve[3].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)sleeve[8].X} {(int)sleeve[8].Y} L {(int)sleeve[6].X} {(int)sleeve[6].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)sleeve[0].X} {(int)sleeve[0].Y} L {(int)sleeve[5].X} {(int)sleeve[5].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)sleeve[5].X} {(int)sleeve[5].Y} L {(int)sleeve[7].X} {(int)sleeve[7].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)sleeve[5].X} {(int)sleeve[5].Y} L {(int)sleeve[1].X} {(int)sleeve[1].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)sleeve[0].X} {(int)sleeve[0].Y} L {(int)sleeve[11].X} {(int)sleeve[11].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)sleeve[4].X} {(int)sleeve[4].Y} L {(int)sleeve[2].X} {(int)sleeve[2].Y}""  stroke-width=""1"" stroke=""black""/>
+
+                ";
+            }    
 
             return s;
         }

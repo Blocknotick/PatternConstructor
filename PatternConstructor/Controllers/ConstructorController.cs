@@ -406,6 +406,7 @@ namespace PatternConstructor.Controllers
                 UpperArm = measure.UpperArm,
                 BustWidth = measure.BustWidth,
                 WaistFloorFrontLength = measure.WaistFloorFrontLength,
+                WristGirth = measure.WristGirth,
                 DressCombinationModel = skirtCombination
             };
 

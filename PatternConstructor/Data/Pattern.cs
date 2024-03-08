@@ -59,6 +59,20 @@ namespace PatternConstructor.Data
             arr[0] = P1; arr[1] = P2;
             return arr;
         }
+
+        public Vector2 RotatedVector(Vector2 v, double angleRad, Vector2 rotationPoint)
+        {
+            float dx = rotationPoint.X;
+            float dy = rotationPoint.Y;
+            float sin = (float)Math.Sin(angleRad);
+            float c = (float)Math.Cos(angleRad);
+            return new Vector2((v.X - dx) * c + ( v.Y - dy) * sin + dx,
+                            dy + ((-dy + v.Y) * c) - ((v.X - dx) * sin));
+        }
+        public Vector2 BezierQ(Vector2 P1, Vector2 P2, Vector2 P3, float t)
+        {
+            return P1 * (1 - t) * (1 - t) + 2 * (1 - t) * t * P2 + t * t * P3;
+        }
         public virtual string GenerateContent() { return ""; }
     }
 }

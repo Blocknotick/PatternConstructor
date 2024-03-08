@@ -100,6 +100,11 @@ namespace PatternConstructor.ViewModels
         [Required(ErrorMessage = "Поле должно быть заполнено")]
         public double WaistFloorFrontLength { get; set; }
 
+        [Display(Name = "Обхват запястья")]
+        [Range(9, 25)]
+        [Required(ErrorMessage = "Поле должно быть заполнено")]
+        public double WristGirth { get; set; }
+
 
         [Required(ErrorMessage = "Поле должно быть заполнено")]
         public string Name { get; set; }

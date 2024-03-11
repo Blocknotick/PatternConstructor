@@ -69,6 +69,14 @@ namespace PatternConstructor.Data
             return new Vector2((v.X - dx) * c + ( v.Y - dy) * sin + dx,
                             dy + ((-dy + v.Y) * c) - ((v.X - dx) * sin));
         }
+
+        public Vector2 RotatedVector(Vector2 v, float sin, float cos, Vector2 rotationPoint)
+        {
+            float dx = rotationPoint.X;
+            float dy = rotationPoint.Y;
+            return new Vector2((v.X - dx) * cos + (v.Y - dy) * sin + dx,
+                            dy + ((-dy + v.Y) * cos) - ((v.X - dx) * sin));
+        }
         public Vector2 BezierQ(Vector2 P1, Vector2 P2, Vector2 P3, float t)
         {
             return P1 * (1 - t) * (1 - t) + 2 * (1 - t) * t * P2 + t * t * P3;

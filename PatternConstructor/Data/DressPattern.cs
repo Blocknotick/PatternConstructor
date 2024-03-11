@@ -49,6 +49,7 @@ namespace PatternConstructor.Data
         string neckType, collartype, sleevetype, clasptype, waisttype;
         public DressPattern(DressConstructModel model)
         {
+            s = "";
             switch (model.DressCombinationModel.Silhouette)
             {
                 case "Среднее":
@@ -117,13 +118,13 @@ namespace PatternConstructor.Data
             clasptype = model.DressCombinationModel.Clasp;
             waisttype = model.DressCombinationModel.Waist;
         }
-        private void BackFront(float a, float a1, float a2)
+        private void BackFront(float a, float a1, float a2, Vector2 A1)
         {
             float g = vprz + pspr;
             float t = dts + pdts;
             float b = t + 0.5f * dts - 2;
 
-            Vector2 A1 = new Vector2(csh / 3 + pshgor, (csh / 3 + pshgor) / 3);
+            
             float II1 = 2;
             float A2I = 4;
             back.Add(new Vector2(0, A1.Y));
@@ -270,8 +271,15 @@ namespace PatternConstructor.Data
             else if (neckType == "Круглая")
             {
                 back[3] += (back[4] - back[3]) / Vector2.Distance(back[3], back[4]) * 2;
-                front[0] += new Vector2(0, 2);
+                front[0] += 2 * Vector2.UnitY;
                 front[1] += (front[9] - front[1]) / Vector2.Distance(front[9], front[1]) * 2;
+            }
+            else if (neckType == "Стандартная" && (collartype == "Отложной с круглыми концами" || collartype == "Отложной с прямыми углами" || collartype == "Стойка с застежкой"))
+            {
+                back[3] += (back[4] - back[3]) / Vector2.Distance(back[3], back[4]);
+                back[0] += 0.5f*Vector2.UnitY;
+                front[1] += (front[9] - front[1]) / Vector2.Distance(front[9], front[1]);
+                front[0] += 1.5f * Vector2.UnitY;
             }
             arr = CirclesIntersec(back[6], 7.3f, back[3], Vector2.Distance(back[3], back[5]));
             Vector2 I10;
@@ -370,6 +378,48 @@ namespace PatternConstructor.Data
                 cuff.Add(new Vector2(0, 5));
                 cuff.Add(new Vector2(oz + 5, 5));
 
+            }
+        }
+        private void Collar(Vector2 A1)
+        {
+            A1 -= back[3];
+            collar.Add(back[1] - back[3]);
+            collar.Add(back[0] - back[3]);
+            collar.Add(back[18] - back[3]);
+            collar.Add(back[3] - back[3]);
+            collar.Add(back[15] - back[3]);
+
+            collar.Add(front[9] - front[1]);
+            collar.Add(front[1] - front[1]);
+            collar.Add(front[0] - front[1]);
+
+            float sina = (collar[5].Y - collar[6].Y) / Vector2.Distance(collar[5], collar[6]);
+            float cosa = (collar[6].X - collar[5].X) / Vector2.Distance(collar[5], collar[6]);
+
+            float sinb = (collar[4].Y - collar[3].Y) / Vector2.Distance(collar[4], collar[3]);
+            float cosb = (collar[4].X - collar[3].X) / Vector2.Distance(collar[4], collar[3]);
+
+            float sin = -(sina * cosb + sinb * cosa);
+            float cos = -(cosa * cosb - sinb * sina);
+            for (int i = 0; i < 5; i++)
+                collar[i] = RotatedVector(collar[i], sin, cos, collar[3]);
+            A1 = RotatedVector(A1, sin, cos, collar[3]);
+
+            //sin = Math.Abs((collar[4].X - collar[3].X)) / Vector2.Distance(collar[3], collar[4]);
+            //cos = Math.Abs((collar[4].Y - collar[3].Y)) / Vector2.Distance(collar[3], collar[4]);
+            //collar.Add(Intersec(collar[3], new Vector2(collar[3].X - cos, collar[3].Y + sin), collar[1], A1)); //точка для рисования горловины спинки (8)
+            collar.Add(collar[2]);
+
+            if (collartype== "Отложной с прямыми углами")
+            {
+                float collarwidth = 7;
+                collar.Add(collar[7] + collarwidth * Vector2.UnitY);
+                collar.Add((collar[5] - collar[6]) / Vector2.Distance(collar[5], collar[6]) * collarwidth + collar[3]);
+                collar.Add(collar[8] - (collarwidth) * Vector2.UnitX - (collarwidth+1) * Vector2.UnitY);
+                sin = -((collar[0] - collar[1]) / Vector2.Distance(collar[0], collar[1])).X;
+                cos = -((collar[0] - collar[1]) / Vector2.Distance(collar[0], collar[1])).Y;
+                collar[11] = RotatedVector(collar[11], sin, cos, collar[3]);
+                collar.Add((collar[0] - collar[1])/ Vector2.Distance(collar[0], collar[1])*(collarwidth-1)+collar[1]);
             }
         }
         private void Offset(List<Vector2> l, Vector2 offset)
@@ -504,6 +554,17 @@ namespace PatternConstructor.Data
                     <path d=""M {(int)cuff[4].X} {(int)cuff[4].Y} L {(int)cuff[5].X} {(int)cuff[5].Y}""  stroke-width=""1"" stroke=""black""/>
                 ";
         }
+        private void DrawCollar()
+        {
+            s += $@"
+                    <path d=""M {(int)collar[12].X} {(int)collar[12].Y} L {(int)collar[1].X} {(int)collar[1].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)collar[1].X},{(int)collar[1].Y} Q {(int)collar[8].X},{(int)collar[8].Y} {(int)collar[3].X},{(int)collar[3].Y}""  stroke-width=""3"" stroke=""black"" fill-opacity=""0""/>
+                    <path d=""M {(int)collar[3].X},{(int)collar[3].Y} Q {(int)collar[3].X},{(int)collar[7].Y} {(int)collar[7].X},{(int)collar[7].Y}""  stroke-width=""3"" stroke=""black"" fill-opacity=""0""/>
+                    <path d=""M {(int)collar[7].X} {(int)collar[7].Y} L {(int)collar[9].X} {(int)collar[9].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)collar[9].X},{(int)collar[9].Y} Q {(int)collar[10].X},{(int)collar[9].Y} {(int)collar[10].X},{(int)collar[10].Y}""  stroke-width=""3"" stroke=""black"" fill-opacity=""0""/>
+                    <path d=""M {(int)collar[10].X},{(int)collar[10].Y} Q {(int)collar[10].X},{(int)collar[11].Y} {(int)collar[12].X},{(int)collar[12].Y}""  stroke-width=""3"" stroke=""black"" fill-opacity=""0""/>
+                ";
+        }
         public override string GenerateContent()
         {
             float a1 = cg3 + pg;
@@ -511,18 +572,21 @@ namespace PatternConstructor.Data
             float a = shs + pshs;
             float a2 = a1 - (shg + cg2 - cg1 + pshp);
             float gbdif = ((cb + pb) - (cg3 + pg)) / 2;
+            Vector2 A1 = new Vector2(csh / 3 + pshgor, (csh / 3 + pshgor) / 3);
 
-            BackFront(a, a1, a2);
+            BackFront(a, a1, a2, A1);
             if (sleevetype!= "Без рукава")
                 Sleeve(a2, a);
 
-            //Collar
+
+            if (collartype != "Без воротника")
+                Collar(A1);
 
             Vector2 offsetFront = new Vector2(0, Math.Max(-front[1].Y,0));
             Vector2 offsetB = new Vector2(Math.Max(gbdif*2,0), 0);
             Vector2 sleeveoff = new Vector2(0,0);
             Vector2 cuffoff = new Vector2(0, 0);
-
+            Vector2 collaroff = new Vector2(0, 0);
 
             widthcm = (front[0].X+offsetB.X) * pixelsizeincm;
             heightcm = (skirtfront[3].Y+offsetFront.Y) * pixelsizeincm;
@@ -534,15 +598,40 @@ namespace PatternConstructor.Data
                 sleeveoff = new Vector2(offsetB.X + front[0].X - Math.Min(sleeve[4].X, sleeve[14].X), -(sleeve[0].Y));
                 widthcm = (Math.Max(sleeve[2].X, sleeve[13].X) + sleeveoff.X) * pixelsizeincm;
                 width = (int)((Math.Max(sleeve[2].X, sleeve[13].X) + sleeveoff.X) * 10);
-                if (cuff.Count != 0) cuffoff = new Vector2(offsetB.X+front[0].X, sleeveoff.Y + offsetFront.Y + BezierQ(sleeve[14], sleeve[15], sleeve[13], (float)(Vector2.Distance(cuff[0], cuff[3]) / Vector2.Distance(sleeve[14], sleeve[13]))).Y);
+                if (cuff.Count != 0) cuffoff = new Vector2(offsetB.X+front[0].X, sleeveoff.Y + offsetFront.Y + BezierQ(sleeve[14], sleeve[15], sleeve[13], 0.5f).Y);
             }
+            if (collartype!= "Без воротника")
+            {
+                //рукав без манжеты
+                if (cuff.Count == 0 && sleeve.Count != 0)
+                {
+                    collaroff = new Vector2(offsetB.X + front[0].X, sleeveoff.Y + offsetFront.Y + BezierQ(sleeve[14], sleeve[15], sleeve[13], 0.5f).Y - (collar[12].Y));
+                    heightcm = (collar[9].Y + collaroff.Y) * pixelsizeincm;
+                    height = (int)((collar[9].Y + collaroff.Y) * 10);
+                }
+                else if (sleeve.Count == 0) //нет рукава
+                {
+                    collaroff = new Vector2(offsetB.X + front[0].X - Math.Min(collar[11].X, 0), -(collar[12].Y));
+                    collaroff += offsetFront;
+                    widthcm = (collar[7].X + collaroff.X) * pixelsizeincm;
+                    width = (int)((collar[7].X + collaroff.X) * 10);
+                }
+                //рукав с манжетой
+                else if (cuff.Count != 0)
+                {
+                    collaroff = cuffoff + new Vector2(cuff[3].X - Math.Min(collar[11].X, 0), -(collar[12].Y));
+                    heightcm = (collar[9].Y + collaroff.Y) * pixelsizeincm;
+                    height = (int)((collar[9].Y + collaroff.Y) * 10);
+                }
 
+            }
             Offset(back, offsetFront);
             Offset(front, offsetFront + offsetB);
             Offset(skirtback, offsetFront);
             Offset(skirtfront, offsetFront + offsetB);
             Offset(sleeve, sleeveoff + offsetFront);
             Offset(cuff, cuffoff);
+            Offset(collar, collaroff);
 
 
             s = $"<svg version=\"1.1\" width = \"{width}mm\" height = \"{height}mm\" xmlns =\"http://www.w3.org/2000/svg\">";
@@ -551,6 +640,7 @@ namespace PatternConstructor.Data
             DrawFront();
             DrawSkirtFront();
             if (sleeve.Count != 0) DrawSleeve();
+            if (collar.Count != 0) DrawCollar();
 
             s += "</svg>";
             return s;

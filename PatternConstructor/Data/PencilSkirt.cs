@@ -54,7 +54,7 @@ namespace PatternConstructor.Data
             float CH = hips / 2;
             float CW = waist / 2;
             float width = beltwitdth * 2 + 2 + hips / 2 + 1 + 2;
-            float height = Math.Max(2 + 1 + skirtlengthSide, waist + 2 + beltadd +2);
+            float height = Math.Max(2 + 1 + Math.Max(skirtlengthSide,skirtlengthBack), waist + 2 + beltadd +2);
 
             if (isLecal)
             {
@@ -133,8 +133,13 @@ namespace PatternConstructor.Data
             back.Add(new Vector2(0, back[3].Y));
             front.Add(new Vector2(front[0].X, back[3].Y));
 
+            Vector2 backoffset = Vector2.Zero;
+            if (back[0].Y<0)
+            {
+                backoffset = new Vector2(0,-(back[0].Y));
+            }
+
             Vector2 plus11 = new Vector2(1, 1);
-            Vector2 plus10 = new Vector2(1, 0);
             for (int i = 0;i<belt.Count; i++)
             {
                 belt[i] += plus11;
@@ -143,6 +148,8 @@ namespace PatternConstructor.Data
             Vector2 beltoffset = new Vector2(belt[3].X, 0);
             for (int i = 0; i < back.Count; i++)
             {
+                back[i] += backoffset;
+                front[i] += backoffset;
                 back[i] += plus11;
                 front[i] += plus11;
                 back[i] = (float)pixelsizeincm * back[i];

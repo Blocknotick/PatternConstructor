@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using static iTextSharp.awt.geom.Point2D;
 
 namespace PatternConstructor.Data
 {
@@ -80,6 +81,31 @@ namespace PatternConstructor.Data
         public Vector2 BezierQ(Vector2 P1, Vector2 P2, Vector2 P3, float t)
         {
             return P1 * (1 - t) * (1 - t) + 2 * (1 - t) * t * P2 + t * t * P3;
+        }
+        public float BezierQLength(Vector2 a, Vector2 b, Vector2 c)
+        {
+            Vector2 v,w;
+            v.X = 2 * (b.X - a.X);
+            v.Y = 2 * (b.Y - a.Y);
+            w.X = c.X - 2 * b.X + a.X;
+            w.Y = c.Y - 2 * b.Y + a.Y;
+
+            float uu = 4 * (w.X * w.X + w.Y * w.Y);
+
+            if (uu < 0.00001)
+            {
+                return (float)Math.Sqrt((c.X - a.X) * (c.X - a.X) + (c.Y - a.Y) * (c.Y - a.Y));
+            }
+
+            float vv = 4 * (v.X * w.X + v.Y * w.Y);
+            float ww = v.X * v.X + v.Y * v.Y;
+
+            float t1 = (float)(2 * Math.Sqrt(uu * (uu + vv + ww)));
+            float t2 = 2 * uu + vv;
+            float t3 = vv * vv - 4 * uu * ww;
+            float t4 = (float)(2 * Math.Sqrt(uu * ww));
+
+            return (float)((t1 * t2 - t3 * Math.Log(t2 + t1) - (vv * t4 - t3 * Math.Log(vv + t4))) / (8 * Math.Pow(uu, 1.5)));
         }
         public virtual string GenerateContent() { return ""; }
     }

@@ -107,6 +107,25 @@ namespace PatternConstructor.Data
 
             return (float)((t1 * t2 - t3 * Math.Log(t2 + t1) - (vv * t4 - t3 * Math.Log(vv + t4))) / (8 * Math.Pow(uu, 1.5)));
         }
+        /// <summary>
+        /// direction = 0 -> y<0, direction = 1 -> y>0
+        /// </summary>
+        /// <param name="v1"></param>
+        /// <param name="v2"></param>
+        /// <param name="direction"></param>
+        /// <returns></returns>
+        public Vector2 Normal (Vector2 v1, Vector2 v2, bool direction)
+        {
+            Vector2 Normal = v2 - v1;
+            float x = Normal.X;
+            Normal.X = Normal.Y;
+            Normal.Y = -x;
+            if (direction&&Normal.Y<0 || !direction&&Normal.Y>0)
+            {
+                Normal *= -1;
+            }
+            return Normal/Normal.Length();
+        }
         public virtual string GenerateContent() { return ""; }
     }
 }

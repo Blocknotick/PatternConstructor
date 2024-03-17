@@ -60,6 +60,7 @@ namespace PatternConstructor.Data
             pop;
 
         string neckType, collartype, sleevetype, clasptype, waisttype;
+        bool isLecal;
         public DressPattern(DressConstructModel model)
         {
             s = "";
@@ -130,6 +131,7 @@ namespace PatternConstructor.Data
             sleevetype = model.DressCombinationModel.Sleeve;
             clasptype = model.DressCombinationModel.Clasp;
             waisttype = model.DressCombinationModel.Waist;
+            isLecal = model.DressCombinationModel.DoubleContour;
         }
         private void BackFront(float a, float a1, float a2, Vector2 A1)
         {
@@ -436,7 +438,10 @@ namespace PatternConstructor.Data
 
             collar.Add(front[9] - front[1]);
             collar.Add(front[1] - front[1]);
-            collar.Add(front[0] - front[1]);
+            if (clasptype.Contains("Застежка"))
+                collar.Add(front[17] - front[1]);
+            else
+                collar.Add(front[0] - front[1]);
 
             float sina = (collar[5].Y - collar[6].Y) / Vector2.Distance(collar[5], collar[6]);
             float cosa = (collar[6].X - collar[5].X) / Vector2.Distance(collar[5], collar[6]);
@@ -491,6 +496,121 @@ namespace PatternConstructor.Data
             collar[4] = RotatedVector(collar[4], sin, cos, collar[2]);
             collar[5] = RotatedVector(collar[5], sin, cos, collar[2]);
             collar[6] = RotatedVector(collar[6], sin, cos, collar[2]);
+        }
+        private void FrontD()
+        {
+            if (!clasptype.Contains("Застежка"))
+            {
+                frontD.Add(front[0] - Vector2.UnitY);//0
+            }
+            else
+            {
+                frontD.Add(front[17] - Vector2.UnitY);//0
+            }
+            frontD.Add(front[1] + Vector2.UnitX); //1
+            frontD.Add(Normal(front[1], front[9], false) + front[1]); //2
+            frontD.Add(frontD[2] + Vector2.UnitX);//3
+            frontD.Add(Normal(front[1], front[9], false) + front[9]); //4
+            frontD[4] = Intersec(frontD[4], frontD[2], front[2], front[9]);//4
+            frontD.Add(Normal(front[6], front[8],false) + front[8]); //5
+            frontD.Add(Normal(front[6], front[8], false) + front[6]); //6
+            frontD[5] = Intersec(frontD[5], frontD[6], front[2], front[8]);//5
+            frontD.Add(Normal(front[6], frontD[6], true) + frontD[6]); //7
+            frontD.Add(Normal(front[6], frontD[6], true) + front[6]); //8
+            frontD.Add(Normal(front[7], front[15], true) + front[7]); //9
+            frontD.Add(Normal(front[7], front[15], true) + front[15]); //10
+            frontD.Add(front[5] - Vector2.UnitX);//11
+            frontD.Add(front[4] - Vector2.One / (float)Math.Sqrt(2));//12
+            frontD.Add(front[3] - Vector2.UnitY);//13
+            frontD.Add(Normal(front[3], front[10], true) + front[10]); //14
+            frontD.Add(Normal(front[3], front[10], true) + front[3]); //15
+            frontD.Add(Intersec(frontD[14], frontD[15], frontD[13], frontD[13] + Vector2.UnitX));//16 возодно поменять
+            //frontD[16] = new Vector2(frontD[15].X, frontD[13].Y);
+            frontD[15] = Intersec(frontD[14], frontD[15], front[10], front[10] + Vector2.UnitX); //15
+
+            frontD.Add(Normal(front[10], front[14],true) + front[10]);//17
+            frontD.Add(Normal(front[10], front[14], true) + front[14]);//18
+            frontD[17] = Intersec(frontD[14], frontD[15], frontD[18], frontD[17]);//17
+            frontD[18] = Intersec(front[14], front[13], frontD[16], frontD[18]);//18
+
+            if (!clasptype.Contains("Застежка"))
+            {
+                frontD.Add(Normal(front[11], front[12], true) + front[12]);//19
+                frontD.Add(Normal(front[11], front[12], true) + front[11]);//20
+                frontD[19] = Intersec(front[12], front[13], frontD[19], frontD[20]);//19
+                frontD.Add(front[11] + Vector2.UnitX);//21
+                frontD.Add(front[11] + Vector2.One);//22
+                frontD.Add(frontD[0] + Vector2.UnitX);//23
+            }
+            else
+            {
+                frontD.Add(Normal(front[18], front[12], true) + front[12]);//19
+                frontD.Add(Normal(front[18], front[12], true) + front[18]);//20
+                frontD[18] = Intersec(front[12], front[13], frontD[19], frontD[20]);//19
+                frontD.Add(front[11]);//21
+                frontD.Add(front[11] + Vector2.UnitY);//22
+                frontD.Add(front[0] - Vector2.UnitY);//23
+            }
+            Vector2 middle = (frontD[4] + frontD[5]) / 2;
+            frontD.Add(Intersec(frontD[6], frontD[5], front[2], middle));//24
+            middle = (frontD[19] + frontD[18]) / 2;
+            frontD.Add(Intersec(frontD[18], frontD[17], front[13],middle));//25
+            if (!clasptype.Contains("Застежка"))
+            {
+                frontD.Add(new Vector2(front[11].X, frontD[22].Y));//26
+            }
+            else
+            {
+                frontD.Add(new Vector2(front[18].X, frontD[22].Y));//26
+            }
+            if (neckType=="V-горловина")
+            {
+                Vector2 righttop = front[0];
+                if (clasptype.Contains("Застежка"))
+                    righttop = front[17];
+                Vector2 n1 = Normal(front[1], righttop, false) + front[1];
+                Vector2 n2 = Normal(front[1], righttop, false) + righttop;
+                if (clasptype == "Без застежки")
+                    frontD[0] = Intersec(frontD[0], frontD[26], n1, n2);
+                else
+                    frontD[0] = Intersec(frontD[0], frontD[23], n1, n2);
+            }
+        }
+        private void BackD()
+        {
+            backD.Add(back[0] - Vector2.One);//0
+            backD.Add(back[1] - Vector2.UnitX + Vector2.UnitY);//1
+            backD.Add(back[1] + Vector2.UnitY);//2
+            backD.Add(back[11] + Vector2.UnitY); //3
+            backD.Add(Normal(back[11], back[9], true) + back[11]);//4
+            backD.Add(Normal(back[11], back[9], true) + back[9]);//5
+            backD.Add(Intersec(backD[1], backD[2], backD[5], backD[4]));//6
+            backD[4] = Intersec(backD[4], backD[5], back[1], back[11]);//4
+            backD.Add(back[9]-Vector2.UnitY);//7
+            backD.Add(Intersec(backD[7], backD[7] + Vector2.UnitX, backD[5], backD[5]+Vector2.UnitY));//8
+            backD.Add(new Vector2(back[10].X + 1 / (float)Math.Sqrt(2), back[10].Y-1/(float)Math.Sqrt(2)));//9
+            backD.Add(back[8] + Vector2.UnitX);//10
+            backD.Add(Normal(back[4], back[16], false) + back[4]);//11
+            backD.Add(Normal(back[4], backD[11], true) + back[4]);//12
+            backD.Add(Normal(back[4], backD[11], true) + backD[11]);//13
+
+            backD.Add(Normal(back[4], back[16], false) + back[16]);//14
+            backD[14] = Intersec(backD[14], backD[11], back[6], back[16]);//14
+            backD.Add(Normal(back[3], back[15], false) + back[15]);//15
+            backD.Add(Normal(back[3], back[15], false) + back[3]);//16
+            backD[15] = Intersec(backD[15], backD[16], back[6], back[15]);//15
+            Vector2 middle = (backD[14] + backD[15]) / 2;
+            backD.Add(Intersec(backD[14], backD[11], back[6], middle));//17
+
+            backD.Add(Normal(back[3], back[18], false) + back[3]);//18
+            backD.Add(back[0] - Vector2.UnitY);//19
+            //backD.Add(Normal(back[3], back[18], false) + back[18]);//20
+            //backD[20] = Intersec(backD[0], backD[19], backD[18], backD[20]);//20
+            backD.Add(back[18] - Vector2.One);
+            backD.Add(back[1] - Vector2.UnitX);//21
+
+            backD.Add(backD[10] - 2* Vector2.UnitY + (backD[13].Y - backD[11].Y) * Vector2.UnitY);//22
+
         }
         private void Offset(List<Vector2> l, Vector2 offset)
         {
@@ -606,6 +726,8 @@ namespace PatternConstructor.Data
                     <path d=""M {(int)skirtfront[8].X} {(int)skirtfront[8].Y} L {(int)skirtfront[5].X} {(int)skirtfront[5].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)skirtfront[8].X} {(int)skirtfront[8].Y} L {(int)skirtfront[4].X} {(int)skirtfront[4].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)skirtfront[9].X} {(int)skirtfront[9].Y} L {(int)skirtfront[3].X} {(int)skirtfront[3].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)skirtfront[9].X} {(int)skirtfront[9].Y} L {(int)skirtfront[8].X} {(int)skirtfront[8].Y}""  stroke-width=""3"" stroke=""black""/>
+                    <path d=""M {(int)skirtfront[10].X} {(int)skirtfront[10].Y} L {(int)skirtfront[11].X} {(int)skirtfront[11].Y}""  stroke-width=""3"" stroke=""black""/>
                 ";
             }
         }
@@ -699,6 +821,128 @@ namespace PatternConstructor.Data
                 ";
             }
         }
+        private void DrawFrontD()
+        {
+            if (neckType == "V-горловина")
+                s += @$"
+                    <path d=""M {(int)frontD[0].X} {(int)frontD[0].Y} L {(int)frontD[1].X},{(int)frontD[1].Y}""  stroke-width=""1"" stroke=""black"" />
+                    ";
+            else
+                s += @$"
+                    <path d=""M {(int)frontD[0].X} {(int)frontD[0].Y} Q {(int)frontD[1].X},{(int)frontD[0].Y} {(int)frontD[1].X},{(int)frontD[1].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                    ";
+            s += @$"
+                    <path d=""M {(int)frontD[1].X} {(int)frontD[1].Y} L {(int)frontD[3].X} {(int)frontD[3].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)frontD[2].X} {(int)frontD[2].Y} L {(int)frontD[3].X} {(int)frontD[3].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)frontD[2].X} {(int)frontD[2].Y} L {(int)frontD[4].X} {(int)frontD[4].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)frontD[4].X} {(int)frontD[4].Y} L {(int)frontD[24].X} {(int)frontD[24].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)frontD[24].X} {(int)frontD[24].Y} L {(int)frontD[5].X} {(int)frontD[5].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)frontD[5].X} {(int)frontD[5].Y} L {(int)frontD[6].X} {(int)frontD[6].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)frontD[6].X} {(int)frontD[6].Y} L {(int)frontD[7].X} {(int)frontD[7].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)frontD[7].X} {(int)frontD[7].Y} L {(int)frontD[8].X} {(int)frontD[8].Y}""  stroke-width=""1"" stroke=""black""/>
+                    
+                    <path d=""M {(int)frontD[8].X} {(int)frontD[8].Y} C {(int)frontD[8].X},{(int)frontD[8].Y} {(int)frontD[10].X},{(int)frontD[10].Y} {(int)frontD[9].X},{(int)frontD[9].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                    <path d=""M {(int)frontD[9].X} {(int)frontD[9].Y} Q {(int)frontD[11].X},{(int)((frontD[9].Y + frontD[11].Y) / 2)} {(int)frontD[11].X},{(int)frontD[11].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                    <path d=""M {(int)frontD[11].X} {(int)frontD[11].Y} Q {(int)frontD[11].X},{(int)((frontD[12].Y + frontD[11].Y) / 2)} {(int)frontD[12].X},{(int)frontD[12].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                    <path d=""M {(int)frontD[12].X} {(int)frontD[12].Y} Q {(int)((frontD[12].X + frontD[13].X) / 2)},{(int)frontD[13].Y} {(int)frontD[13].X},{(int)frontD[13].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                    <path d=""M {(int)frontD[13].X} {(int)frontD[13].Y} L {(int)frontD[16].X} {(int)frontD[16].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)frontD[16].X} {(int)frontD[16].Y} L {(int)frontD[14].X} {(int)frontD[14].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)frontD[14].X} {(int)frontD[14].Y} L {(int)frontD[15].X} {(int)frontD[15].Y}""  stroke-width=""1"" stroke=""black""/>
+
+                ";
+            if (waisttype== "Отрезноe по талии" || clasptype!= "Без застежки")
+            {
+                if (waisttype == "Отрезноe по талии")
+                    //если есть низ
+                    s += $@"
+                    <path d=""M {(int)frontD[15].X} {(int)frontD[15].Y} L {(int)frontD[17].X} {(int)frontD[17].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)frontD[17].X} {(int)frontD[17].Y} L {(int)frontD[18].X} {(int)frontD[18].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)frontD[18].X} {(int)frontD[18].Y} L {(int)frontD[25].X} {(int)frontD[25].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)frontD[25].X} {(int)frontD[25].Y} L {(int)frontD[19].X} {(int)frontD[19].Y}""  stroke-width=""1"" stroke=""black""/>
+
+                    <path d=""M {(int)frontD[19].X} {(int)frontD[19].Y} L {(int)frontD[20].X} {(int)frontD[20].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)frontD[20].X} {(int)frontD[20].Y} L {(int)frontD[26].X} {(int)frontD[26].Y}""  stroke-width=""1"" stroke=""black""/>
+                    ";
+                if (clasptype != "Без застежки")
+                    //если есть бок
+                    s += $@"
+                    <path d=""M {(int)frontD[0].X} {(int)frontD[0].Y} L {(int)frontD[23].X} {(int)frontD[23].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)frontD[23].X} {(int)frontD[23].Y} L {(int)frontD[21].X} {(int)frontD[21].Y}""  stroke-width=""1"" stroke=""black""/>
+                    ";
+                else
+                    //если нет бока
+                    s += $@"
+                    <path d=""M {(int)frontD[26].X} {(int)frontD[26].Y} L {(int)frontD[0].X} {(int)frontD[0].Y}""  stroke-width=""1"" stroke=""black""/>
+                    ";
+                if (waisttype == "Отрезноe по талии" && clasptype != "Без застежки")
+                //если есть и бок и низ
+                    s += $@"
+                    <path d=""M {(int)frontD[26].X} {(int)frontD[26].Y} L {(int)frontD[22].X} {(int)frontD[22].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)frontD[22].X} {(int)frontD[22].Y} L {(int)frontD[21].X} {(int)frontD[21].Y}""  stroke-width=""1"" stroke=""black""/>
+                    ";
+            }
+            else if (clasptype == "Без застежки")
+            {
+                s += $@"
+                    <path d=""M {(int)frontD[0].X} {(int)frontD[0].Y} L {(int)front[0].X} {(int)front[0].Y}""  stroke-width=""1"" stroke=""black""/>
+                    ";
+            }
+
+
+        }
+        private void DrawBackD()
+        {
+            s += @$"
+                    <path d=""M {(int)backD[19].X} {(int)backD[19].Y} Q {(int)backD[20].X},{(int)backD[20].Y} {(int)backD[18].X},{(int)backD[18].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                    
+                    <path d=""M {(int)backD[18].X} {(int)backD[18].Y} L {(int)backD[16].X} {(int)backD[16].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)backD[16].X} {(int)backD[16].Y} L {(int)backD[15].X} {(int)backD[15].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)backD[15].X} {(int)backD[15].Y} L {(int)backD[17].X} {(int)backD[17].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)backD[17].X} {(int)backD[17].Y} L {(int)backD[14].X} {(int)backD[14].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)backD[14].X} {(int)backD[14].Y} L {(int)backD[13].X} {(int)backD[13].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)backD[12].X} {(int)backD[12].Y} L {(int)backD[13].X} {(int)backD[13].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)backD[12].X} {(int)backD[12].Y} C {(int)backD[12].X},{(int)backD[12].Y} {(int)backD[22].X},{(int)(backD[22].Y)} {(int)backD[10].X},{(int)backD[10].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                    <path d=""M {(int)backD[10].X} {(int)backD[10].Y} Q {(int)backD[10].X},{(int)((backD[9].Y + backD[10].Y) / 2)} {(int)backD[9].X},{(int)backD[9].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                    <path d=""M {(int)backD[9].X} {(int)backD[9].Y} Q {(int)((backD[7].X + backD[9].X) / 2)},{(int)backD[7].Y} {(int)backD[7].X},{(int)backD[7].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                    <path d=""M {(int)backD[7].X} {(int)backD[7].Y} L {(int)backD[8].X} {(int)backD[8].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)backD[8].X} {(int)backD[8].Y} L {(int)backD[5].X} {(int)backD[5].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)backD[5].X} {(int)backD[5].Y} L {(int)backD[4].X} {(int)backD[4].Y}""  stroke-width=""1"" stroke=""black""/>
+                    
+            ";
+            if (waisttype == "Отрезноe по талии" || clasptype == "Без застежки")
+            {
+                if (waisttype == "Отрезноe по талии")
+                    //если есть низ
+                    s += $@"
+                    <path d=""M {(int)backD[2].X} {(int)backD[2].Y} L {(int)backD[6].X} {(int)backD[6].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)backD[6].X} {(int)backD[6].Y} L {(int)backD[4].X} {(int)backD[4].Y}""  stroke-width=""1"" stroke=""black""/>
+
+                    ";
+                if (clasptype == "Без застежки")
+                    //если есть бок
+                    s += $@"
+                    <path d=""M {(int)backD[19].X} {(int)backD[19].Y} L {(int)backD[0].X} {(int)backD[0].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)backD[0].X} {(int)backD[0].Y} L {(int)backD[21].X} {(int)backD[21].Y}""  stroke-width=""1"" stroke=""black""/>
+                    ";
+                else
+                    //если нет бока
+                    s += $@"
+                    <path d=""M {(int)backD[19].X} {(int)backD[19].Y} L {(int)backD[2].X} {(int)backD[2].Y}""  stroke-width=""1"" stroke=""black""/>
+                    ";
+                if (waisttype == "Отрезноe по талии" && clasptype == "Без застежки")
+                    //если есть и бок и низ
+                    s += $@"
+                    <path d=""M {(int)backD[21].X} {(int)backD[21].Y} L {(int)backD[1].X} {(int)backD[1].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)backD[1].X} {(int)backD[1].Y} L {(int)backD[2].X} {(int)backD[2].Y}""  stroke-width=""1"" stroke=""black""/>
+                    ";
+            }
+            else if (clasptype != "Без застежки")
+            {
+                s += $@"
+                    <path d=""M {(int)backD[19].X} {(int)backD[19].Y} L {(int)back[0].X} {(int)back[0].Y}""  stroke-width=""1"" stroke=""black""/>
+                    ";
+            }
+        }
         public override string GenerateContent()
         {
             float a1 = cg3 + pg;
@@ -719,6 +963,11 @@ namespace PatternConstructor.Data
                     StandCollar();
                 else if (collartype.Contains("Отложной"))
                     Collar(A1);
+            }
+            if (isLecal)
+            {
+                FrontD();
+                BackD();
             }
 
             Vector2 offsetFront = new Vector2(0, Math.Max(-front[1].Y,0));
@@ -806,6 +1055,9 @@ namespace PatternConstructor.Data
             Offset(cuff, cuffoff);
             Offset(collar, collaroff);
 
+            Offset(frontD, offsetFront+offsetB);
+            Offset(backD, offsetFront);
+
 
             s = $"<svg version=\"1.1\" width = \"{width}mm\" height = \"{height}mm\" xmlns =\"http://www.w3.org/2000/svg\">";
             DrawBack();
@@ -814,7 +1066,11 @@ namespace PatternConstructor.Data
             DrawSkirtFront();
             if (sleeve.Count != 0) DrawSleeve();
             if (collar.Count != 0) DrawCollar();
-
+            if (isLecal)
+            {
+                DrawFrontD();
+                DrawBackD();
+            }
             s += "</svg>";
             return s;
         }

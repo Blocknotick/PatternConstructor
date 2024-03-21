@@ -374,6 +374,9 @@ namespace PatternConstructor.Controllers
         {
             //проверка на реализуемость
             if (!ModelState.IsValid) return View(skirtCombination);
+            if (skirtCombination.Neck=="V-горловина"&&skirtCombination.Collar=="Стойка с застежкой" ||
+                skirtCombination.Collar=="Стойка с застежкой"&&(skirtCombination.Clasp== "Без застежки"||skirtCombination.Clasp== "Центральный шов полочки") ||
+                skirtCombination.Waist== "Неотрезное по талии"&&skirtCombination.Clasp== "Застежка на пуговицы до талии") return View(skirtCombination);
 
             return RedirectToAction("Dress", skirtCombination);
         }

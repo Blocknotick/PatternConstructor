@@ -430,18 +430,18 @@ namespace PatternConstructor.Data
         private void Collar(Vector2 A1)
         {
             A1 -= back[3];
-            collar.Add(back[1] - back[3]);
-            collar.Add(back[0] - back[3]);
-            collar.Add(back[18] - back[3]);
-            collar.Add(back[3] - back[3]);
-            collar.Add(back[15] - back[3]);
+            collar.Add(back[1] - back[3]);//0
+            collar.Add(back[0] - back[3]);//1
+            collar.Add(back[18] - back[3]);//2
+            collar.Add(back[3] - back[3]);//3
+            collar.Add(back[15] - back[3]);//4
 
-            collar.Add(front[9] - front[1]);
-            collar.Add(front[1] - front[1]);
+            collar.Add(front[9] - front[1]);//5
+            collar.Add(front[1] - front[1]);//5
             if (clasptype.Contains("Застежка"))
-                collar.Add(front[17] - front[1]);
+                collar.Add(front[17] - front[1]);//7
             else
-                collar.Add(front[0] - front[1]);
+                collar.Add(front[0] - front[1]);//7
 
             float sina = (collar[5].Y - collar[6].Y) / Vector2.Distance(collar[5], collar[6]);
             float cosa = (collar[6].X - collar[5].X) / Vector2.Distance(collar[5], collar[6]);
@@ -462,18 +462,21 @@ namespace PatternConstructor.Data
 
                 collar.Add(Intersec(collar[3], collar[3] + Vector2.UnitY, collar[1], A1)); //точка для рисования горловины спинки (8)
                 float collarwidth = 7;
-                collar.Add(collar[7] + (collarwidth+1) * Vector2.UnitY);//9
-                collar.Add(collar[3]-collarwidth*Vector2.UnitX);//10
+                collar.Add(collar[7] + (collarwidth) * Vector2.UnitY);//9
+                                                                        //collar.Add(collar[3]-collarwidth*Vector2.UnitX);//10
+            collar.Add(Normal(collar[3], collar[8], true) * collarwidth + collar[3]);
 
-                collar.Add((collar[0] - collar[1])/ Vector2.Distance(collar[0], collar[1])*(collarwidth)+collar[1]); //11
+            collar.Add((collar[0] - collar[1])/ Vector2.Distance(collar[0], collar[1])*(collarwidth)+collar[1]); //11
 
                 collar.Add(Intersec(collar[10], collar[10] + Vector2.UnitY, collar[11], collar[11] + collar[8] - collar[1])); //12
 
                 if (collartype == "Отложной с прямыми углами")
                 {
-                    collar[9] -= 0.5f * collarwidth * Vector2.UnitX;
-                    float d = (collar[9].X - collar[10].X - collarwidth*0.5f)/ (float)Math.Sqrt(3);
-                    collar.Add(new Vector2(collar[10].X, collar[9].Y-d));
+                //collar[9] -= 0.5f * collarwidth * Vector2.UnitX;
+                //float d = (collar[7].X - collar[10].X - collarwidth*0.5f)/ (float)Math.Sqrt(3);
+                //collar.Add(new Vector2(collar[10].X, collar[9].Y-d));//13
+                collar[9] = RotatedVector(collar[9],-0.5f,(float)Math.Sqrt(3)/2, collar[7]);
+                collar.Add(new Vector2(collar[10].X, collar[9].Y));
                 }
 
 

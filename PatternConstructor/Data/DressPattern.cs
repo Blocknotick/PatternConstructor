@@ -348,36 +348,36 @@ namespace PatternConstructor.Data
         private void Sleeve(float a2,float a)
         {
             Vector2 O = (back[4] + front[6]) / 2;
-            sleeve.Add(new Vector2(O.X, O.Y + 2f)); //O2
+            sleeve.Add(new Vector2(O.X, O.Y + 2f)); //O2 0
             float shruk = (op + pop) / 2;
             //sleeve.Add(new Vector2(sleeve[0].X + shruk/2 + 1f, front[5].Y+0.5f)); //P62
-            sleeve.Add(new Vector2(sleeve[0].X + shruk / 2 + 0.5f, front[5].Y + 0.5f)); //P62
-            sleeve.Add(new Vector2(sleeve[0].X + shruk, back[9].Y)); //P2
-            sleeve.Add(new Vector2(sleeve[0].X - shruk / 2 - 1f, back[8].Y + 0.5f)); //P31
-            sleeve.Add(new Vector2(sleeve[0].X - shruk, back[9].Y)); //P1
-            sleeve.Add(new Vector2(sleeve[0].X + shruk / 4 + 2, sleeve[0].Y)); // O5
-            sleeve.Add(new Vector2(sleeve[0].X - shruk / 4, sleeve[0].Y)); // O6
+            sleeve.Add(new Vector2(sleeve[0].X + shruk / 2 + 0.5f, front[5].Y + 0.5f)); //P62 1 
+            sleeve.Add(new Vector2(sleeve[0].X + shruk, back[9].Y)); //P2 2
+            sleeve.Add(new Vector2(sleeve[0].X - shruk / 2 - 1f, back[8].Y + 0.5f)); //P31 3
+            sleeve.Add(new Vector2(sleeve[0].X - shruk, back[9].Y)); //P1 4
+            sleeve.Add(new Vector2(sleeve[0].X + shruk / 4 + 2, sleeve[0].Y)); // O5 5
+            sleeve.Add(new Vector2(sleeve[0].X - shruk / 4, sleeve[0].Y)); // O6 6
             sleeve.Add(new Vector2((float)(sleeve[5].X - 2.25 * Math.Sqrt((1 - (sleeve[1].X - sleeve[5].X) / Vector2.Distance(sleeve[5], sleeve[1])) / 2)),
-                (float)(sleeve[5].Y + 2.25 * Math.Sqrt((1 + (sleeve[1].X - sleeve[5].X) / Vector2.Distance(sleeve[5], sleeve[1])) / 2)))); // O51
+                (float)(sleeve[5].Y + 2.25 * Math.Sqrt((1 + (sleeve[1].X - sleeve[5].X) / Vector2.Distance(sleeve[5], sleeve[1])) / 2)))); // O51 7
             sleeve.Add(new Vector2((float)(sleeve[6].X + 1.5 * Math.Sqrt((1 - (sleeve[6].X - sleeve[3].X) / Vector2.Distance(sleeve[3], sleeve[6])) / 2)),
-                (float)(sleeve[6].Y + 1.5 * Math.Sqrt((1 + (sleeve[6].X - sleeve[3].X) / Vector2.Distance(sleeve[3], sleeve[6])) / 2)))); // O61
+                (float)(sleeve[6].Y + 1.5 * Math.Sqrt((1 + (sleeve[6].X - sleeve[3].X) / Vector2.Distance(sleeve[3], sleeve[6])) / 2)))); // O61 8
             Vector2 Six = (sleeve[3] + sleeve[4]) / 2;
             float sin = (float)((sleeve[4].Y - sleeve[3].Y) / Vector2.Distance(sleeve[3], sleeve[4]));
             float c = (float)((-sleeve[4].X + sleeve[3].X) / Vector2.Distance(sleeve[3], sleeve[4]));
-            sleeve.Add(new Vector2(Six.X + 1.2f * sin, Six.Y + 1.2f * c)); // 7
+            sleeve.Add(new Vector2(Six.X + 1.2f * sin, Six.Y + 1.2f * c)); // 7 9
             float G3G4 = a2 - a;
             float cG4 = (float)((0.2 * G3G4 + 1) / Math.Sqrt(2));
-            sleeve.Add(new Vector2(sleeve[0].X + shruk / 2 + cG4, sleeve[2].Y - cG4)); // P81
+            sleeve.Add(new Vector2(sleeve[0].X + shruk / 2 + cG4, sleeve[2].Y - cG4)); // P81 10
             Vector2 L = new Vector2(sleeve[0].X, sleeve[0].Y + dr / 2 + 3);
             if (sleevetype == "Короткий")
             {
-                sleeve.Add(new Vector2(sleeve[0].X, sleeve[0].Y + (L.Y - sleeve[0].Y) / 3 * 2));
+                sleeve.Add(new Vector2(sleeve[0].X, sleeve[0].Y + (L.Y - sleeve[0].Y) / 3 * 2)); //11
                 sin = 10.25f; //это тангенс донт майнд зе нейм
-                float slevelen = sleeve[11].Y - sleeve[4].Y + 0.5f;
-                sleeve.Add(new Vector2(sleeve[4].X + slevelen / sin, sleeve[4].Y + slevelen));
-                sleeve.Add(new Vector2(sleeve[2].X - slevelen / sin, sleeve[2].Y + slevelen));
-                sleeve.Add(new Vector2(sleeve[3].X + 0.5f, sleeve[3].Y));
-                sleeve.Add(new Vector2(sleeve[1].X - 0.5f, sleeve[1].Y));
+                float slevelen = sleeve[11].Y - sleeve[4].Y + 0.5f; 
+                sleeve.Add(new Vector2(sleeve[4].X + slevelen / sin, sleeve[4].Y + slevelen)); //12
+                sleeve.Add(new Vector2(sleeve[2].X - slevelen / sin, sleeve[2].Y + slevelen)); //13
+                sleeve.Add(new Vector2(sleeve[3].X + 0.5f, sleeve[3].Y)); //14
+                sleeve.Add(new Vector2(sleeve[1].X - 0.5f, sleeve[1].Y)); //15
             }
             else if (sleevetype == "Епископ с резинкой")
             {
@@ -397,6 +397,7 @@ namespace PatternConstructor.Data
                 list = new List<int>() { 12, 4, 14, 9 };
                 for (int i = 0; i < list.Count; i++)
                     sleeve[list[i]] = RotatedVector(sleeve[list[i]], -0.174533, sleeve[3]);
+
                 sleeve.Add(new Vector2(sleeve[0].X, sleeve[0].Y + dr + 7)); //(15)
             }
             else if (sleevetype == "Епископ с манжетой")
@@ -468,16 +469,20 @@ namespace PatternConstructor.Data
 
             collar.Add((collar[0] - collar[1])/ Vector2.Distance(collar[0], collar[1])*(collarwidth)+collar[1]); //11
 
-                collar.Add(Intersec(collar[10], collar[10] + Vector2.UnitY, collar[11], collar[11] + collar[8] - collar[1])); //12
+            collar.Add(Intersec(collar[10], collar[10] + Vector2.UnitY, collar[11], collar[11] + collar[8] - collar[1])); //12
 
-                if (collartype == "Отложной с прямыми углами")
-                {
+            if (collartype == "Отложной с прямыми углами")
+            {
                 //collar[9] -= 0.5f * collarwidth * Vector2.UnitX;
                 //float d = (collar[7].X - collar[10].X - collarwidth*0.5f)/ (float)Math.Sqrt(3);
                 //collar.Add(new Vector2(collar[10].X, collar[9].Y-d));//13
                 collar[9] = RotatedVector(collar[9],-0.5f,(float)Math.Sqrt(3)/2, collar[7]);
                 collar.Add(new Vector2(collar[10].X, collar[9].Y));
+                if (neckType=="V-горловина")
+                {
+                    collar[9] = Intersec(collar[7], collar[9], collar[10], Normal(collar[3], collar[7],true)*collarwidth+ collar[7]);
                 }
+            }
 
 
         }
@@ -700,11 +705,90 @@ namespace PatternConstructor.Data
         }
         private void SleeveD()
         {
+            sleeveD.Add(sleeve[0] - Vector2.UnitY);//0
+            sleeveD.Add(Normal(sleeve[1], sleeve[5], false) + sleeve[1]);//1
+            sleeveD.Add(Intersec(sleeveD[0], sleeveD[0] + Vector2.UnitX, sleeveD[1], sleeveD[1] + (sleeve[1] - sleeve[5]))); //2
+            sleeveD.Add(Normal(sleeve[1], sleeve[10], false) + sleeve[1]);//3
+            sleeveD.Add(Normal(sleeve[10], sleeve[2], false) + sleeve[2]);//4
+            sleeveD.Add(Intersec(sleeveD[3], sleeveD[3] + (sleeve[1] - sleeve[10]), sleeveD[4], sleeveD[4] + (sleeve[10] - sleeve[2]))); //5
+            sleeveD.Add(Intersec(sleeveD[2], sleeveD[1], sleeveD[3], sleeveD[5])); //6
 
+            sleeveD.Add(Normal(sleeve[3], sleeve[6], false) + sleeve[3]);//7
+            sleeveD.Add(Intersec(sleeveD[0], sleeveD[0] + Vector2.UnitX, sleeveD[7], sleeveD[7] + (sleeve[3] - sleeve[6]))); //8
+            sleeveD.Add(Normal(sleeve[3], sleeve[9], false) + sleeve[3]);//9
+            sleeveD.Add(Normal(sleeve[4], sleeve[9], false) + sleeve[4]);//10
+            sleeveD.Add(Intersec(sleeveD[10], sleeveD[10] + (sleeve[4] - sleeve[9]), sleeveD[9], sleeveD[9] + (sleeve[3] - sleeve[9]))); //11
+            sleeveD.Add(Intersec(sleeveD[9], sleeveD[11], sleeveD[7], sleeveD[8])); //12
+
+            if (sleevetype == "Короткий")
+            {
+                sleeveD.Add(Normal(sleeve[2], sleeve[13], true) + sleeve[2]);//13
+                sleeveD.Add(Normal(sleeve[4], sleeve[12], true) + sleeve[4]);//14
+                sleeveD.Add(sleeve[11] + Vector2.UnitY);//15
+                Vector2 temp = sleeveD[15] + Vector2.UnitY * (sleeve[13].Y - sleeve[11].Y);
+                sleeveD.Add(Intersec(sleeve[2], sleeve[13], temp, temp + Vector2.UnitX));//16
+                sleeveD.Add(Normal(sleeve[2], sleeve[13], true) + sleeveD[16]);//17
+                sleeveD.Add(new Vector2(sleeveD[16].X, sleeveD[15].Y));//18
+                sleeveD[13] = Intersec(sleeveD[13], sleeveD[17], sleeveD[4], sleeveD[5]);
+
+                sleeveD.Add(Intersec(sleeve[4], sleeve[12], temp, temp + Vector2.UnitX));//19
+                sleeveD.Add(Normal(sleeve[4], sleeve[12], true) + sleeveD[19]);//20
+                sleeveD.Add(new Vector2(sleeveD[19].X, sleeveD[15].Y));//21
+                sleeveD[14] = Intersec(sleeveD[14], sleeveD[20], sleeveD[10], sleeveD[11]); //14
+
+            }
+            else if (sleevetype.Contains("Епископ"))
+            {
+                sleeveD.Add(Normal(sleeve[2], sleeve[13], false) + sleeve[2]);//13
+                sleeveD.Add(Normal(sleeve[4], sleeve[14], false) + sleeve[4]);//14
+
+                sleeveD.Add(Normal(sleeve[13], sleeve[15], true) + sleeve[13]); //15
+                sleeveD.Add(Normal(sleeve[13], sleeve[15], true) + sleeve[15]); //16
+                sleeveD.Add(Normal(sleeve[14], sleeve[15], true) + sleeve[14]); //17
+
+                sleeveD.Add(Normal(sleeve[2], sleeve[13], false) + sleeve[13]);//18
+                sleeveD.Add(Normal(sleeve[4], sleeve[14], false) + sleeve[14]);//19
+
+                sleeveD.Add(Normal(sleeve[14], sleeve[15], true) + sleeve[15]); //20
+
+                sleeveD[16] = Intersec(sleeveD[15],sleeveD[16],sleeveD[17],sleeveD[20]);
+
+                sleeveD[13] = Intersec(sleeveD[13], sleeveD[18], sleeveD[4], sleeveD[5]);
+                sleeveD[14] = Intersec(sleeveD[14], sleeveD[19], sleeveD[10], sleeveD[11]);
+                if (cuff.Count != 0)
+                {
+                    cuffD.Add(cuff[0] - Vector2.One);
+                    cuffD.Add(cuff[1] + Vector2.UnitY - Vector2.UnitX);
+                    cuffD.Add(cuff[2] + Vector2.One);
+                    cuffD.Add(cuff[3] + Vector2.UnitX - Vector2.UnitY);
+                }
+            }
         }
         private void CollarD()
         {
-
+            collarD.Add(collar[3] + Vector2.UnitX);//0
+            collarD.Add((collar[1] - collar[11]) / Vector2.Distance(collar[1], collar[11]) + collar[1]); //1
+            collarD.Add(Intersec(collarD[0], collarD[0] + Vector2.UnitY, collarD[1], collarD[1] + (collar[1] - collar[8])));//2
+            collarD.Add((collar[11] - collar[1]) / Vector2.Distance(collar[1], collar[11]) + collar[11]); //3
+            collarD.Add(collar[10] - Vector2.UnitX);//4
+            collarD.Add(Intersec(collarD[4], collarD[4] + Vector2.UnitY, collarD[3], collarD[3] + (collar[1] - collar[8])));//5
+            collarD.Add(collar[13] + Vector2.UnitY - Vector2.UnitX);//6
+            collarD.Add(collar[9] + Vector2.UnitY);//7
+            collarD.Add(Normal(collar[9], collar[7], true) + collar[9]);//8
+            collarD.Add(Normal(collar[9], collar[7], true) + collar[7]);//9
+            collarD[8] = Intersec(collarD[6], collarD[7], collarD[8], collarD[9]);
+            collarD.Add(collar[7] - Vector2.UnitY);//10
+            collarD.Add(new Vector2(collarD[0].X, collarD[10].Y));//11
+            collarD.Add(new Vector2(collarD[9].X, collarD[10].Y));//12
+            if (collartype == "Отложной с прямыми углами")
+            {
+                if (neckType == "V-горловина")
+                {
+                    collarD[10] = Normal(collar[3], collar[7], false) + collar[7];
+                    collarD[6] = Normal(collar[10], collar[9], true) + collar[9];
+                    collarD[8] = Intersec(collarD[6], collarD[4], collarD[8], collarD[9]);
+                }
+            }
         }
         private void StandCollarD()
         {
@@ -1150,33 +1234,79 @@ namespace PatternConstructor.Data
         }
         private void DrawSleeveD()
         {
+            s += @$"
+                    <path d=""M {(int)sleeveD[0].X},{(int)sleeveD[0].Y} Q {(int)sleeveD[2].X},{(int)sleeveD[2].Y} {(int)sleeveD[6].X},{(int)sleeveD[6].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                    <path d=""M {(int)sleeveD[0].X},{(int)sleeveD[0].Y} Q {(int)sleeveD[8].X},{(int)sleeveD[8].Y} {(int)sleeveD[12].X},{(int)sleeveD[12].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                    <path d=""M {(int)sleeveD[6].X},{(int)sleeveD[6].Y} Q {(int)sleeveD[5].X},{(int)sleeveD[5].Y} {(int)sleeveD[4].X},{(int)sleeveD[4].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                    <path d=""M {(int)sleeveD[12].X},{(int)sleeveD[12].Y} Q {(int)sleeveD[11].X},{(int)sleeveD[11].Y} {(int)sleeveD[10].X},{(int)sleeveD[10].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                ";
+            if (sleevetype == "Короткий")
+            {
+                s += @$"
+                    <path d=""M {(int)sleeveD[4].X} {(int)sleeveD[4].Y} L {(int)sleeveD[13].X} {(int)sleeveD[13].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)sleeveD[13].X} {(int)sleeveD[13].Y} L {(int)sleeveD[17].X} {(int)sleeveD[17].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)sleeveD[17].X} {(int)sleeveD[17].Y} L {(int)sleeveD[16].X} {(int)sleeveD[16].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)sleeveD[19].X} {(int)sleeveD[19].Y} L {(int)sleeveD[20].X} {(int)sleeveD[20].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)sleeveD[20].X} {(int)sleeveD[20].Y} L {(int)sleeveD[14].X} {(int)sleeveD[14].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)sleeveD[14].X} {(int)sleeveD[14].Y} L {(int)sleeveD[10].X} {(int)sleeveD[10].Y}""  stroke-width=""1"" stroke=""black""/>
 
+                    <path d=""M {(int)sleeveD[16].X},{(int)sleeveD[16].Y} C {(int)sleeveD[16].X},{(int)sleeveD[16].Y} {(int)sleeveD[18].X},{(int)sleeveD[18].Y} {(int)sleeveD[15].X},{(int)sleeveD[15].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                    <path d=""M {(int)sleeveD[19].X},{(int)sleeveD[19].Y} C {(int)sleeveD[19].X},{(int)sleeveD[19].Y} {(int)sleeveD[21].X},{(int)sleeveD[21].Y} {(int)sleeveD[15].X},{(int)sleeveD[15].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                ";
+            }
+            else if (sleevetype.Contains("Епископ"))
+            {
+                s += @$"
+
+                    <path d=""M {(int)sleeveD[4].X} {(int)sleeveD[4].Y} L {(int)sleeveD[13].X} {(int)sleeveD[13].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)sleeveD[13].X} {(int)sleeveD[13].Y} L {(int)sleeveD[18].X} {(int)sleeveD[18].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)sleeveD[19].X} {(int)sleeveD[19].Y} L {(int)sleeveD[14].X} {(int)sleeveD[14].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)sleeveD[14].X} {(int)sleeveD[14].Y} L {(int)sleeveD[10].X} {(int)sleeveD[10].Y}""  stroke-width=""1"" stroke=""black""/>
+
+                    <path d=""M {(int)sleeveD[19].X} {(int)sleeveD[19].Y} L {(int)sleeveD[17].X} {(int)sleeveD[17].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)sleeveD[18].X} {(int)sleeveD[18].Y} L {(int)sleeveD[15].X} {(int)sleeveD[15].Y}""  stroke-width=""1"" stroke=""black""/>
+
+                    <path d=""M {(int)sleeveD[17].X},{(int)sleeveD[17].Y} Q {(int)sleeveD[16].X},{(int)sleeveD[16].Y} {(int)sleeveD[15].X},{(int)sleeveD[15].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                ";
+                if (cuff.Count != 0)
+                {
+                    s += $@"
+                    <path d=""M {(int)cuffD[0].X} {(int)cuffD[0].Y} L {(int)cuffD[1].X} {(int)cuffD[1].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)cuffD[1].X} {(int)cuffD[1].Y} L {(int)cuffD[2].X} {(int)cuffD[2].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)cuffD[2].X} {(int)cuffD[2].Y} L {(int)cuffD[3].X} {(int)cuffD[3].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)cuffD[3].X} {(int)cuffD[3].Y} L {(int)cuffD[0].X} {(int)cuffD[0].Y}""  stroke-width=""1"" stroke=""black""/>
+                    ";
+                }
+            }
         }
         private void DrawCollarD()
         {
             if (collartype == "Отложной с прямыми углами")
             {
                 if (neckType != "V-горловина")
-                //    s += $@"
-                //    <path d=""M {(int)collar[11].X} {(int)collar[11].Y} L {(int)collar[1].X} {(int)collar[1].Y}""  stroke-width=""3"" stroke=""black""/>
-                //    <path d=""M {(int)collar[1].X},{(int)collar[1].Y} Q {(int)collar[8].X},{(int)collar[8].Y} {(int)collar[3].X},{(int)collar[3].Y}""  stroke-width=""3"" stroke=""black"" fill-opacity=""0""/>
-                //    <path d=""M {(int)collar[3].X},{(int)collar[3].Y} Q {(int)collar[3].X},{(int)collar[7].Y} {(int)collar[7].X},{(int)collar[7].Y}""  stroke-width=""3"" stroke=""black"" fill-opacity=""0""/>
-                //    <path d=""M {(int)collar[7].X} {(int)collar[7].Y} L {(int)collar[9].X} {(int)collar[9].Y}""  stroke-width=""3"" stroke=""black""/>
-                //    <path d=""M {(int)collar[9].X},{(int)collar[9].Y} Q {(int)collar[13].X},{(int)collar[13].Y} {(int)collar[10].X},{(int)collar[10].Y}""  stroke-width=""3"" stroke=""black"" fill-opacity=""0""/>
-                //    <path d=""M {(int)collar[10].X},{(int)collar[10].Y} Q {(int)collar[12].X},{(int)collar[12].Y} {(int)collar[11].X},{(int)collar[11].Y}""  stroke-width=""3"" stroke=""black"" fill-opacity=""0""/>
-
-                //"
-                ;
+                    s += $@"
+                    <path d=""M {(int)collarD[3].X} {(int)collarD[3].Y} L {(int)collarD[1].X} {(int)collarD[1].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)collarD[1].X},{(int)collarD[1].Y} Q {(int)collarD[2].X},{(int)collarD[2].Y} {(int)collarD[0].X},{(int)collarD[0].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                    <path d=""M {(int)collarD[0].X},{(int)collarD[0].Y} Q  {(int)(collarD[11].X)},{(int)collarD[11].Y} {(int)collarD[10].X},{(int)collarD[10].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                    <path d=""M {(int)collarD[10].X} {(int)collarD[10].Y} L {(int)collarD[12].X} {(int)collarD[12].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)collarD[12].X} {(int)collarD[12].Y} L {(int)collarD[9].X} {(int)collarD[9].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)collarD[9].X} {(int)collarD[9].Y} L {(int)collarD[8].X} {(int)collarD[8].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)collarD[8].X} {(int)collarD[8].Y} L {(int)collarD[7].X} {(int)collarD[7].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)collarD[7].X},{(int)collarD[7].Y} Q {(int)collarD[6].X},{(int)collarD[6].Y} {(int)collarD[4].X},{(int)collarD[4].Y}""  stroke-width=""1"" stroke=""black""  fill-opacity=""0""/>
+                    <path d=""M {(int)collarD[4].X},{(int)collarD[4].Y} Q {(int)collarD[5].X},{(int)collarD[5].Y} {(int)collarD[3].X},{(int)collarD[3].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                    "
+                    ;
                 else
                 {
-                //    s += $@"
-                //    <path d=""M {(int)collar[11].X} {(int)collar[11].Y} L {(int)collar[1].X} {(int)collar[1].Y}""  stroke-width=""3"" stroke=""black""/>
-                //    <path d=""M {(int)collar[1].X},{(int)collar[1].Y} Q {(int)collar[8].X},{(int)collar[8].Y} {(int)collar[3].X},{(int)collar[3].Y}""  stroke-width=""3"" stroke=""black"" fill-opacity=""0""/>
-                //    <path d=""M {(int)collar[3].X},{(int)collar[3].Y} C {(int)collar[3].X},{(int)(collar[3].Y + 2 * pixelsizeincm)} {(int)(collar[7].X)},{(int)collar[7].Y} {(int)collar[7].X},{(int)collar[7].Y}""  stroke-width=""3"" stroke=""black"" fill-opacity=""0""/>
-                //    <path d=""M {(int)collar[7].X} {(int)collar[7].Y} L {(int)collar[9].X} {(int)collar[9].Y}""  stroke-width=""3"" stroke=""black""/>
-                //    <path d=""M {(int)collar[9].X},{(int)collar[9].Y} C {(int)collar[9].X},{(int)collar[9].Y} {(int)collar[10].X},{(int)(collar[10].Y + 2 * pixelsizeincm)} {(int)collar[10].X},{(int)collar[10].Y}""  stroke-width=""3"" stroke=""black""  fill-opacity=""0""/>
-                //    <path d=""M {(int)collar[10].X},{(int)collar[10].Y} Q {(int)collar[12].X},{(int)collar[12].Y} {(int)collar[11].X},{(int)collar[11].Y}""  stroke-width=""3"" stroke=""black"" fill-opacity=""0""/>
-                //"
+                    s += $@"
+                    <path d=""M {(int)collarD[3].X} {(int)collarD[3].Y} L {(int)collarD[1].X} {(int)collarD[1].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)collarD[1].X},{(int)collarD[1].Y} Q {(int)collarD[2].X},{(int)collarD[2].Y} {(int)collarD[0].X},{(int)collarD[0].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                    <path d=""M {(int)collarD[0].X},{(int)collarD[0].Y} C {(int)collarD[0].X},{(int)(collarD[0].Y + 2 * pixelsizeincm)} {(int)(collarD[10].X)},{(int)collarD[10].Y} {(int)collarD[10].X},{(int)collarD[10].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                    <path d=""M {(int)collarD[10].X} {(int)collarD[10].Y} L {(int)collarD[9].X} {(int)collarD[9].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)collarD[9].X} {(int)collarD[9].Y} L {(int)collarD[8].X} {(int)collarD[8].Y}""  stroke-width=""1"" stroke=""black""/>
+                    <path d=""M {(int)collarD[8].X},{(int)collarD[8].Y} C {(int)collarD[8].X},{(int)collarD[8].Y} {(int)collarD[4].X},{(int)(collarD[4].Y + 2 * pixelsizeincm)} {(int)collarD[4].X},{(int)collarD[4].Y}""  stroke-width=""1"" stroke=""black""  fill-opacity=""0""/>
+                    <path d=""M {(int)collarD[4].X},{(int)collarD[4].Y} Q {(int)collarD[5].X},{(int)collarD[5].Y} {(int)collarD[3].X},{(int)collarD[3].Y}""  stroke-width=""1"" stroke=""black"" fill-opacity=""0""/>
+                "
                 ;
                 }
             }
@@ -1228,6 +1358,8 @@ namespace PatternConstructor.Data
                     else if (collartype.Contains("Отложной"))
                         CollarD();
                 }
+                if (sleevetype != "Без рукава")
+                    SleeveD();
             }
 
             Vector2 offsetFront = new Vector2(0, Math.Max(-front[1].Y,0));
@@ -1258,70 +1390,126 @@ namespace PatternConstructor.Data
             int width = (int)((rightborder + offsetB.X) * 10);
             int height = (int)((downborder + offsetFront.Y) * 10);
 
+            float sleeveleft = 0;
+            float sleevetop = 0;
+            float sleeveright = 0;
+            float sleevebottomBishop = 0;
+            float sleevebottomShort = 0;
+            float cuffbottom = 0;
+            float cuffleft = 0;
             if (sleevetype != "Без рукава")
             {
-                sleeveoff = new Vector2(offsetB.X + rightborder - Math.Min(sleeve[4].X, sleeve[14].X), -(sleeve[0].Y));
-                widthcm = (Math.Max(sleeve[2].X, sleeve[13].X) + sleeveoff.X) * pixelsizeincm;
-                width = (int)((Math.Max(sleeve[2].X, sleeve[13].X) + sleeveoff.X) * 10);
-                if (cuff.Count != 0) cuffoff = new Vector2(offsetB.X+ rightborder, sleeveoff.Y + BezierQ(sleeve[14], sleeve[15], sleeve[13], 0.5f).Y);
+                sleeveleft = Math.Min(sleeve[4].X, sleeve[14].X);
+                sleevetop = -(sleeve[0].Y);
+                sleeveright = Math.Max(sleeve[2].X, sleeve[13].X);
+                sleevebottomBishop = BezierQ(sleeve[14], sleeve[15], sleeve[13], 0.5f).Y;
+                sleevebottomShort = sleeve[12].Y;
+                if (isLecal)
+                {
+                    sleeveleft = Math.Min(sleeveD[19].X, sleeveD[14].X);
+                    sleevetop = -(sleeveD[0].Y);
+                    sleeveright = Math.Max(sleeveD[18].X, sleeveD[13].X);
+                    sleevebottomBishop = BezierQ(sleeveD[17], sleeveD[16], sleeveD[15], 0.5f).Y;
+                    sleevebottomShort = sleeveD[20].Y;
+                }
+
+                sleeveoff = new Vector2(offsetB.X + rightborder - sleeveleft, sleevetop);
+                widthcm = (sleeveright + sleeveoff.X) * pixelsizeincm;
+                width = (int)((sleeveright + sleeveoff.X) * 10);
+                if (cuff.Count != 0)
+                {
+                    cuffbottom = cuff[1].Y;
+                    cuffleft = cuff[3].X;
+                    float t = 0;
+                    if (isLecal)
+                    {
+                        cuffbottom = cuffD[1].Y;
+                        cuffleft = cuffD[3].X;
+                        t = 1;
+                    }
+                    cuffoff = new Vector2(offsetB.X + rightborder + t, sleeveoff.Y + sleevebottomBishop);
+                }
+
             }
             if (collartype!= "Без воротника")
             {
                 if (collartype.Contains("Отложной"))
                 {
+                    Vector2 ctop = collar[11];
+                    Vector2 cleft = collar[10];
+                    Vector2 cright = collar[7];
+                    Vector2 cdown = collar[9];
+                    if (isLecal)
+                    {
+                        ctop = collarD[3];
+                        cleft = collarD[4];
+                        cright = collarD[9];
+                        cdown = collarD[8];
+                    }
                     //рукав без манжеты
                     if (cuff.Count == 0 && sleeve.Count != 0)
                     {
                         if (sleevetype == "Короткий")
                         {
-                            collaroff = new Vector2(offsetB.X + rightborder - collar[10].X, sleeveoff.Y + sleeve[12].Y - (collar[11].Y));
+                            collaroff = new Vector2(offsetB.X + rightborder - cleft.X, sleeveoff.Y + sleevebottomShort - (ctop.Y));
                         }
                         if (sleevetype == "Епископ с резинкой")
                         {
-                            collaroff = new Vector2(offsetB.X + rightborder - collar[10].X, sleeveoff.Y + BezierQ(sleeve[14], sleeve[15], sleeve[13], 0.5f).Y - (collar[11].Y));
+                            collaroff = new Vector2(offsetB.X + rightborder - cleft.X, sleeveoff.Y + sleevebottomBishop - (ctop.Y));
                         }
                     }
                     else if (sleeve.Count == 0) //нет рукава
                     {
-                        collaroff = new Vector2(offsetB.X + rightborder - collar[10].X, -(collar[11].Y));
+                        collaroff = new Vector2(offsetB.X + rightborder - cleft.X, -(ctop.Y));
                     }
                     //рукав с манжетой
                     else if (cuff.Count != 0)
                     {
-                        collaroff = cuffoff + new Vector2(cuff[3].X - collar[10].X, -(collar[11].Y));
+                        collaroff = cuffoff + new Vector2(cuffleft - cleft.X, -(ctop.Y));
                     }
-                    heightcm = Math.Max((collar[9].Y + collaroff.Y) * pixelsizeincm, heightcm);
-                    height = Math.Max((int)((collar[9].Y + collaroff.Y) * 10), height);
-                    widthcm = Math.Max((collar[7].X + collaroff.X) * pixelsizeincm, widthcm);
-                    width = Math.Max((int)((collar[7].X + collaroff.X) * 10),width);
+                    heightcm = Math.Max((cdown.Y + collaroff.Y) * pixelsizeincm, heightcm);
+                    height = Math.Max((int)((cdown.Y + collaroff.Y) * 10), height);
+                    widthcm = Math.Max((cright.X + collaroff.X) * pixelsizeincm, widthcm);
+                    width = Math.Max((int)((cright.X + collaroff.X) * 10),width);
                 }
                 if (collartype=="Стойка с застежкой")
                 {
+                    Vector2 ctop = collar[6];
+                    Vector2 cright = collar[4];
+                    Vector2 cleft = collar[1];
+                    Vector2 cbottom = collar[1];
+                    if (isLecal)
+                    {
+                        ctop = collarD[6];
+                        cright = collarD[7];
+                        cleft = collarD[1];
+                        cbottom = collarD[1];
+                    }
                     //рукав без манжеты
                     if (cuff.Count == 0 && sleeve.Count != 0)
                     {
                         if (sleevetype == "Короткий")
                         {
-                            collaroff = new Vector2(offsetB.X + rightborder, sleeveoff.Y + sleeve[12].Y - collar[6].Y);
+                            collaroff = new Vector2(offsetB.X + rightborder, sleeveoff.Y + sleevebottomShort - ctop.Y);
                         }
                         if (sleevetype == "Епископ с резинкой")
                         {
-                            collaroff = new Vector2(offsetB.X + rightborder, sleeveoff.Y + BezierQ(sleeve[14], sleeve[15], sleeve[13], 0.5f).Y - collar[6].Y);
+                            collaroff = new Vector2(offsetB.X + rightborder, sleeveoff.Y + sleevebottomBishop - ctop.Y);
                         }
                     }
                     else if (sleeve.Count == 0) //нет рукава
                     {
-                        collaroff = new Vector2(offsetB.X + rightborder, -collar[6].Y);
+                        collaroff = new Vector2(offsetB.X + rightborder, -ctop.Y);
                     }
                     //рукав с манжетой
                     else if (cuff.Count != 0)
                     {
-                        collaroff = cuffoff + new Vector2(0, cuff[1].Y - collar[6].Y);
+                        collaroff = cuffoff + new Vector2(0, cuffbottom - ctop.Y);
                     }
-                    heightcm = Math.Max((collar[1].Y + collaroff.Y) * pixelsizeincm, heightcm);
-                    height = Math.Max((int)((collar[1].Y + collaroff.Y) * 10), height);
-                    widthcm = Math.Max((collar[4].X + collaroff.X) * pixelsizeincm,widthcm);
-                    width = Math.Max((int)((collar[4].X + collaroff.X) * 10),width);
+                    heightcm = Math.Max((cbottom.Y + collaroff.Y) * pixelsizeincm, heightcm);
+                    height = Math.Max((int)((cbottom.Y + collaroff.Y) * 10), height);
+                    widthcm = Math.Max((cright.X + collaroff.X) * pixelsizeincm,widthcm);
+                    width = Math.Max((int)((cright.X + collaroff.X) * 10),width);
                 }
             }
             Offset(back, offsetFront);
@@ -1337,6 +1525,8 @@ namespace PatternConstructor.Data
             Offset(skirtbackD, offsetFront+ skirtsoffsetvert);
             Offset(skirtfrontD, offsetFront + offsetB+ skirtsoffsetvert);
             Offset(collarD, collaroff);
+            Offset(sleeveD, sleeveoff);
+            Offset(cuffD, cuffoff);
 
 
             s = $"<svg version=\"1.1\" width = \"{width}mm\" height = \"{height}mm\" xmlns =\"http://www.w3.org/2000/svg\">";
@@ -1354,6 +1544,9 @@ namespace PatternConstructor.Data
                 DrawSkirtBackD();
                 if (collarD.Count != 0)
                     DrawCollarD();
+
+                if (sleeveD.Count != 0) 
+                    DrawSleeveD();
             }
             s += "</svg>";
             return s;

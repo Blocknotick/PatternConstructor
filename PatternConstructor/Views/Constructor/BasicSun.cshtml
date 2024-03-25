@@ -12,26 +12,28 @@
 
 <div class="row">
     <div class="col-md-4">
-        <form>
-        <select class="form-select" aria-label="Выбор размера" id="ddltype" name="type" asp-items="ViewBag.Types" >
-            <option>Выберите размер</option>
-        </select>
-
-        </form>
         <form asp-action="BasicSun">
 
             <div  class="text-danger"></div>
-
-                        
             <div class="form-group">
                 <label asp-for="WaistGirth" class="control-label"></label>
-                <input asp-for="WaistGirth" class="form-control"/>
+                <input asp-for="WaistGirth" class="form-control" />
                 <span asp-validation-for="WaistGirth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WaistP" class="control-label"></label>
+                <input asp-for="WaistP" class="form-control" />
+                <span asp-validation-for="WaistP" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Length" class="control-label"></label>
                 <input asp-for="Length" class="form-control" />
                 <span asp-validation-for="Length" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Degree" class="control-label"></label>
+                <input asp-for="Degree" class="form-control" />
+                <span asp-validation-for="Degree" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -48,8 +50,3 @@
     </div>
 </div>
 
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
-}

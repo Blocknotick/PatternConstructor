@@ -4,11 +4,11 @@ namespace PatternConstructor.Data
 {
     public class SunSkirtPattern : Pattern
     {
-        double skirtlength; double waist; bool isLecal; double beltwitdth; int degrees;
+        double skirtlength; double waist; bool isLecal; double beltwitdth; int degrees; double waistp=2;
         bool hasButtons;
         string skirtType = "Sun";
 
-        public SunSkirtPattern(double _skirtlength, double _waist, double _beltwitdth, bool _isLecal, int _degrees, bool _hasButtons)
+        public SunSkirtPattern(double _skirtlength, double _waist, double _beltwitdth, bool _isLecal, int _degrees, bool _hasButtons, double _waistP)
         {
             skirtlength = _skirtlength;
             waist = _waist;
@@ -16,11 +16,13 @@ namespace PatternConstructor.Data
             beltwitdth = _beltwitdth;
             hasButtons = _hasButtons;
             degrees = _degrees; // 180 - полусолнце, 360 - солнце
+            waistp = _waistP;
         }
         public SunSkirtPattern(SkirtConstructModel skirtConstructModel)
         {
             skirtlength = CountLength(skirtConstructModel.SkirtCombinationModel.Length, skirtConstructModel.WaistFloorFrontLength);
-            waist = skirtConstructModel.WaistGirth + 2; //припуск на свободу облегания
+
+            waist = skirtConstructModel.WaistGirth + waistp; //припуск на свободу облегания
             isLecal = skirtConstructModel.SkirtCombinationModel.DoubleContour;
 
             double belt = 0;
@@ -44,7 +46,6 @@ namespace PatternConstructor.Data
                 skirtType = "HalfSun";
             }
 
-            
         }
         public override string GenerateContent()
         {
@@ -122,11 +123,16 @@ namespace PatternConstructor.Data
             }
             else
             {
-                s += @$" <path d=""M {(int)pixelsizeincm} {(int)pixelsizeincm} v {(int)(pixelsizeincm * beltwitdth)}""  stroke-width=""3"" stroke=""black""/>
+                if (beltwitdth!=0)
+                s += $@"<path d=""M {(int)pixelsizeincm} {(int)pixelsizeincm} v {(int)(pixelsizeincm * beltwitdth)}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)(pixelsizeincm * (waist + 1 + beltadd))} {(int)pixelsizeincm} v  {(int)(pixelsizeincm * beltwitdth)}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)pixelsizeincm} {(int)pixelsizeincm} h {(int)(pixelsizeincm * (waist + beltadd))} ""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)pixelsizeincm} {(int)(pixelsizeincm * (beltwitdth + 1))} h {(int)(pixelsizeincm * (waist + beltadd))} ""  stroke-width=""3"" stroke=""black""/>
-                    <path d=""M {(int)pixelsizeincm} {(int)(pixelsizeincm * (1 + beltwitdth / 2))} h {(int)(pixelsizeincm * (waist + beltadd))} ""  stroke-width=""1"" stroke=""black"" stroke-dasharray=""4""/>
+                    <path d=""M {(int)pixelsizeincm} {(int)(pixelsizeincm * (1 + beltwitdth / 2))} h {(int)(pixelsizeincm * (waist + beltadd))} ""  stroke-width=""1"" stroke=""black"" stroke-dasharray=""4""/><text x=""{(int)(pixelsizeincm * 2)}"" y=""{(int)(pixelsizeincm * 3)}"" font-size=""32"" font-family=""Verdana"">Belt of the {skirtType} skirt, waist = {waist - 2}cm, skirt length = {Math.Round(skirtlength, 2)}cm x1, interfacing</text>
+                    <text x=""{(int)(pixelsizeincm * ((waist + beltadd) / 2 + 1))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth / 2 + 1))}"" font-size=""32"" font-family=""Verdana"">fold</text>
+          
+                ";
+                s += @$" 
 
                     <path d=""M {(int)pixelsizeincm} {(int)(pixelsizeincm * (1 + beltwitdth + 1 + smallradius))} v {(int)(pixelsizeincm * skirtlength)}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)(pixelsizeincm * (1 + smallradius))} {(int)(pixelsizeincm * (1 + beltwitdth + 1))} h {(int)(pixelsizeincm * skirtlength)} ""  stroke-width=""3"" stroke=""black""/>
@@ -134,18 +140,20 @@ namespace PatternConstructor.Data
                     <path d=""M {(int)pixelsizeincm} {(int)(pixelsizeincm * (1 + beltwitdth + 1 + smallradius))} A {(int)(pixelsizeincm * smallradius)} {(int)(pixelsizeincm * smallradius)} 90 0 0 {(int)(pixelsizeincm * (1 + smallradius))} {(int)(pixelsizeincm * (1 + beltwitdth + 1))}"" fill-opacity=""0"" stroke-width=""3"" stroke=""black""/>
                     <path d = ""M {(int)pixelsizeincm} {(int)(pixelsizeincm * (1 + beltwitdth + 1 + bigradius))} A {(int)(pixelsizeincm * bigradius)} {(int)(pixelsizeincm * bigradius)} 90 0 0 {(int)(pixelsizeincm * (1 + bigradius))} {(int)(pixelsizeincm * (1 + beltwitdth + 1))}"" fill-opacity = ""0"" stroke-width = ""3"" stroke = ""black"" />
                     
-                    <text x=""{(int)(pixelsizeincm * 2)}"" y=""{(int)(pixelsizeincm * 3)}"" font-size=""32"" font-family=""Verdana"">Belt of the {skirtType} skirt, waist = {waist - 2}cm, skirt length = {Math.Round(skirtlength, 2)}cm x1, interfacing</text>
-                    <text x=""{(int)(pixelsizeincm * ((waist + beltadd)/2+1))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth / 2+1))}"" font-size=""32"" font-family=""Verdana"">fold</text>
-                    <text x=""{(int)(pixelsizeincm * (bigradius / 2 + 1))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth + 2))}"" font-size=""32"" font-family=""Verdana"">fold</text>
                 ";
 
                 if (degrees == 360)
                     s += @$"
-<text x=""{(int)(pixelsizeincm * (2 + smallradius))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth + 3))}"" font-size=""32"" font-family=""Verdana"">Width of the {skirtType} skirt, waist = {waist - 2}cm, skirt length = {Math.Round(skirtlength, 2)}cm, x2</text>
+                    <text x=""{(int)(pixelsizeincm * (2 + smallradius))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth + 3))}"" font-size=""32"" font-family=""Verdana"">Width of the {skirtType} skirt, waist = {waist - 2}cm, skirt length = {Math.Round(skirtlength, 2)}cm, x2</text>
+                    <text x=""{(int)(pixelsizeincm * (bigradius / 2 + 1))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth + 2))}"" font-size=""32"" font-family=""Verdana"">fold</text>      
                     ";
 
                 if (degrees == 180)
-                    s += @$"<text x=""{(int)(pixelsizeincm * (2 + smallradius))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth + 3))}"" font-size=""32"" font-family=""Verdana"">Width of the {skirtType} skirt,{"\n"} waist = {waist - 2}cm, skirt length = {Math.Round(skirtlength, 2)}cm, x1</text>";
+                    s += @$"
+                    <text x=""{(int)(pixelsizeincm * (2 + smallradius))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth + 3))}"" font-size=""32"" font-family=""Verdana"">Width of the {skirtType} skirt,{"\n"} waist = {waist - 2}cm, skirt length = {Math.Round(skirtlength, 2)}cm, x1</text>
+                    <text x=""{(int)(pixelsizeincm * (bigradius / 2 + 1))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth + 2))}"" font-size=""32"" font-family=""Verdana"">fold</text>      
+                    ";
+
                 
                 if (hasButtons)
                     s += @$"<path d=""M {(int)(pixelsizeincm * (waist + 1))} {(int)pixelsizeincm} v  {(int)(pixelsizeincm)}""  stroke-width=""2"" stroke=""black""/>

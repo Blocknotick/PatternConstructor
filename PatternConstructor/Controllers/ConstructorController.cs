@@ -14,17 +14,6 @@ using iText.Svg.Processors;
 using iText.Svg.Processors.Impl;
 using iText.Svg.Converter;
 using System.Text;
-//using Aspose.Svg;
-//using Aspose.Svg.Saving;
-//using Aspose.Imaging;
-////using Aspose.Svg.Rendering.Pdf;
-////using Aspose.Svg.Rendering;
-
-////using Aspose.Html;
-////using Aspose.Html.Drawing;
-//using Aspose.Html.Dom.Svg;
-//using Aspose.Html.Converters;
-//using Aspose.Html.Saving;
 
 namespace PatternConstructor.Controllers
 {
@@ -72,77 +61,44 @@ namespace PatternConstructor.Controllers
         {
             if (!ModelState.IsValid) return RedirectToAction("BasicSun");
             //создание файлов выкройки
-            string documentContent = "<svg xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"50\" r=\"40\" /></svg>";
 
-            // Initialize an object of SVGDocument class from the string content
-            Aspose.Svg.SVGDocument document = new Aspose.Svg.SVGDocument(documentContent, ".");
+            var user = await _userManager.GetUserAsync(User);
+            var createdFile = new CreatedFile
+            {
+                UserId = user.Id,
+            };
+            await _context.AddAsync(createdFile);
+            _context.SaveChanges();
 
-            
-            
-            // Save the document to a file
-            //document.Save("wwwroot/sunskirts/test.svg", SVGSaveFormat.SVG);
-            //document.Save("wwwroot/sunskirts/test1.svg", SVGSaveFormat.SVG);
-            ////конвертировать в pdf
-            ////Create an instance of PdfOptions
-            //var image = Aspose.Imaging.Image.Load("wwwroot/sunskirts");
-            //var exportOptions = new Aspose.Imaging.ImageOptions.PdfOptions();
-            //Aspose.Imaging.ImageOptions.VectorRasterizationOptions rasterizationOptions = new Aspose.Imaging.ImageOptions.SvgRasterizationOptions();
-            //rasterizationOptions.PageWidth = image.Width;
-            //rasterizationOptions.PageHeight = image.Height;
-            //exportOptions.VectorRasterizationOptions = rasterizationOptions;
+            string FileName = user.Id + createdFile.Id.ToString() + ".pdf";
 
-            //// Save svg to pdf
-            //image.Save(Path.Combine("wwwroot/sunskirts/", "output.pdf"), exportOptions);
+            //Здесь должна быть функция, которая генерирует выкройку
 
-            //File.Delete(Path.Combine(templatesFolder, "output.pdf"));
+            Pattern skirtPattern = new SunSkirtPattern(sunSkirtConstructModel.Length, sunSkirtConstructModel.WaistGirth, 0, false, sunSkirtConstructModel.Degree, false, sunSkirtConstructModel.WaistP);
 
 
-            //var options = new Aspose.Html.Saving.PdfSaveOptions();
-
-            //Converter.ConvertSVG(document, options, "wwwroot/sunskirts/output.pdf");
-            
-
-            string dataDir = "wwwroot/sunskirts/";
-
-            // Create an instance of SvgRenderer
-            //SvgRenderer renderer = new SvgRenderer();
-
-            //// Specify PdfRenderingOptions
-            //var options = new PdfRenderingOptions()
-            //{
-            //    // Set Page Setup properties
-            //    PageSetup =
-            //    {
-            //        Sizing = SizingType.FitContent
-            //    }
-            //};
+            string documentContent = skirtPattern.GenerateContent();
 
 
 
+            using (iText.Kernel.Pdf.PdfDocument doc =
+                new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfWriter(new FileStream("wwwroot/skirts/" + FileName, FileMode.OpenOrCreate),
+                                                                                new WriterProperties().SetCompressionLevel(0))))
+            {
+                doc.AddNewPage(new PageSize((float)(0.75 * skirtPattern.widthcm), (float)(0.75 * skirtPattern.heightcm)));
+                SvgConverter.DrawOnDocument(documentContent, doc, 1);
 
-            //var user = await _userManager.GetUserAsync(User);
-            //var createdFile = new CreatedFile
-            //{
-            //    UserId = user.Id,
-            //};
-            //await _context.AddAsync(createdFile);
-            //_context.SaveChanges();
+            }
 
-            //string FileName = user.Id + createdFile.Id.ToString()+".pdf";
 
-            //// Create an instance of PdfDevice
-            //PdfDevice device = new PdfDevice(options, dataDir + FileName);
-
-            //// Merge or combine all SVG documents to a PDF file.
-            //renderer.Render(device, document, document);
-
-            //createdFile.PatternLink = "/sunskirts/" + FileName;
-            //createdFile.Name = sunSkirtConstructModel.Name;
-            //_context.Update(createdFile);
-            //_context.SaveChanges();
+            createdFile.PatternLink = "/skirts/" + FileName;
+            createdFile.Name = sunSkirtConstructModel.Name;
+            _context.Update(createdFile);
+            _context.SaveChanges();
 
             //переход к странице созданных файлов
             return RedirectToAction("History", "Account");
+
         }
 
         [Authorize]
@@ -228,76 +184,13 @@ namespace PatternConstructor.Controllers
                 new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfWriter(new FileStream("wwwroot/skirts/" + FileName, FileMode.OpenOrCreate),
                                                                                 new WriterProperties().SetCompressionLevel(0))))
             {
-                //doc.AddNewPage(PageSize.A4);
                 doc.AddNewPage(new PageSize((float)(0.75*skirtPattern.widthcm),(float)(0.75*skirtPattern.heightcm)));
-                //doc.AddNewPage(size);
-                //ISvgConverterProperties properties = new SvgConverterProperties().SetBaseUri("wwwroot/skirts/temp.svg");
-                //SvgConverter.DrawOnDocument(new FileStream("wwwroot/skirts/temp.svg", FileMode.Open, FileAccess.Read, FileShare.Read), doc, 1, properties);
                 SvgConverter.DrawOnDocument(documentContent, doc, 1);
 
             }
 
-            //using (iText.Kernel.Pdf.PdfDocument doc =
-            //    new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfWriter(new FileStream("wwwroot/skirts/" + FileName, FileMode.OpenOrCreate),
-            //                                                                    new WriterProperties().SetCompressionLevel(0))))
-            //{
-            //    iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(documentContent);
-            //    float width = image.Width;
-            //    float height = image.Height;
-
-
-            //    PdfContentByte canvas;
-            //    SvgConverter.DrawOnPage(documentContent, doc.AddNewPage(0, PageSize.A4), 100, 100);
-            //    SvgConverter.DrawOnPage(documentContent, doc.AddNewPage(1, PageSize.A4), 200, 200);
-            //    canvas.AddImage(image, width, 0, 0, height, 0, -height / 2);
-            //    document.NewPage();
-            //    canvas.AddImage(image, width, 0, 0, height, 0, 0);
-            //    document.NewPage();
-            //    canvas.AddImage(image, width, 0, 0, height, -width / 2, -height / 2);
-            //    document.NewPage();
-            //    canvas.AddImage(image, width, 0, 0, height, -width / 2, 0);
-
-            //}
-            
-
-            //using (FileStream outputStream = new FileStream("wwwroot/skirts/" + FileName, FileMode.Create))
-            //{
-            //    iTextSharp.text.pdf.PdfDocument document = new iTextSharp.text.pdf.PdfDocument();
-            //    //document.SetMargins(40, 40, 40, 40);
-
-            //        iTextSharp.text.pdf.PdfWriter writer = iTextSharp.text.pdf.PdfWriter.GetInstance(document, outputStream);
-            //    writer.SetPageSize(new iTextSharp.text.Rectangle(595f,842f));
-            //    writer.SetMargins(40, 40, 40, 40);
-
-            //    document.AddWriter(writer);
-            //        iTextSharp.text.pdf.PdfReader reader = new iTextSharp.text.pdf.PdfReader("wwwroot/skirts/" + user.Id + createdFile.Id.ToString() + "big.pdf");
-
-            //    reader.ConsolidateNamedDestinations(); // Assuming 'editedPageNo' is related to named destinations
-            //        document.Open();
-            //        PdfImportedPage page = writer.GetImportedPage(reader, 1);
-            //        PdfContentByte cb = writer.DirectContent;
-            //        cb.AddTemplate(page, 1.4f, 0, 0, 1.19f, -13, 7);
-            //        document.Close();
-
-
-            //}
-
-
-            //ConvertPatternToPDF(new Aspose.Svg.SVGDocument[] {document, document}, dataDir + FileName);
-            //логика генерации описания пошива
 
             var htmldocs = new List<string>();
-            //if (skirtConstructModel.SkirtCombinationModel.Type == "Прямая" || skirtConstructModel.SkirtCombinationModel.Type == "Тюльпан")
-            //    htmldocs.Add("wwwroot/DescriptionUnits/dart.html");
-            //htmldocs.Add("wwwroot/DescriptionUnits/interfacing.html");
-            //htmldocs.Add("wwwroot/DescriptionUnits/belt.html");
-
-            //htmldocs.Add("wwwroot/DescriptionUnits/sideseam.html");
-            //htmldocs.Add("wwwroot/DescriptionUnits/bottomseam.html");
-            //if (skirtConstructModel.SkirtCombinationModel.Clasp == "Потайная молния")
-            //    htmldocs.Add("wwwroot/DescriptionUnits/zipper.html");
-            //else
-            //    htmldocs.Add("wwwroot/DescriptionUnits/button.html");
 
             htmldocs.Add("wwwroot/DescriptionUnits/skirts/decatification.pdf");
             htmldocs.Add("wwwroot/DescriptionUnits/skirts/cutting.pdf");
@@ -343,23 +236,6 @@ namespace PatternConstructor.Controllers
             document.Close();
 
         }
-
-
-        //void ConvertPatternToPDF(Aspose.Svg.SVGDocument[] svgfiles, string outputpath)
-        //{
-        //    // Create an instance of SvgRenderer
-        //    SvgRenderer renderer = new SvgRenderer();
-
-        //    // Specify PdfRenderingOptions
-        //    var options = new PdfRenderingOptions();
-
-        //    // Create an instance of PdfDevice
-        //    PdfDevice device = new PdfDevice(options, outputpath);
-
-        //    // Merge or combine all SVG documents to a PDF file.
-        //    renderer.Render(device, svgfiles);
-
-        //}
 
         [Authorize]
         public ActionResult DressCombination()

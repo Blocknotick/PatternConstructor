@@ -490,13 +490,12 @@ namespace PatternConstructor.Data
         {
             float l1 = BezierQLength(front[1],new Vector2(front[1].X, front[17].Y), front[17]);
             float l2 = BezierQLength(back[3], back[18], back[0]);
-            float collarwidth = 3;
             float total = l1 + l2 + boardwidth;
             collar.Add(Vector2.Zero);//0
-            collar.Add(new Vector2(0, collarwidth));//1
-            collar.Add(new Vector2(total/3,collarwidth));//2
-            collar.Add(new Vector2(total / 3, 0)); // возможно уменьшить x на 1
-            collar.Add(new Vector2(total,collarwidth)); //4
+            collar.Add(new Vector2(0, standcollarwidth));//1
+            collar.Add(new Vector2(total/3, standcollarwidth));//2
+            collar.Add(new Vector2(total / 3, 0)); // 3
+            collar.Add(new Vector2(total, standcollarwidth)); //4
             collar.Add(new Vector2(total-boardwidth, 0)); //5
             collar.Add(new Vector2(total, 0)); //6
             float sin = 3/total;
@@ -838,6 +837,10 @@ namespace PatternConstructor.Data
                     <path d=""M {(int)back[12].X} {(int)back[12].Y} L {(int)back[1].X} {(int)back[1].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)back[17].X} {(int)back[17].Y} L {(int)back[8].X} {(int)back[8].Y}""  stroke-width=""1"" stroke=""black""/>
                 ";
+            if (clasptype == "Без застежки")
+                s += $@"<text text-anchor=""middle"" font-size=""32"" font-family=""Verdana"" transform=""translate({(int)((back[0].X + back[9].X) / 2)}, {(int)(back[13].Y-2*pixelsizeincm)})"" >Back, x2</text>";
+            else
+                s += $@"<text text-anchor=""middle"" font-size=""32"" font-family=""Verdana"" transform=""translate({(int)((back[0].X + back[9].X) / 2)}, {(int)(back[13].Y - 2 * pixelsizeincm)})"" >Back, x1</text>";
         }
         private void DrawSkirtBack()
         {
@@ -851,6 +854,10 @@ namespace PatternConstructor.Data
                     <path d=""M {(int)skirtback[6].X} {(int)skirtback[6].Y} L {(int)skirtback[7].X} {(int)skirtback[7].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)skirtback[7].X} {(int)skirtback[7].Y} L {(int)skirtback[0].X} {(int)skirtback[0].Y}""  stroke-width=""3"" stroke=""black""/>
                 ";
+            if (clasptype == "Без застежки")
+                s += $@"<text text-anchor=""middle"" font-size=""32"" font-family=""Verdana"" transform=""translate({(int)((skirtback[3].X + skirtback[1].X) / 2)}, {(int)((skirtback[4].Y + skirtback[3].Y)/2)})"" >Back skirt, x2</text>";
+            else
+                s += $@"<text text-anchor=""middle"" font-size=""32"" font-family=""Verdana"" transform=""translate({(int)((skirtback[3].X + skirtback[1].X) / 2)}, {(int)((skirtback[4].Y + skirtback[3].Y) / 2)})"" >Back skirt, x1</text>";
         }
         private void DrawFront()
         {
@@ -903,6 +910,10 @@ namespace PatternConstructor.Data
                     <path d=""M {(int)front[11].X} {(int)front[11].Y} L {(int)front[0].X} {(int)front[0].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)front[5].X} {(int)front[5].Y} L {(int)front[16].X} {(int)front[16].Y}""  stroke-width=""3"" stroke=""black""/>
                 ";
+            if (clasptype == "Без застежки")
+                s += $"<text text-anchor=\"middle\" font-size=\"32\" font-family=\"Verdana\" transform=\"translate({(int)((front[3].X + front[11].X) / 2)}, {(int)(front[2].Y+pixelsizeincm)})\" >Front, x1</text>";
+            else
+                s += $"<text text-anchor=\"middle\" font-size=\"32\" font-family=\"Verdana\" transform=\"translate({(int)((front[3].X + front[11].X) / 2)}, {(int)(front[2].Y + pixelsizeincm)})\" >Front, x2</text>";
         }
         private void DrawSkirtFront()
         {
@@ -932,9 +943,19 @@ namespace PatternConstructor.Data
                     <path d=""M {(int)skirtfront[10].X} {(int)skirtfront[10].Y} L {(int)skirtfront[11].X} {(int)skirtfront[11].Y}""  stroke-width=""3"" stroke=""black""/>
                 ";
             }
+            if (clasptype=="Без застежки")
+                s += @$"
+                    <text text-anchor=""middle"" font-size=""32"" font-family=""Verdana"" transform=""translate({(int)((skirtfront[1].X + skirtfront[3].X) / 2)}, {(int)((skirtfront[4].Y + skirtfront[3].Y) / 2)})"" >Front skirt, x1</text>
+                ";
+            else
+                s += $@"
+                    <text text-anchor=""middle"" font-size=""32"" font-family=""Verdana"" transform=""translate({(int)((skirtfront[1].X + skirtfront[3].X) / 2)}, {(int)((skirtfront[4].Y + skirtfront[3].Y) / 2)})"" >Front skirt, x2</text>";
         }
         private void DrawSleeve()
         {
+            s += $@"
+                    <text text-anchor=""middle"" font-size=""32"" font-family=""Verdana"" transform=""translate({(int)((sleeve[4].X + sleeve[2].X) / 2)}, {(int)(sleeve[4].Y)})"" >Sleeve, x2</text>
+            ";
             if (sleevetype == "Короткий")
             {
                 s += @$"
@@ -983,12 +1004,16 @@ namespace PatternConstructor.Data
                     <path d=""M {(int)cuff[2].X} {(int)cuff[2].Y} L {(int)cuff[3].X} {(int)cuff[3].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)cuff[3].X} {(int)cuff[3].Y} L {(int)cuff[0].X} {(int)cuff[0].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)cuff[4].X} {(int)cuff[4].Y} L {(int)cuff[5].X} {(int)cuff[5].Y}""  stroke-width=""1"" stroke=""black""/>
+
+                    <text text-anchor=""middle"" font-size=""32"" font-family=""Verdana"" transform=""translate({(int)((cuff[1].X + cuff[2].X) / 2)}, {(int)((cuff[4].Y + cuff[1].Y) / 2)})"" >Cuff, x2, interfacing</text>
+                    <text text-anchor=""middle"" font-size=""32"" font-family=""Verdana"" transform=""translate({(int)((cuff[1].X + cuff[2].X) / 2)}, {(int)(cuff[4].Y-1)})"" >Fold</text>
                 ";
         }
         private void DrawCollar()
         {
             if (collartype == "Отложной с прямыми углами")
             {
+                int deg = 180 + (int)(Math.Asin((collar[1].Y - collar[11].Y) / Vector2.Distance(collar[11], collar[1])) * 180 / Math.PI);
                 if (neckType!= "V-горловина")
                 s += $@"
                     <path d=""M {(int)collar[11].X} {(int)collar[11].Y} L {(int)collar[1].X} {(int)collar[1].Y}""  stroke-width=""3"" stroke=""black""/>
@@ -997,7 +1022,8 @@ namespace PatternConstructor.Data
                     <path d=""M {(int)collar[7].X} {(int)collar[7].Y} L {(int)collar[9].X} {(int)collar[9].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)collar[9].X},{(int)collar[9].Y} Q {(int)collar[13].X},{(int)collar[13].Y} {(int)collar[10].X},{(int)collar[10].Y}""  stroke-width=""3"" stroke=""black"" fill-opacity=""0""/>
                     <path d=""M {(int)collar[10].X},{(int)collar[10].Y} Q {(int)collar[12].X},{(int)collar[12].Y} {(int)collar[11].X},{(int)collar[11].Y}""  stroke-width=""3"" stroke=""black"" fill-opacity=""0""/>
-
+                    <text text-anchor=""middle"" font-size=""32"" font-family=""Verdana"" transform=""translate({(int)((collar[10].X + collar[3].X) / 2)}, {(int)(collar[12].Y + 2*pixelsizeincm)}) rotate(90)"" >Collar, x2, interfacing</text>
+                    <text text-anchor=""middle"" font-size=""32"" font-family=""Verdana"" transform=""translate({(int)(collar[1].X - pixelsizeincm)}, {(int)(collar[1].Y - pixelsizeincm)}) rotate({deg})"" >Fold</text>
                 ";
                 else
                 {
@@ -1008,6 +1034,8 @@ namespace PatternConstructor.Data
                     <path d=""M {(int)collar[7].X} {(int)collar[7].Y} L {(int)collar[9].X} {(int)collar[9].Y}""  stroke-width=""3"" stroke=""black""/>
                     <path d=""M {(int)collar[9].X},{(int)collar[9].Y} C {(int)collar[9].X},{(int)collar[9].Y} {(int)collar[10].X},{(int)(collar[10].Y + 2*pixelsizeincm)} {(int)collar[10].X},{(int)collar[10].Y}""  stroke-width=""3"" stroke=""black""  fill-opacity=""0""/>
                     <path d=""M {(int)collar[10].X},{(int)collar[10].Y} Q {(int)collar[12].X},{(int)collar[12].Y} {(int)collar[11].X},{(int)collar[11].Y}""  stroke-width=""3"" stroke=""black"" fill-opacity=""0""/>
+                    <text text-anchor=""middle"" font-size=""32"" font-family=""Verdana"" transform=""translate({(int)((collar[10].X + collar[3].X) / 2)}, {(int)(collar[12].Y + 2*pixelsizeincm)}) rotate(90)"" >Collar, x2, interfacing</text>
+                    <text text-anchor=""middle"" font-size=""32"" font-family=""Verdana"" transform=""translate({(int)(collar[1].X - pixelsizeincm)}, {(int)(collar[1].Y - pixelsizeincm)}) rotate({deg})"" >Fold</text>
                 ";
                 }
             }
@@ -1019,8 +1047,11 @@ namespace PatternConstructor.Data
                     <path d=""M {(int)collar[2].X},{(int)collar[2].Y} C {(int)(collar[2].X+pixelsizeincm)},{(int)collar[2].Y} {(int)collar[4].X},{(int)collar[4].Y} {(int)collar[4].X},{(int)collar[4].Y}""  stroke-width=""3"" stroke=""black"" fill-opacity=""0""/>
                     <path d=""M {(int)collar[5].X},{(int)collar[5].Y} C {(int)collar[5].X},{(int)collar[5].Y} {(int)(collar[3].X+pixelsizeincm)},{(int)collar[3].Y} {(int)collar[3].X},{(int)collar[3].Y}""  stroke-width=""3"" stroke=""black"" fill-opacity=""0""/>
                     <path d=""M {(int)collar[3].X} {(int)collar[3].Y} L {(int)collar[0].X} {(int)collar[0].Y}""  stroke-width=""3"" stroke=""black""/>
-                    <path d=""M {(int)collar[4].X},{(int)collar[4].Y} Q  {(int)collar[6].X} {(int)collar[6].Y} {(int)collar[5].X},{(int)collar[5].Y}"" fill-opacity=""0"" stroke-width=""3"" stroke=""black""/>   
+                    <path d=""M {(int)collar[4].X},{(int)collar[4].Y} Q  {(int)collar[6].X} {(int)collar[6].Y} {(int)collar[5].X},{(int)collar[5].Y}"" fill-opacity=""0"" stroke-width=""3"" stroke=""black""/>
+                    <text text-anchor=""middle"" font-size=""32"" font-family=""Verdana"" transform=""translate({(int)(collar[0].X + 2* pixelsizeincm)}, {(int)((collar[0].Y + collar[1].Y)/2)})"" >Collar, x2, interfacing</text>
+                    <text text-anchor=""middle"" font-size=""32"" font-family=""Verdana"" transform=""translate({(int)(collar[0].X+pixelsizeincm)}, {(int)((collar[0].Y + collar[1].Y) / 2)}) rotate(270)"">Fold</text>
                 ";
+
             }
         }
         private void DrawFrontD()

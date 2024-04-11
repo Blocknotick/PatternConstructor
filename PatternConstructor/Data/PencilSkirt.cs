@@ -229,6 +229,7 @@ namespace PatternConstructor.Data
                 }
                 for (int i = 0; i < backD.Count; i++)
                 {
+                    backD[i] += backoffset;
                     frontD[i] += backoffset;
                     backD[i] += Vector2.One;
                     frontD[i] += Vector2.One;
@@ -250,7 +251,7 @@ namespace PatternConstructor.Data
                 // сдвинуть бэк на 3 1
                 for (int i = 0; i < back.Count; i++)
                     back[i] += Vector2.UnitY * (float)pixelsizeincm + Vector2.UnitX * 3 * (float)pixelsizeincm;
-                for (int i = 0; i < back.Count; i++)
+                for (int i = 0; i < backD.Count; i++)
                     backD[i] += Vector2.UnitY * (float)pixelsizeincm + Vector2.UnitX * 3 * (float)pixelsizeincm;
                 // сдвинуть фронт на 5 1
                 for (int i = 0; i < front.Count; i++)

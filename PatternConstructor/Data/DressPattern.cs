@@ -61,6 +61,48 @@ namespace PatternConstructor.Data
 
         string neckType, collartype, sleevetype, clasptype, waisttype;
         bool isLecal;
+        public DressPattern(BasicDress model)
+        {
+            s = "";
+            pg = (float)model.pg;
+            pshs = (float)model.pshs;
+            pshp = (float)model.pshp;
+            ppr = pg-pshs-pshp;
+            pt = (float)model.pt;
+            pb = (float)model.pb;
+            pdts = (float)model.pdts;
+            pspr = (float)model.pspr;
+            pshgor = (float)model.pshgor;
+            pop = 0;
+                
+            csh = (float)model.NeckGirth / 2;
+            cg1 = (float)model.BustGirthUp / 2;
+            cg2 = (float)model.BustGirthSecond / 2;
+            cg3 = (float)model.BustGirth / 2;
+            ct = (float)model.WaistGirth / 2;
+            cb = (float)model.HipsGirth / 2;
+            dts = (float)model.BackWaistLength;
+            vg = (float)model.BustHeight;
+            vpk = (float)model.ShoulderHeight;
+            dtp = (float)model.FrontWaistLength;
+            shs = (float)model.BackWidth / 2;
+            shg = (float)model.BustWidth / 2;
+            shp = (float)model.ShoulderToNeck;
+            vprz = (float)model.BackArmholeDepth;
+            tsg = (float)model.BustCenter / 2;
+            dr = 0;
+            op = 0;
+            di = (float)model.di;
+            oz = 0;
+
+           
+            neckType = "Стандартная";
+            collartype = "Без воротника";
+            sleevetype = "Без рукава";
+            clasptype = "Без застежки";
+            waisttype = "Неотрезное по талии";
+            isLecal = false;
+        }
         public DressPattern(DressConstructModel model)
         {
             s = "";

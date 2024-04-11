@@ -102,9 +102,86 @@ namespace PatternConstructor.Controllers
         }
 
         [Authorize]
-        public async Task<ActionResult> BasicDress()
+        public async Task<ActionResult> BasicDressAsync()
         {
-            return RedirectToAction("Index");
+            var user = await _userManager.GetUserAsync(User);
+
+            Measure measure;
+            measure = _context.Measures.FirstOrDefault(m => m.MeasureId == user.MeasureId); ;
+
+            BasicDress basicDressModel = new BasicDress
+            {
+                WaistGirth = measure.WaistGirth,
+                BustGirth = measure.BustGirth,
+                HipsGirth = measure.HipsGirth,
+                NeckGirth = measure.NeckGirth,
+                BustGirthUp = measure.BustGirthUp,
+                BustGirthSecond = measure.BurstGirthSecond,
+                BackWaistLength = measure.BackWaistLength,
+                BustHeight = measure.BustHeight,
+                ShoulderHeight = measure.ShoulderHeight,
+                FrontWaistLength = measure.FrontWaistLength,
+                BackWidth = measure.BackWidth,
+                ShoulderToNeck = measure.ShoulderToNeck,
+                BackArmholeDepth = measure.BackArmholeDepth,
+                BustCenter = measure.BustCenter,
+                BustWidth = measure.BustWidth,
+                pg=4,
+                pshs= 0.8,
+                pshp = 0.4,
+                pt = 1,
+                pb=1,
+                pshgor = 0.5,
+                pspr = 1.5,
+                pdts=0.5
+            };
+
+            
+            return View(basicDressModel);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult> BasicDressAsync(BasicDress basicDressModel)
+        {
+            if (!ModelState.IsValid) return RedirectToAction("BasicDress");
+            //создание файлов выкройки
+
+            var user = await _userManager.GetUserAsync(User);
+            var createdFile = new CreatedFile
+            {
+                UserId = user.Id,
+            };
+            await _context.AddAsync(createdFile);
+            _context.SaveChanges();
+
+            string FileName = user.Id + createdFile.Id.ToString() + ".pdf";
+
+            //Здесь должна быть функция, которая генерирует выкройку
+
+            Pattern skirtPattern = new DressPattern(basicDressModel);
+
+            string documentContent = skirtPattern.GenerateContent();
+
+
+
+            using (iText.Kernel.Pdf.PdfDocument doc =
+                new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfWriter(new FileStream("wwwroot/dresses/" + FileName, FileMode.OpenOrCreate),
+                                                                                new WriterProperties().SetCompressionLevel(0))))
+            {
+                doc.AddNewPage(new PageSize((float)(0.75 * skirtPattern.widthcm), (float)(0.75 * skirtPattern.heightcm)));
+                SvgConverter.DrawOnDocument(documentContent, doc, 1);
+
+            }
+
+
+            createdFile.PatternLink = "/dresses/" + FileName;
+            createdFile.Name = basicDressModel.Name;
+            _context.Update(createdFile);
+            _context.SaveChanges();
+
+            //переход к странице созданных файлов
+            return RedirectToAction("History", "Account");
         }
 
         [Authorize]
@@ -148,7 +225,6 @@ namespace PatternConstructor.Controllers
 
             return View(skirtConstructModel);
         }
-
 
         [Authorize]
         [HttpPost]
@@ -198,7 +274,7 @@ namespace PatternConstructor.Controllers
             if (skirtConstructModel.SkirtCombinationModel.Type == "Прямая" || skirtConstructModel.SkirtCombinationModel.Type == "Тюльпан")
             {
                 htmldocs.Add("wwwroot/DescriptionUnits/skirts/darts.pdf");
-                htmldocs.Add("wwwroot/DescriptionUnits/skirts/sideSeams.pdf");
+                htmldocs.Add("wwwroot/DescriptionUnits/skirts/sideSeamsStraightSkirt.pdf");
             }
             if (skirtConstructModel.SkirtCombinationModel.Type == "Солнце")
                 htmldocs.Add("wwwroot/DescriptionUnits/skirts/sideSeams.pdf");
@@ -246,19 +322,19 @@ namespace PatternConstructor.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult DressCombination(DressCombinationModel skirtCombination)
+        public ActionResult DressCombination(DressCombinationModel dressCombination)
         {
             //проверка на реализуемость
-            if (!ModelState.IsValid) return View(skirtCombination);
-            if (skirtCombination.Neck=="V-горловина"&&skirtCombination.Collar=="Стойка с застежкой" ||
-                skirtCombination.Collar=="Стойка с застежкой"&&(skirtCombination.Clasp== "Без застежки"||skirtCombination.Clasp== "Центральный шов полочки") ||
-                skirtCombination.Waist== "Неотрезное по талии"&&skirtCombination.Clasp== "Застежка на пуговицы до талии") return View(skirtCombination);
+            if (!ModelState.IsValid) return View(dressCombination);
+            if (dressCombination.Neck=="V-горловина"&&dressCombination.Collar=="Стойка с застежкой" ||
+                dressCombination.Collar=="Стойка с застежкой"&&(dressCombination.Clasp== "Без застежки"||dressCombination.Clasp== "Центральный шов полочки") ||
+                dressCombination.Waist== "Неотрезное по талии"&&dressCombination.Clasp== "Застежка на пуговицы до талии") return View(dressCombination);
 
-            return RedirectToAction("Dress", skirtCombination);
+            return RedirectToAction("Dress", dressCombination);
         }
 
         [Authorize]
-        public async Task<IActionResult> DressAsync(DressCombinationModel skirtCombination)
+        public async Task<IActionResult> DressAsync(DressCombinationModel dressCombination)
         {
             var user = await _userManager.GetUserAsync(User);
 
@@ -286,7 +362,7 @@ namespace PatternConstructor.Controllers
                 BustWidth = measure.BustWidth,
                 WaistFloorFrontLength = measure.WaistFloorFrontLength,
                 WristGirth = measure.WristGirth,
-                DressCombinationModel = skirtCombination
+                DressCombinationModel = dressCombination
             };
 
             var s_measures = _context.standartMeasures.ToList();
@@ -298,9 +374,9 @@ namespace PatternConstructor.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> DressAsync(DressConstructModel skirtConstructModel)
+        public async Task<IActionResult> DressAsync(DressConstructModel dressConstructModel)
         {
-            if (!ModelState.IsValid) return RedirectToAction("Dress", skirtConstructModel.DressCombinationModel);
+            if (!ModelState.IsValid) return RedirectToAction("Dress", dressConstructModel.DressCombinationModel);
             var user = await _userManager.GetUserAsync(User);
             var createdFile = new CreatedFile
             {
@@ -313,7 +389,7 @@ namespace PatternConstructor.Controllers
             string FileName = user.Id + createdFile.Id.ToString() + ".pdf";
 
 
-            Pattern skirtPattern = new DressPattern(skirtConstructModel);
+            Pattern skirtPattern = new DressPattern(dressConstructModel);
             
 
             string documentContent = skirtPattern.GenerateContent();
@@ -338,7 +414,7 @@ namespace PatternConstructor.Controllers
             createPdf("wwwroot/descr/" + FileName, htmldocs);
             createdFile.PatternLink = "/dresses/" + FileName;
             createdFile.DescribtionLink = "/descr/" + FileName;
-            createdFile.Name = skirtConstructModel.Name;
+            createdFile.Name = dressConstructModel.Name;
             _context.Update(createdFile);
             _context.SaveChanges();
 

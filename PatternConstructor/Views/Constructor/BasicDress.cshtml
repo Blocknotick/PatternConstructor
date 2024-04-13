@@ -6,179 +6,188 @@
 }
 @model PatternConstructor.ViewModels.BasicDress
 
-<h1>Генератор базовой выкройки платья</h1>
+<h1 class="text-DarkPurple text-center fw-bold">Генератор базовой выкройки платья</h1>
 
 
 <div class="row">
-    <div class="col-md-4">
+    
        
         <form asp-action="BasicDress">
+            <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="WaistGirth" class="control-label"></label>
+                    <input asp-for="WaistGirth" class="form-control" />
+                    @*<span asp-validation-for="WaistGirth" class="text-danger"></span>*@
+                </div>
 
-            <div class="form-group">
-                <label asp-for="WaistGirth" class="control-label"></label>
-                <input asp-for="WaistGirth" class="form-control" />
-                @*<span asp-validation-for="WaistGirth" class="text-danger"></span>*@
+
+                <div class="form-group">
+                    <label asp-for="BustGirth" class="control-label"></label>
+                    <input asp-for="BustGirth" class="form-control" />
+                    @*<span asp-validation-for="BustGirth" class="text-danger"></span>*@
+                </div>
+
+
+                <div class="form-group">
+                    <label asp-for="HipsGirth" class="control-label"></label>
+                    <input asp-for="HipsGirth" class="form-control" />
+                    @*<span asp-validation-for="HipsGirth" class="text-danger"></span>*@
+                </div>
+
+
+                <div class="form-group">
+                    <label asp-for="NeckGirth" class="control-label"></label>
+                    <input asp-for="NeckGirth" class="form-control" />
+                    @*<span asp-validation-for="NeckGirth" class="text-danger"></span>*@
+                </div>
+
+
+                <div class="form-group">
+                    <label asp-for="BustGirthUp" class="control-label"></label>
+                    <input asp-for="BustGirthUp" class="form-control" />
+                    @*<span asp-validation-for="BustGirthUp" class="text-danger"></span>*@
+                </div>
+
+
+                <div class="form-group">
+                    <label asp-for="BustGirthSecond" class="control-label"></label>
+                    <input asp-for="BustGirthSecond" class="form-control" />
+                    @*<span asp-validation-for="BustGirthSecond" class="text-danger"></span>*@
+                </div>
+
+
+                <div class="form-group">
+                    <label asp-for="BackWaistLength" class="control-label"></label>
+                    <input asp-for="BackWaistLength" class="form-control" />
+                    @*<span asp-validation-for="BackWaistLength" class="text-danger"></span>*@
+                </div>
+
+
+                <div class="form-group">
+                    <label asp-for="BustHeight" class="control-label"></label>
+                    <input asp-for="BustHeight" class="form-control" />
+                    @*<span asp-validation-for="BustHeight" class="text-danger"></span>*@
+                </div>
+
+
+                
+
             </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="ShoulderHeight" class="control-label"></label>
+                    <input asp-for="ShoulderHeight" class="form-control" />
+                    @*<span asp-validation-for="ShoulderHeight" class="text-danger"></span>*@
+                </div>
 
 
-            <div class="form-group">
-                <label asp-for="BustGirth" class="control-label"></label>
-                <input asp-for="BustGirth" class="form-control" />
-                @*<span asp-validation-for="BustGirth" class="text-danger"></span>*@
+                <div class="form-group">
+                    <label asp-for="FrontWaistLength" class="control-label"></label>
+                    <input asp-for="FrontWaistLength" class="form-control" />
+                    @*<span asp-validation-for="FrontWaistLength" class="text-danger"></span>*@
+                </div>
+
+
+                <div class="form-group">
+                    <label asp-for="BackWidth" class="control-label"></label>
+                    <input asp-for="BackWidth" class="form-control" />
+                    @*<span asp-validation-for="BackWidth" class="text-danger"></span>*@
+                </div>
+
+
+                <div class="form-group">
+                    <label asp-for="ShoulderToNeck" class="control-label"></label>
+                    <input asp-for="ShoulderToNeck" class="form-control" />
+                    @*<span asp-validation-for="ShoulderToNeck" class="text-danger"></span>*@
+                </div>
+
+
+                <div class="form-group">
+                    <label asp-for="BackArmholeDepth" class="control-label"></label>
+                    <input asp-for="BackArmholeDepth" class="form-control" />
+                    @*<span asp-validation-for="BackArmholeDepth" class="text-danger"></span>*@
+                </div>
+
+
+                <div class="form-group">
+                    <label asp-for="BustCenter" class="control-label"></label>
+                    <input asp-for="BustCenter" class="form-control" />
+                    @*<span asp-validation-for="BustCenter" class="text-danger"></span>*@
+                </div>
+
+
+                <div class="form-group">
+                    <label asp-for="BustWidth" class="control-label"></label>
+                    <input asp-for="BustWidth" class="form-control" />
+                    @*<span asp-validation-for="BustWidth" class="text-danger"></span>*@
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="di" class="control-label"></label>
+                    <input asp-for="di" class="form-control" />
+                    @*<span asp-validation-for="di" class="text-danger"></span>*@
+                </div>
             </div>
+            <div class="col-md-4">
 
+                <div class="form-group">
+                    <label asp-for="pg" class="control-label"></label>
+                    <input asp-for="pg" class="form-control" />
+                    @*<span asp-validation-for="pg" class="text-danger"></span>*@
+                </div>
+                <div class="form-group">
+                    <label asp-for="pshs" class="control-label"></label>
+                    <input asp-for="pshs" class="form-control" />
+                    @*<span asp-validation-for="pshs" class="text-danger"></span>*@
+                </div>
+                <div class="form-group">
+                    <label asp-for="pshp" class="control-label"></label>
+                    <input asp-for="pshp" class="form-control" />
+                    @*<span asp-validation-for="pshp" class="text-danger"></span>*@
+                </div>
+                <div class="form-group">
+                    <label asp-for="pt" class="control-label"></label>
+                    <input asp-for="pt" class="form-control" />
+                    @*<span asp-validation-for="pt" class="text-danger"></span>*@
+                </div>
+                <div class="form-group">
+                    <label asp-for="pb" class="control-label"></label>
+                    <input asp-for="pb" class="form-control" />
+                    @*<span asp-validation-for="pb" class="text-danger"></span>*@
+                </div>
+                <div class="form-group">
+                    <label asp-for="pdts" class="control-label"></label>
+                    <input asp-for="pdts" class="form-control" />
+                    @*<span asp-validation-for="pdts" class="text-danger"></span>*@
+                </div>
+                <div class="form-group">
+                    <label asp-for="pspr" class="control-label"></label>
+                    <input asp-for="pspr" class="form-control" />
+                    @*<span asp-validation-for="pspr" class="text-danger"></span>*@
+                </div>
+                <div class="form-group">
+                    <label asp-for="pshgor" class="control-label"></label>
+                    <input asp-for="pshgor" class="form-control" />
+                    @*<span asp-validation-for="pshgor" class="text-danger"></span>*@
+                </div>
 
-            <div class="form-group">
-                <label asp-for="HipsGirth" class="control-label"></label>
-                <input asp-for="HipsGirth" class="form-control" />
-                @*<span asp-validation-for="HipsGirth" class="text-danger"></span>*@
+               
+
+                
             </div>
-
-
-            <div class="form-group">
-                <label asp-for="NeckGirth" class="control-label"></label>
-                <input asp-for="NeckGirth" class="form-control" />
-                @*<span asp-validation-for="NeckGirth" class="text-danger"></span>*@
-            </div>
-
-
-            <div class="form-group">
-                <label asp-for="BustGirthUp" class="control-label"></label>
-                <input asp-for="BustGirthUp" class="form-control" />
-                @*<span asp-validation-for="BustGirthUp" class="text-danger"></span>*@
-            </div>
-
-
-            <div class="form-group">
-                <label asp-for="BustGirthSecond" class="control-label"></label>
-                <input asp-for="BustGirthSecond" class="form-control" />
-                @*<span asp-validation-for="BustGirthSecond" class="text-danger"></span>*@
-            </div>
-
-
-            <div class="form-group">
-                <label asp-for="BackWaistLength" class="control-label"></label>
-                <input asp-for="BackWaistLength" class="form-control" />
-                @*<span asp-validation-for="BackWaistLength" class="text-danger"></span>*@
-            </div>
-
-
-            <div class="form-group">
-                <label asp-for="BustHeight" class="control-label"></label>
-                <input asp-for="BustHeight" class="form-control" />
-                @*<span asp-validation-for="BustHeight" class="text-danger"></span>*@
-            </div>
-
-
-            <div class="form-group">
-                <label asp-for="ShoulderHeight" class="control-label"></label>
-                <input asp-for="ShoulderHeight" class="form-control" />
-                @*<span asp-validation-for="ShoulderHeight" class="text-danger"></span>*@
-            </div>
-
-
-            <div class="form-group">
-                <label asp-for="FrontWaistLength" class="control-label"></label>
-                <input asp-for="FrontWaistLength" class="form-control" />
-                @*<span asp-validation-for="FrontWaistLength" class="text-danger"></span>*@
-            </div>
-
-
-            <div class="form-group">
-                <label asp-for="BackWidth" class="control-label"></label>
-                <input asp-for="BackWidth" class="form-control" />
-                @*<span asp-validation-for="BackWidth" class="text-danger"></span>*@
-            </div>
-
-
-            <div class="form-group">
-                <label asp-for="ShoulderToNeck" class="control-label"></label>
-                <input asp-for="ShoulderToNeck" class="form-control" />
-                @*<span asp-validation-for="ShoulderToNeck" class="text-danger"></span>*@
-            </div>
-
-
-            <div class="form-group">
-                <label asp-for="BackArmholeDepth" class="control-label"></label>
-                <input asp-for="BackArmholeDepth" class="form-control" />
-                @*<span asp-validation-for="BackArmholeDepth" class="text-danger"></span>*@
-            </div>
-
-
-            <div class="form-group">
-                <label asp-for="BustCenter" class="control-label"></label>
-                <input asp-for="BustCenter" class="form-control" />
-                @*<span asp-validation-for="BustCenter" class="text-danger"></span>*@
-            </div>
-
-
-            
-
-
-
-            <div class="form-group">
-                <label asp-for="BustWidth" class="control-label"></label>
-                <input asp-for="BustWidth" class="form-control" />
-                @*<span asp-validation-for="BustWidth" class="text-danger"></span>*@
-            </div>
-
-            <div class="form-group">
-                <label asp-for="di" class="control-label"></label>
-                <input asp-for="di" class="form-control" />
-                @*<span asp-validation-for="di" class="text-danger"></span>*@
-            </div>
-            <div class="form-group">
-                <label asp-for="pg" class="control-label"></label>
-                <input asp-for="pg" class="form-control" />
-                @*<span asp-validation-for="pg" class="text-danger"></span>*@
-            </div>
-            <div class="form-group">
-                <label asp-for="pshs" class="control-label"></label>
-                <input asp-for="pshs" class="form-control" />
-                @*<span asp-validation-for="pshs" class="text-danger"></span>*@
-            </div>
-            <div class="form-group">
-                <label asp-for="pshp" class="control-label"></label>
-                <input asp-for="pshp" class="form-control" />
-                @*<span asp-validation-for="pshp" class="text-danger"></span>*@
-            </div>
-            <div class="form-group">
-                <label asp-for="pt" class="control-label"></label>
-                <input asp-for="pt" class="form-control" />
-                @*<span asp-validation-for="pt" class="text-danger"></span>*@
-            </div>
-            <div class="form-group">
-                <label asp-for="pb" class="control-label"></label>
-                <input asp-for="pb" class="form-control" />
-                @*<span asp-validation-for="pb" class="text-danger"></span>*@
-            </div>
-            <div class="form-group">
-                <label asp-for="pdts" class="control-label"></label>
-                <input asp-for="pdts" class="form-control" />
-                @*<span asp-validation-for="pdts" class="text-danger"></span>*@
-            </div>
-            <div class="form-group">
-                <label asp-for="pspr" class="control-label"></label>
-                <input asp-for="pspr" class="form-control" />
-                @*<span asp-validation-for="pspr" class="text-danger"></span>*@
-            </div>
-            <div class="form-group">
-                <label asp-for="pshgor" class="control-label"></label>
-                <input asp-for="pshgor" class="form-control" />
-                @*<span asp-validation-for="pshgor" class="text-danger"></span>*@
-            </div>
-
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-
-            <div class="form-group">
-                <input type="submit" value="Создать" class="btn btn-primary" />
+            <hr size="0px"/>
+            <div class="form-group  text-center">
+                <input type="submit" value="Создать" class="btn btn-favorite fs-4" />
             </div>
+            </div>
+       
         </form>
 
 
-    </div>
 </div>

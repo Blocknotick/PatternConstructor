@@ -83,7 +83,7 @@ namespace PatternConstructor.ViewModels
         
 
 
-        [Display(Name = "Ширина спинки")]
+        [Display(Name = "Ширина груди")]
         [Range(10, 100)]
         [Required(ErrorMessage = "Поле должно быть заполнено")]
         public double BustWidth { get; set; }
@@ -99,11 +99,11 @@ namespace PatternConstructor.ViewModels
         [Range(0, 30)]
         [Required(ErrorMessage = "Поле должно быть заполнено")]
         public double pg { get; set; }
-        [Display(Name = "Прибавка к ширине спины (входит в прибавку по линии груди)")]
+        [Display(Name = "Прибавка к ширине спины")]
         [Range(0, 30)]
         [Required(ErrorMessage = "Поле должно быть заполнено")]
         public double pshs { get; set; }
-        [Display(Name = "Прибавка к ширине полы (входит в прибавку по линии груди)")]
+        [Display(Name = "Прибавка к ширине переда")]
         [Range(0, 30)]
         [Required(ErrorMessage = "Поле должно быть заполнено")]
         public double pshp { get; set; }
@@ -128,7 +128,7 @@ namespace PatternConstructor.ViewModels
         [Required(ErrorMessage = "Поле должно быть заполнено")]
         public double pshgor { get; set; }
 
-
+        [Display(Name = "Название выкройки")]
         [Required(ErrorMessage = "Поле должно быть заполнено")]
         public string Name { get; set; }
 

@@ -328,7 +328,8 @@ namespace PatternConstructor.Controllers
             if (!ModelState.IsValid) return View(dressCombination);
             if (dressCombination.Neck=="V-горловина"&&dressCombination.Collar=="Стойка с застежкой" ||
                 dressCombination.Collar=="Стойка с застежкой"&&(dressCombination.Clasp== "Без застежки"||dressCombination.Clasp== "Центральный шов полочки") ||
-                dressCombination.Waist== "Неотрезное по талии"&&dressCombination.Clasp== "Застежка на пуговицы до талии") return View(dressCombination);
+                dressCombination.Waist== "Неотрезное по талии"&&dressCombination.Clasp== "Застежка на пуговицы до талии"||
+                dressCombination.Collar== "Отложной с прямыми углами"&&dressCombination.Clasp== "Без застежки") return View(dressCombination);
 
             return RedirectToAction("Dress", dressCombination);
         }

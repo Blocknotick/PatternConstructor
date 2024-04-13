@@ -4,7 +4,7 @@
     ViewData["Title"] = "History";
 }
 
-<h1>Созданные выкройки</h1>
+<h1 class="text-DarkPurple text-center fw-bold">Созданные выкройки</h1>
 
 <div class="album py-5">
     <div class="container">
@@ -13,18 +13,17 @@
 
             @foreach (var item in Model)
             {
-            
               <div class="col">
-                    <div class="card shadow-sm">
+                    <div class="card shadow-sm bg-LightPink">
                         <div class="card-body">
-                            <p class="card-text">@Html.DisplayFor(modelItem => item.Name)</p>
-                            <a href=@Html.DisplayFor(modelItem => item.PatternLink) download="Pattern.pdf">
+                            <p class="card-text text-DarkPurple fs-5">@Html.DisplayFor(modelItem => item.Name)</p>
+                            <a class="text-DarkPurple fs-5 text-decoration-underline" href=@Html.DisplayFor(modelItem => item.PatternLink) download="Pattern.pdf">
                                 Загрузить файл выкройки
                             </a>
                             <br>
                             @if(item.DescribtionLink!=null)
                             {
-                                <a href=@Html.DisplayFor(modelItem => item.DescribtionLink) download="Description.pdf">
+                                <a class="text-DarkPurple fs-5 text-decoration-underline" href=@Html.DisplayFor(modelItem => item.DescribtionLink) download="Description.pdf">
                                     Загрузить файл описания пошива
                                 </a>
                             }

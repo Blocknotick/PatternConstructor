@@ -2,7 +2,58 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col m-3 rounded-3 bg-LightPink">
+            <a class="nav-link text-DarkPurple" asp-area="" asp-controller="Constructor" asp-action="Index" asp-route-id="">
+                <br />
+                <p class="fs-2 text-center">Конструктор выкроек</p>
+                <hr size=5px />
+                <ol class="fs-4">
+                    <li>
+                        Выбери изделие
+                    </li>
+                    <li>
+                        Комбинируй детали
+                    </li>
+                    <li>
+                        Введи свои мерки
+                    </li>
+                    <li>
+                        Сохраняй свою уникальную выкройку
+                    </li>
+                </ol>
+                <br />
+            </a>
+        </div>
+
+        <div class="col m-3 rounded-3 bg-LightPink">
+            <a class="nav-link text-DarkPurple" asp-area="" asp-controller="Articles" asp-action="Index" asp-route-id="">
+                <br />
+                <p class="fs-2 text-center">Статьи</p>
+                <hr size=5px />
+                <p class="fs-4">
+                    Нужно что-то другое?
+                </p>
+                <p class="fs-4">
+                    Создавай базовую выкройку и начинай моделирование
+                </p>
+                <br />
+            </a>
+        </div>
+
+        <div class="col m-3 rounded-3 bg-LightPink">
+            <a class="nav-link text-DarkPurple" asp-area="" asp-controller="Account" asp-action="Register" asp-route-id="">
+                <br />
+                <p class="fs-2 text-center">Регистрация</p>
+                <hr size=5px />
+                <p class="fs-4">
+                    Получи доступ к полному функционалу конструктора
+                </p>
+                <br />
+            </a>
+        </div>
+    </div>
 </div>

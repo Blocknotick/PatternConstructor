@@ -5,31 +5,29 @@
 }
 @model IEnumerable<Article>
 
-<h1>Уроки моделирования</h1>
+<h1 class="text-DarkPurple text-center fw-bold">Статьи</h1>
 
-<div class="album py-5">
+<div class="album ">
     <div class="container">
 
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         
       @foreach (var item in Model)
       {
-          <a class="nav-link text-dark" asp-area="" asp-controller="Articles" asp-action="DetailArticle" asp-route-id=@item.Id>
+          <a class="nav-link text-DarkPurple" asp-area="" asp-controller="Articles" asp-action="DetailArticle" asp-route-id=@item.Id>
               <div class="col">
-                    <div class="card shadow-sm">
-                        <img class="card-img-top" src="@item.Image" style="object-fit: scale-down; height:250px; width: 100%;" alt="Card image cap">
+                    <div class="card shadow-sm bg-LightPink">
+                            <img class="card-img-top pt-3" src="@item.Image" style="object-fit: scale-down; height:250px; width: 100%;" alt="Card image cap">
 
-                        <div class="card-body">
-                            <p class="card-text">@item.Title</p>
-                        </div>
+                            <div class="card-body">
+                                <p class="card-text text-DarkPurple fs-3 text-decoration-underline">@item.Title</p>
+                            </div>
+                        
                     </div>
                </div>
            </a>   
       }
 
-        
-
-        
         
       </div>
     </div>

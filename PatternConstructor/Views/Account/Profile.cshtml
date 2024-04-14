@@ -5,24 +5,30 @@
 <h1 class="text-DarkPurple text-center fw-bold">Мои мерки</h1>
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form>
-        <select class="form-select" aria-label="Выбор размера" id="ddltype" name="type" asp-items="ViewBag.Types" >
-            <option>Выберите размер</option>
-        </select>
-        </form>
-        <form asp-action="Edit">
 
-            <div  class="text-danger"></div>
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <form>
+            <select class="form-select fs-5" aria-label="Выбор размера" id="ddltype" name="type" asp-items="ViewBag.Types">
+                <option>Выберите размер</option>
+            </select>
+            <br />
+        </form>
+    </div>
+</div>
+
+<form asp-action="Edit">
+    <div class="row text-DarkPurple">
+        <div class="col-md-4">
+            <div class="text-danger"></div>
             <div class="form-group">
-                <input type="hidden" id="UserId" asp-for="Id" class="form-control"/>
+                <input type="hidden" id="UserId" asp-for="Id" class="form-control" />
                 @*<span asp-validation-for="Id" class="text-danger"></span>*@
             </div>
-                        
+
             <div class="form-group">
                 <label asp-for="BustCenter" class="control-label"></label>
-                <input asp-for="BustCenter" class="form-control"/>
+                <input asp-for="BustCenter" class="form-control" />
                 @*<span asp-validation-for="BustCenter" class="text-danger"></span>*@
             </div>
             <div class="form-group">
@@ -65,6 +71,8 @@
                 <input asp-for="WristGirth" class="form-control" />
                 @*<span asp-validation-for="WristGirth" class="text-danger"></span>*@
             </div>
+        </div>
+        <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="HipHeight" class="control-label"></label>
                 <input asp-for="HipHeight" class="form-control" />
@@ -105,6 +113,11 @@
                 <input asp-for="NeckGirth" class="form-control" />
                 @*<span asp-validation-for="NeckGirth" class="text-danger"></span>*@
             </div>
+
+            
+            
+        </div>
+        <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="BustWidth" class="control-label"></label>
                 <input asp-for="BustWidth" class="form-control" />
@@ -145,14 +158,17 @@
                 <input asp-for="WaistFloorBackLength" class="form-control" />
                 @*<span asp-validation-for="WaistFloorBackLength" class="text-danger"></span>*@
             </div>
-            <div class="form-group text-center ">
-                <input class="btn btn-favorite w-100 fs-4" type="submit" value="Изменить" />
-            </div>
-        </form>
+        </div>
+    </div>
+    
+    <div class="form-group text-center ">
+        <br />
+        <input class="btn btn-favorite w-100 fs-4" type="submit" value="Изменить" />
+    </div>
+</form>
 
         
-    </div>
-</div>
+
 
 
 

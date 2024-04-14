@@ -82,7 +82,6 @@ namespace PatternConstructor.ViewModels
 
         
 
-
         [Display(Name = "Ширина груди")]
         [Range(10, 100)]
         [Required(ErrorMessage = "Поле должно быть заполнено")]

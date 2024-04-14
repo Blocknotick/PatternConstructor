@@ -5,108 +5,190 @@
     ViewData["Title"] = "Платье";
 }
 
-<h1>Комбинация выкройки платья</h1>
+<h1 class="text-DarkPurple text-center fw-bold">Комбинация выкройки платья</h1>
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row justify-content-center">
+    <div class="col-md-10 fs-5 ">
         <form asp-action="DressCombination">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="Silhouette" class="control-label" ></label>
-                <div>
+            <div class="form-group ">
+                <label asp-for="Silhouette" class="control-label fs-4  text-DarkPurple" ></label>
+                <br />
+                <div class="form_radio_group fs-5">
                     @foreach (var l in Model.Silhouettes)
                     {
-                        <input type="radio" asp-for="Silhouette" value="@l" /> @l
+                        <div class="form_radio_group-item m-3">
+                            <input id="Silhouette-@l" type="radio" asp-for="Silhouette" value="@l"  />
+                            <label for="Silhouette-@l">
+                                <div class="text-center container pt-3">
+                                    <img class="border rounded-3" src="@Model.dict[@l]" width="100" height="100" />
+                                    <br />
+                                    @l
+                                </div>
+                            </label>
+                        </div>
+                        
                     }
                 </div>
                 
                 <span asp-validation-for="Silhouette" class="text-danger"></span>
             </div>
 
+            <hr size="5px" class="text-DarkPurple"/>
             <div class="form-group">
-                <label asp-for="Length" class="control-label" ></label>
-                <div>
+                <label asp-for="Length" class="control-label fs-4 text-DarkPurple"></label>
+                <br />
+                <div class="form_radio_group fs-5">
                     @foreach (var l in Model.Lengths)
                     {
-                        <input type="radio" asp-for="Length" value="@l" /> @l
+                        <div class="form_radio_group-item m-3">
+                            <input id="Length-@l" type="radio" asp-for="Length" value="@l" />
+                            <label for="Length-@l">
+                                <div class="text-center container pt-3">
+                                    <img class="border rounded-3" src="@Model.dict[@l]" width="100px" height="100px" />
+                                    <br />
+                                    @l
+                                </div>
+                            </label>
+                        </div>
                     }
                 </div>
                 
                 <span asp-validation-for="Length" class="text-danger"></span>
             </div>
 
+
+            <hr size="5px" class="text-DarkPurple" />
             <div class="form-group">
-                <label asp-for="Neck" class="control-label"></label>
-                <div>
+                <label asp-for="Neck" class="control-label fs-4 text-DarkPurple"></label>
+                <br />
+                <div class="form_radio_group fs-5">
                     @foreach (var l in Model.Necks)
                     {
-                        <input type="radio" asp-for="Neck" value="@l" /> @l
+                        <div class="form_radio_group-item m-3">
+                            <input id="Neck-@l" type="radio" asp-for="Neck" value="@l" />
+                            <label for="Neck-@l">
+                                <div class="text-center container pt-3">
+                                    <img class="border rounded-3" src="@Model.dict[@l]" width="100px" height="100px" />
+                                    <br />
+                                    @l
+                                </div>
+                            </label>
+                        </div>
                     }
                 </div>
                 <span asp-validation-for="Neck" class="text-danger"></span>
             </div>
 
+
+            <hr size="5px" class="text-DarkPurple" />
             <div class="form-group">
-                <label asp-for="Collar" class="control-label"></label>
-                <div>
+                <label asp-for="Collar" class="control-label fs-4 text-DarkPurple"></label>
+                <br />
+                <div class="form_radio_group fs-5">
                     @foreach (var l in Model.Collars)
                     {
-                        <input type="radio" asp-for="Collar" value="@l" /> @l
+                        <div class="form_radio_group-item m-3">
+                            <input id="Collar-@l" type="radio" asp-for="Collar" value="@l" />
+                            <label for="Collar-@l">
+                                <div class="text-center container pt-3">
+                                    <img class="border rounded-3" src="@Model.dict[@l]" width="100px" height="100px" />
+                                    <br />
+                                    @l
+                                </div>
+                            </label>
+                        </div>
                     }
                 </div>
                 <span asp-validation-for="Collar" class="text-danger"></span>
             </div>
 
+
+            <hr size="5px" class="text-DarkPurple" />
             <div class="form-group">
-                <label asp-for="Clasp" class="control-label"></label>
-                <div>
+                <label asp-for="Clasp" class="control-label fs-4 text-DarkPurple"></label>
+                <br />
+                <div class="form_radio_group fs-5">
                     @foreach (var l in Model.Clasps)
                     {
-                        <input type="radio" asp-for="Clasp" value="@l" /> @l
+                        <div class="form_radio_group-item m-3">
+                            <input id="Clasp-@l" type="radio" asp-for="Clasp" value="@l" />
+                            <label for="Clasp-@l">
+                                <div class="text-center container pt-3">
+                                    <img class="border rounded-3" src="@Model.dict[@l]" width="100px" height="100px" />
+                                    <br />
+                                    @l
+                                </div>
+                            </label>
+                        </div>
                     }
                 </div>
                 <span asp-validation-for="Clasp" class="text-danger"></span>
             </div>
 
+
+            <hr size="5px" class="text-DarkPurple" />
             <div class="form-group">
-                <label asp-for="Waist" class="control-label"></label>
-                <div>
+                <label asp-for="Waist" class="control-label fs-4 text-DarkPurple"></label>
+                <br />
+                <div class="form_radio_group fs-5">
                     @foreach (var l in Model.Waists)
                     {
-                        <input type="radio" asp-for="Waist" value="@l" /> @l
+                        <div class="form_radio_group-item m-3">
+                            <input id="Waist-@l" type="radio" asp-for="Waist" value="@l" />
+                            <label for="Waist-@l">
+                                <div class="text-center container pt-3">
+                                    <img class="border rounded-3" src="@Model.dict[@l]" width="100px" height="100px" />
+                                    <br />
+                                    @l
+                                </div>
+                            </label>
+                        </div>
                     }
                 </div>
                 <span asp-validation-for="Waist" class="text-danger"></span>
             </div>
 
+
+            <hr size="5px" class="text-DarkPurple" />
             <div class="form-group">
-                <label asp-for="Sleeve" class="control-label"></label>
-                <div>
+                <label asp-for="Sleeve" class="control-label fs-4 text-DarkPurple"></label>
+                <br />
+                <div class="form_radio_group fs-5">
                     @foreach (var l in Model.Sleeves)
                     {
-                        <input type="radio" asp-for="Sleeve" value="@l" /> @l
+                        <div class="form_radio_group-item m-3">
+                            <input id="Sleeve-@l" type="radio" asp-for="Sleeve" value="@l" />
+                            <label for="Sleeve-@l">
+                                <div class="text-center container pt-3">
+                                    <img class="border rounded-3" src="@Model.dict[@l]" width="100px" height="100px" />
+                                    <br />
+                                    @l
+                                </div>
+                            </label>
+                        </div>
                     }
                 </div>
                 <span asp-validation-for="Sleeve" class="text-danger"></span>
             </div>
 
+
+            <hr size="5px" class="text-DarkPurple" />
             <div class="form-group form-check">
-                <label class="form-check-label">
+                <label class="form-check-label fs-5 text-DarkPurple">
                     <input class="form-check-input" asp-for="DoubleContour" /> @Html.DisplayNameFor(model => model.DoubleContour)
                 </label>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <br />
+            <div class="form-group text-center">
+                <input class="btn btn-favorite w-100 fs-4" type="submit" value="Создать" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

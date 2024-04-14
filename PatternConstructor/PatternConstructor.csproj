@@ -26,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\sunskirts\" />
     <Folder Include="wwwroot\skirts\" />
     <Folder Include="wwwroot\descr\" />
     <Folder Include="wwwroot\dresses\" />

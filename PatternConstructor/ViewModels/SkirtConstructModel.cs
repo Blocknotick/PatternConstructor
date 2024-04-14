@@ -45,7 +45,7 @@ namespace PatternConstructor.ViewModels
         [Required(ErrorMessage = "Поле должно быть заполнено")]
         public double WaistFloorBackLength { get; set; }
 
-
+        [Display(Name = "Название выкройки")]
         [Required(ErrorMessage = "Поле должно быть заполнено")]
         public string Name { get; set; }
 

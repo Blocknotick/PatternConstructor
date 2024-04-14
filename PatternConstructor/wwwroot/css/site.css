@@ -23,6 +23,16 @@ body {
     color: #5D2A42 !important;
 }
 
+    .text-DarkPurple.link:hover {
+        --bs-text-opacity: 1;
+        color: #FB6376 !important;
+    }
+
+    .text-DarkPurple.light-link:hover {
+        --bs-text-opacity: 1;
+        color: #FFF9EC !important;
+    }
+
 .text-BrightPink {
     --bs-text-opacity: 1;
     color: #FB6376 !important;

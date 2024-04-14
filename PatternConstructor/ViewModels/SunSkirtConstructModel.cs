@@ -21,7 +21,7 @@ namespace PatternConstructor.ViewModels
         [Range(89, 721)]
         public int Degree { get; set; }
 
-        [Display(Name = "Название")]
+        [Display(Name = "Название выкройки")]
         [Required]
         public string Name { get; set; }
     }

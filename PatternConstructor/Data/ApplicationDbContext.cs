@@ -16,7 +16,7 @@ namespace PatternConstructor.Data
         public DbSet<User> Users { get; set; }
         public DbSet<FavoriteArticle> FavoriteArticles { get; set; }
         public DbSet<CreatedFile> CreatedFiles { get; set; }
-        public DbSet<DescriptionUnit> DescriptionUnits { get; set; }
+        //public DbSet<DescriptionUnit> DescriptionUnits { get; set; }
 
        
     }

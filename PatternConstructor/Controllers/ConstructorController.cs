@@ -74,7 +74,8 @@ namespace PatternConstructor.Controllers
 
             //Здесь должна быть функция, которая генерирует выкройку
 
-            Pattern skirtPattern = new SunSkirtPattern(sunSkirtConstructModel.Length, sunSkirtConstructModel.WaistGirth, 0, false, sunSkirtConstructModel.Degree, false, sunSkirtConstructModel.WaistP);
+            //Pattern skirtPattern = new SunSkirtPattern(sunSkirtConstructModel.Length, sunSkirtConstructModel.WaistGirth, 0, false, sunSkirtConstructModel.Degree, false, sunSkirtConstructModel.WaistP);
+            Pattern skirtPattern = new SunSkirtPattern(sunSkirtConstructModel);
 
 
             string documentContent = skirtPattern.GenerateContent();
@@ -109,7 +110,7 @@ namespace PatternConstructor.Controllers
             Measure measure;
             measure = _context.Measures.FirstOrDefault(m => m.MeasureId == user.MeasureId); ;
 
-            BasicDress basicDressModel = new BasicDress
+            BasicDressConstructModel basicDressModel = new BasicDressConstructModel
             {
                 WaistGirth = measure.WaistGirth,
                 BustGirth = measure.BustGirth,
@@ -142,7 +143,7 @@ namespace PatternConstructor.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult> BasicDressAsync(BasicDress basicDressModel)
+        public async Task<ActionResult> BasicDressAsync(BasicDressConstructModel basicDressModel)
         {
             if (!ModelState.IsValid) return RedirectToAction("BasicDress");
             //создание файлов выкройки
@@ -326,10 +327,35 @@ namespace PatternConstructor.Controllers
         {
             //проверка на реализуемость
             if (!ModelState.IsValid) return View(dressCombination);
-            if (dressCombination.Neck=="V-горловина"&&dressCombination.Collar=="Стойка с застежкой" ||
-                dressCombination.Collar=="Стойка с застежкой"&&(dressCombination.Clasp== "Без застежки"||dressCombination.Clasp== "Центральный шов полочки") ||
-                dressCombination.Waist== "Неотрезное по талии"&&dressCombination.Clasp== "Застежка на пуговицы до талии"||
-                dressCombination.Collar== "Отложной с прямыми углами"&&dressCombination.Clasp== "Без застежки") return View(dressCombination);
+            if (dressCombination.Neck == "V-горловина" && dressCombination.Collar == "Стойка с застежкой")
+            {
+                TempData["Error"] = "V-горловина не соответствует воротнику стойке";
+                return View(dressCombination);
+            }
+            if (dressCombination.Collar == "Стойка с застежкой" && (dressCombination.Clasp == "Без застежки" || dressCombination.Clasp == "Центральный шов полочки"))
+            {
+                TempData["Error"] = "Воротник стойка требует выбора застежки";
+                return View(dressCombination);
+            }
+            if (dressCombination.Waist == "Неотрезное по талии" && dressCombination.Clasp == "Застежка на пуговицы до талии")
+            {
+                TempData["Error"] = "Неотрезное по талии платье не соответствует застежке на пуговицы до талии";
+                return View(dressCombination);
+            }
+            if (dressCombination.Collar == "Отложной с прямыми углами" && dressCombination.Clasp == "Без застежки")
+            {
+                TempData["Error"] = "Отложной воротник требует выбора застежки";
+                return View(dressCombination);
+            }
+
+            //if (dressCombination.Neck == "V-горловина" && dressCombination.Collar == "Стойка с застежкой" ||
+            //    dressCombination.Collar == "Стойка с застежкой" && (dressCombination.Clasp == "Без застежки" || dressCombination.Clasp == "Центральный шов полочки") ||
+            //    dressCombination.Waist == "Неотрезное по талии" && dressCombination.Clasp == "Застежка на пуговицы до талии" ||
+            //    dressCombination.Collar == "Отложной с прямыми углами" && dressCombination.Clasp == "Без застежки")
+            //{
+            //    TempData["Error"] = "Выбранная комбинация нереализуема, выберите другую";
+            //    return View(dressCombination);
+            //}
 
             return RedirectToAction("Dress", dressCombination);
         }

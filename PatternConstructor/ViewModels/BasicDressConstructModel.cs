@@ -2,7 +2,7 @@
 
 namespace PatternConstructor.ViewModels
 {
-    public class BasicDress
+    public class BasicDressConstructModel
     {
         [Display(Name = "Обхват талии")]
         [Required]

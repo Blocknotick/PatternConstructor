@@ -61,7 +61,7 @@ namespace PatternConstructor.Data
 
         string neckType, collartype, sleevetype, clasptype, waisttype;
         bool isLecal;
-        public DressPattern(BasicDress model)
+        public DressPattern(BasicDressConstructModel model)
         {
             s = "";
             pg = (float)model.pg;
@@ -1500,10 +1500,10 @@ namespace PatternConstructor.Data
                         cuffleft = cuffD[3].X;
                         t = 1;
                     }
-                    cuffoff = new Vector2(offsetB.X + rightborder + t, sleeveoff.Y + sleevebottomBishop);
-                }
+                    cuffoff = new Vector2(offsetB.X + rightborder + t, sleeveoff.Y + sleevebottomBishop + 1);
 
             }
+                }
             if (collartype!= "Без воротника")
             {
                 if (collartype.Contains("Отложной"))

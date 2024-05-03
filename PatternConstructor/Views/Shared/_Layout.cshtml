@@ -85,6 +85,12 @@
                     <span><b>Sorry!</b> - @TempData["Error"] </span>
                 </div>
             }
+            @if (TempData["Success"] != null)
+            {
+                <div class="col-md-12 alert alert-success fs-5">
+                    <span>@TempData["Success"] </span>
+                </div>
+            }
             @RenderBody()
         </main>
     </div>

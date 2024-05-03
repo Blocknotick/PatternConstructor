@@ -55,9 +55,13 @@ namespace PatternConstructor.Controllers
                 return View(registerViewModel);
             }
 
-            return RedirectToAction("Index", "Home");
-        }
 
+            await _signInManager.SignInAsync(newUser, false);
+            TempData["Success"] = "Регистрация прошла успешно";
+
+            return RedirectToAction("Profile", "Account");
+        }
+        
         public IActionResult Login()
         {
             var response = new LoginViewModel();
@@ -80,7 +84,8 @@ namespace PatternConstructor.Controllers
                     var result = await _signInManager.PasswordSignInAsync(user, loginViewModel.Password, false, false);
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("Index", "Home");
+                        TempData["Success"] = "Вход выполнен";
+                        return RedirectToAction("Profile", "Account");
                     }
                 }
                 TempData["Error"] = "Пароль неверный";
@@ -201,7 +206,6 @@ namespace PatternConstructor.Controllers
 
 
             var newUserResponse2 = await _userManager.UpdateAsync(user);
-
             return View("Profile");
         }
 
@@ -210,7 +214,11 @@ namespace PatternConstructor.Controllers
         [Authorize]
         public async Task<IActionResult> Edit(EditProfileViewModel editProfileVM)
         {
-            if (!ModelState.IsValid) return RedirectToAction("Profile");
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Мерки не были изменены";
+                return RedirectToAction("Profile");
+            }
 
             var user = await _userManager.FindByIdAsync(editProfileVM.Id);
             if (user.MeasureId == null)
@@ -256,9 +264,10 @@ namespace PatternConstructor.Controllers
             if (!newUserResponse.Succeeded)
             {
                 //обновление юзера не случилось
-                return View(editProfileVM);
+                TempData["Error"] = "Мерки не были изменены";
+                return RedirectToAction("Profile", "Account");
             }
-
+            TempData["Success"] = "Мерки успешно изменены";
             return RedirectToAction("Profile", "Account");
         }
 

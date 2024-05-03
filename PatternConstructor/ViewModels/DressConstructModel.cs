@@ -96,7 +96,7 @@ namespace PatternConstructor.ViewModels
         public double BustWidth { get; set; }
 
         [Display(Name = "Расстояние от талии до пола спереди")]
-        [Range(10, 100, ErrorMessage = "Значение должно быть между 10 и 100")]
+        [Range(10, 130, ErrorMessage = "Значение должно быть между 10 и 100")]
         [Required(ErrorMessage = "Поле должно быть заполнено")]
         public double WaistFloorFrontLength { get; set; }
 

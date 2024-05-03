@@ -7,8 +7,12 @@ namespace PatternConstructor.Data
 {
     public class PencilSkirt : Pattern
     {
-        float skirtlengthFront; float waist; bool isLecal; float beltwitdth;
-        float hips; float hipsHeight;
+        float skirtlengthFront; 
+        float waist; 
+        bool isLecal; 
+        float beltwitdth;
+        float hips; 
+        float hipsHeight;
         float skirtlengthSide;
         float skirtlengthBack;
         bool hasButtons;

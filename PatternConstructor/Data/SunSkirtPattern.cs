@@ -1,4 +1,5 @@
-﻿using PatternConstructor.ViewModels;
+﻿using PatternConstructor.Data.Enum;
+using PatternConstructor.ViewModels;
 
 namespace PatternConstructor.Data
 {
@@ -17,6 +18,16 @@ namespace PatternConstructor.Data
             hasButtons = _hasButtons;
             degrees = _degrees; // 180 - полусолнце, 360 - солнце
             waistp = _waistP;
+        }
+        public SunSkirtPattern(SunSkirtConstructModel model)
+        {
+            skirtlength = model.Length;
+            waist = model.WaistGirth;
+            isLecal = false;
+            beltwitdth = 0;
+            hasButtons = false;
+            degrees = model.Degree; // 180 - полусолнце, 360 - солнце
+            waistp = model.WaistP;
         }
         public SunSkirtPattern(SkirtConstructModel skirtConstructModel)
         {
@@ -144,7 +155,7 @@ namespace PatternConstructor.Data
 
                 if (degrees == 360)
                     s += @$"
-                    <text x=""{(int)(pixelsizeincm * (2 + smallradius))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth + 3))}"" font-size=""32"" font-family=""Verdana"">Width of the {skirtType} skirt, waist = {waist - 2}cm, skirt length = {Math.Round(skirtlength, 2)}cm, x2</text>
+                    <text x=""{(int)(pixelsizeincm * (2 + smallradius))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth + 3))}"" font-size=""32"" font-family=""Verdana"">Width of the {skirtType} skirt, waist = {waist}cm, skirt length = {Math.Round(skirtlength, 2)}cm, x2</text>
                     <text x=""{(int)(pixelsizeincm * (bigradius / 2 + 1))}"" y=""{(int)(pixelsizeincm * (1 + beltwitdth + 2))}"" font-size=""32"" font-family=""Verdana"">fold</text>      
                     ";
 

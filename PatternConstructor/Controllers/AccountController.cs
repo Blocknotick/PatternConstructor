@@ -91,11 +91,12 @@ namespace PatternConstructor.Controllers
                 TempData["Error"] = "Пароль неверный";
                 return View(loginViewModel);
             }
-            TempData["Error"] = "Пользователя с таким email не существует";
+            TempData["Error"] = "Пользователь с таким email не найден";
             return View(loginViewModel);
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
@@ -108,7 +109,7 @@ namespace PatternConstructor.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 
-            if (user == null) return RedirectToAction("Login");
+            //if (user == null) return RedirectToAction("Login");
 
             Measure measure;
             if (user.MeasureId == null)
@@ -120,7 +121,7 @@ namespace PatternConstructor.Controllers
                 measure = _context.Measures.FirstOrDefault(m => m.MeasureId == user.MeasureId); ;
             }
 
-            var userVM = new EditProfileViewModel
+            var editProfileVM = new EditProfileViewModel
             {
                 Id = user.Id,
                 BackArmholeDepth = measure.BackArmholeDepth,
@@ -153,10 +154,11 @@ namespace PatternConstructor.Controllers
             var s_measures = _context.standartMeasures.ToList();
             ViewBag.Types = s_measures.Select(c => new SelectListItem { Text = "Размер " + c.Size + " Рост " + c.Height, Value = c.Id.ToString() }).ToList();
 
-            return View(userVM);
+            return View(editProfileVM);
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> ChooseSizeAsync(string type, string id)
         {
             var sm = _context.standartMeasures.ToList().Where(c => c.Id.ToString() == type).First();

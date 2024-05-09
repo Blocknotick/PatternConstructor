@@ -160,9 +160,9 @@ namespace PatternConstructor.Controllers
 
             //Здесь должна быть функция, которая генерирует выкройку
 
-            Pattern skirtPattern = new DressPattern(basicDressModel);
+            Pattern dressPattern = new DressPattern(basicDressModel);
 
-            string documentContent = skirtPattern.GenerateContent();
+            string documentContent = dressPattern.GenerateContent();
 
 
 
@@ -170,7 +170,7 @@ namespace PatternConstructor.Controllers
                 new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfWriter(new FileStream("wwwroot/dresses/" + FileName, FileMode.OpenOrCreate),
                                                                                 new WriterProperties().SetCompressionLevel(0))))
             {
-                doc.AddNewPage(new PageSize((float)(0.75 * skirtPattern.widthcm), (float)(0.75 * skirtPattern.heightcm)));
+                doc.AddNewPage(new PageSize((float)(0.75 * dressPattern.widthcm), (float)(0.75 * dressPattern.heightcm)));
                 SvgConverter.DrawOnDocument(documentContent, doc, 1);
 
             }
@@ -436,7 +436,60 @@ namespace PatternConstructor.Controllers
             htmldocs.Add("wwwroot/DescriptionUnits/skirts/decatification.pdf");
             htmldocs.Add("wwwroot/DescriptionUnits/skirts/cutting.pdf");
             htmldocs.Add("wwwroot/DescriptionUnits/skirts/interfacing.pdf");
-            
+            htmldocs.Add("wwwroot/DescriptionUnits/dresses/ShouldersAndSides.pdf");
+            if (dressConstructModel.DressCombinationModel.Waist== "Отрезноe по талии")
+            {
+                htmldocs.Add("wwwroot/DescriptionUnits/dresses/SidesSkirt.pdf");
+                htmldocs.Add("wwwroot/DescriptionUnits/dresses/WaistSeam.pdf");
+            }
+            if (dressConstructModel.DressCombinationModel.Clasp == "Застежка на пуговицы до талии")
+                htmldocs.Add("wwwroot/DescriptionUnits/dresses/SideSeamZipper.pdf");
+
+            if (dressConstructModel.DressCombinationModel.Sleeve == "Без рукава")
+                htmldocs.Add("wwwroot/DescriptionUnits/dresses/ArmHole.pdf");
+            else
+            {
+                if (dressConstructModel.DressCombinationModel.Sleeve == "Короткий")
+                    htmldocs.Add("wwwroot/DescriptionUnits/dresses/ShortSleeve.pdf");
+                else if (dressConstructModel.DressCombinationModel.Sleeve == "Епископ с резинкой")
+                    htmldocs.Add("wwwroot/DescriptionUnits/dresses/Bishop1.pdf");
+                else if (dressConstructModel.DressCombinationModel.Sleeve == "Епископ с манжетой")
+                    htmldocs.Add("wwwroot/DescriptionUnits/dresses/Bishop2.pdf");
+                htmldocs.Add("wwwroot/DescriptionUnits/dresses/AllSleeves.pdf");
+            }
+
+
+            if (dressConstructModel.DressCombinationModel.Collar == "Без воротника" 
+                && dressConstructModel.DressCombinationModel.Clasp== "Без застежки" 
+                ||
+                dressConstructModel.DressCombinationModel.Collar == "Без воротника" 
+                && dressConstructModel.DressCombinationModel.Clasp == "Центральный шов полочки")
+                htmldocs.Add("wwwroot/DescriptionUnits/dresses/biasAndZipper.pdf");
+
+            if (dressConstructModel.DressCombinationModel.Neck == "V-горловина" 
+                && dressConstructModel.DressCombinationModel.Collar == "Без воротника" 
+                && !dressConstructModel.DressCombinationModel.Clasp.Contains("Застежка"))
+                htmldocs.Add("wwwroot/DescriptionUnits/dresses/VneckBias.pdf");
+
+            if (dressConstructModel.DressCombinationModel.Collar == "Без воротника"
+                && dressConstructModel.DressCombinationModel.Clasp.Contains("Застежка"))
+            {
+                if (dressConstructModel.DressCombinationModel.Neck != "V-горловина")
+                    htmldocs.Add("wwwroot/DescriptionUnits/dresses/BiasAndClaps.pdf");
+                else
+                    htmldocs.Add("wwwroot/DescriptionUnits/dresses/Facing.pdf");
+            }
+
+            if(dressConstructModel.DressCombinationModel.Collar == "Отложной с прямыми углами")
+                htmldocs.Add("wwwroot/DescriptionUnits/dresses/PeterPanCollar.pdf");
+
+            else if(dressConstructModel.DressCombinationModel.Collar == "Стойка с застежкой")
+                htmldocs.Add("wwwroot/DescriptionUnits/dresses/StandingCollar.pdf");
+
+            htmldocs.Add("wwwroot/DescriptionUnits/dresses/BottomSeam.pdf");
+
+            if (dressConstructModel.DressCombinationModel.Clasp.Contains("Застежка"))
+                htmldocs.Add("wwwroot/DescriptionUnits/dresses/Clasp.pdf");
 
             createPdf("wwwroot/descr/" + FileName, htmldocs);
             createdFile.PatternLink = "/dresses/" + FileName;

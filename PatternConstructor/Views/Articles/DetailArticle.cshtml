@@ -2,9 +2,11 @@
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@{
-}
+
 @model ArticleViewModel
+@{
+    ViewData["Title"] = @Model.article.Title;
+}
 
 <h1 class="text-DarkPurple text-center fw-bold">@Model.article.Title</h1>
 

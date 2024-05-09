@@ -1,66 +1,64 @@
-﻿using iTextSharp.text.pdf.parser;
-using PatternConstructor.Data.Enum;
-using PatternConstructor.ViewModels;
+﻿using PatternConstructor.ViewModels;
 using System.Numerics;
 
 namespace PatternConstructor.Data
 {
     public class DressPattern : Pattern
     {
-        float boardwidth = 1.5f;
-        float standcollarwidth = 3;
-        string s;
-        List<Vector2> back = new List<Vector2>();
-        List<Vector2> front = new List<Vector2>();
+        float boardwidth = 1.5f; // ширина борта
+        float standcollarwidth = 3; // ширина воротника стойки
+        string s; // строка SVG документа выкройки 
+        List<Vector2> back = new List<Vector2>(); // верхняя часть спинки
+        List<Vector2> front = new List<Vector2>(); //верхняя часть переда
 
-        List<Vector2> skirtback = new List<Vector2>();
-        List<Vector2> skirtfront = new List<Vector2>();
+        List<Vector2> skirtback = new List<Vector2>(); // нижняя часть спинки
+        List<Vector2> skirtfront = new List<Vector2>(); // нижняя часть переда
 
-        List<Vector2> sleeve = new List<Vector2>();
-        List<Vector2> collar = new List<Vector2>();
-        List<Vector2> cuff = new List<Vector2>();
+        List<Vector2> sleeve = new List<Vector2>(); // рукав
+        List<Vector2> collar = new List<Vector2>(); // воротник 
+        List<Vector2> cuff = new List<Vector2>(); // манжета
 
-        List<Vector2> backD = new List<Vector2>();
-        List<Vector2> frontD = new List<Vector2>();
+        List<Vector2> backD = new List<Vector2>(); //двойной контур верхней части спинки
+        List<Vector2> frontD = new List<Vector2>(); // двойной контур верхней части переда
 
-        List<Vector2> skirtbackD = new List<Vector2>();
-        List<Vector2> skirtfrontD = new List<Vector2>();
+        List<Vector2> skirtbackD = new List<Vector2>(); // двойной контур нижней части спинки 
+        List<Vector2> skirtfrontD = new List<Vector2>(); // двойной контур нижней части переда 
 
-        List<Vector2> sleeveD = new List<Vector2>();
-        List<Vector2> collarD = new List<Vector2>();
-        List<Vector2> cuffD = new List<Vector2>();
-        float csh,
-            cg1,
-            cg2,
-            cg3,
-            ct,
-            cb,
-            dts,
-            vg,
-            vpk,
-            dtp,
-            shs,
-            shg,
-            shp,
-            vprz,
-            tsg,
-            dr,
-            op,
-            di,
-            oz;
-        float pg,
-            pshs,
-            pshp,
-            ppr,
-            pt,
-            pb,
-            pshgor,
-            pdts,
-            pspr,
-            pop;
+        List<Vector2> sleeveD = new List<Vector2>(); // двойной контур рукава
+        List<Vector2> collarD = new List<Vector2>(); // двойной контур воротника
+        List<Vector2> cuffD = new List<Vector2>(); // двойной контур манжеты
+        float csh, // полуобхват шеи
+            cg1, // полуобхват груди 1
+            cg2, // полуобхват груди 2
+            cg3, // полуобхват груди 3
+            ct, //полуобхват талии
+            cb, // полуобхват бедер
+            dts, // длина талии спинки
+            vg, // высота груди
+            vpk, // высота плеча косая
+            dtp, // длина талии переда
+            shs, // ширина спинки
+            shg, // ширина груди
+            shp, // ширина плеча
+            vprz, // высота проймы сзади
+            tsg, // центр груди
+            dr, // длина рукава
+            op, // обхват плеча
+            di, // длина изделия
+            oz; // обхват запястья
+        float pg, // прибавка по груди
+            pshs, // прибавка по груди на спинку
+            pshp, // прибавка по груди на перед
+            ppr, // прибавка по груди на пройму 
+            pt, // прибавка по талии
+            pb, // прибавка по бедрам
+            pshgor, // прибавка к ширине горловины
+            pdts, // прибавка к длине талии спинки
+            pspr, // прибавка на свободу проймы
+            pop; // прибавка к обхвату плеча
 
-        string neckType, collartype, sleevetype, clasptype, waisttype;
-        bool isLecal;
+        string neckType, collartype, sleevetype, clasptype, waisttype; // параметры горловины, воротника, рукава, застежки полочки, талии
+        bool isLecal; // наличие двойных контуров
         public DressPattern(BasicDressConstructModel model)
         {
             s = "";
@@ -195,25 +193,28 @@ namespace PatternConstructor.Data
 
             P1.X -= back[3].X;
             Vector2 I;
-            I.Y = A2I * P1.Y / P1.X;
-            I.X = (float)Math.Sqrt(A2I * A2I - I.Y * I.Y);
+            //I.Y = A2I * P1.Y / P1.X;
+            //I.X = (float)Math.Sqrt(A2I * A2I - I.Y * I.Y);
+            I = (back[4] - back[3]) / Vector2.Distance(back[3], back[4])*A2I + back[3];
 
             Vector2 I1;
-            I1.Y = (A2I + II1) * P1.Y / P1.X;
-            I1.X = (float)Math.Sqrt((A2I + II1) * (A2I + II1) - I1.Y * I1.Y);
-            I += back[3];
-            I1 += back[3];
+            I1 = (back[4] - back[3]) / Vector2.Distance(back[3], back[4]) * (A2I+II1)+ back[3];
+            //I1.Y = (A2I + II1) * P1.Y / P1.X;
+            //I1.X = (float)Math.Sqrt((A2I + II1) * (A2I + II1) - I1.Y * I1.Y);
+            //I += back[3];
+            //I1 += back[3];
 
             Vector2 I2;
             I2.X = I.X;
             I2.Y = I.Y + 7;
-            float d = Vector2.Distance(I1, I2);
-            float dy = (I2.Y - I1.Y) * 7 / d;
-            float dx = (float)Math.Sqrt(49 - dy * dy);
+            //float d = Vector2.Distance(I1, I2);
+            //float dy = (I2.Y - I1.Y) * 7 / d;
+            //float dx = (float)Math.Sqrt(49 - dy * dy);
 
             back.Add(I);
             back.Add(I2);
-            back.Add(new Vector2(I2.X + dx, I2.Y - dy));
+            //back.Add(new Vector2(I2.X + dx, I2.Y - dy));
+            back.Add(I1);
 
 
             float G3P2 = vprz + pspr - back[4].Y;
@@ -234,7 +235,7 @@ namespace PatternConstructor.Data
             front.Add(new Vector2(a1 - back[3].X, A3.Y)); // A4
             float G7y = front[1].Y + (float)Math.Sqrt(vg * vg - (G6.X - front[1].X) * (G6.X - front[1].X));
             front.Add(new Vector2(G6.X, G7y)); //G7
-            front.Add(back[9]);//G3
+            front.Add(back[9]);//G2
 
             float cG4 = (float)(0.2 * G3G4 / Math.Sqrt(2));
             front.Add(new Vector2(a2 - cG4, g - cG4)); //c
@@ -255,22 +256,24 @@ namespace PatternConstructor.Data
             front.Add(P5); //P5
 
             Vector2 D = (front[6] + front[5]) / 2;
-            float sin = (front[5].Y - front[6].Y) / Vector2.Distance(front[6], front[5]);
-            float c = (front[5].X - front[6].X) / Vector2.Distance(front[6], front[5]);
-            front.Add(new Vector2(D.X + sin, D.Y - c)); //e
+            //float sin = (front[5].Y - front[6].Y) / Vector2.Distance(front[6], front[5]);
+            //float c = (front[5].X - front[6].X) / Vector2.Distance(front[6], front[5]);
+            //front.Add(new Vector2(D.X + sin, D.Y - c)); //e
+            front.Add(D + Normal(front[5], front[6], false));
 
             Vector2 DE = front[7] - D;
             DE += front[6];
             DE = (DE + front[7]) / 2;
             DE = (DE + front[7]) / 2;
 
-            float d1 = Vector2.Distance(back[3], back[5]);
-            float P5P7 = Vector2.Distance(A9, P5) - d1;
+            //float d1 = Vector2.Distance(back[3], back[5]);
+            //float P5P7 = Vector2.Distance(A9, P5) - d1;
 
-            float px = P5P7 * Math.Abs(P5.X - A9.X) / Vector2.Distance(A9, P5);
-            float py = P5P7 * Math.Abs(P5.Y - A9.Y) / Vector2.Distance(A9, P5);
+            //float px = P5P7 * Math.Abs(P5.X - A9.X) / Vector2.Distance(A9, P5);
+            //float py = P5P7 * Math.Abs(P5.Y - A9.Y) / Vector2.Distance(A9, P5);
 
-            front.Add(new Vector2(P5.X + px, P5.Y - py)); //P7
+            //front.Add(new Vector2(P5.X + px, P5.Y - py)); //P7
+            front.Add((P5 - A9) / Vector2.Distance(P5, A9) * A2I + A9); //P7
 
             arr = CirclesIntersec(front[2], Vector2.Distance(front[2], front[8]), front[1], Vector2.Distance(back[3], back[5]));
             Vector2 A8;
@@ -330,7 +333,7 @@ namespace PatternConstructor.Data
                 front[0] += 2 * Vector2.UnitY;
                 front[1] += (front[9] - front[1]) / Vector2.Distance(front[9], front[1]) * 2;
             }
-            else if (neckType == "Стандартная" && (collartype == "Отложной с круглыми концами" || collartype == "Отложной с прямыми углами"))
+            else if (neckType == "Стандартная" && collartype == "Отложной с прямыми углами")
             {
                 back[3] += (back[4] - back[3]) / Vector2.Distance(back[3], back[4]);
                 back[0] += 0.5f*Vector2.UnitY;
@@ -355,30 +358,40 @@ namespace PatternConstructor.Data
 
             back.Add(new Vector2(back[8].X - 0.5f, back[8].Y)); //отметки для рукава (17)
             front.Add(new Vector2(front[5].X + 0.5f, front[5].Y)); // отметки для рукава (16)
-            sin = (front[9].X - front[1].X) / Vector2.Distance(front[9], front[1]);
-            c = (front[1].Y - front[9].Y) / Vector2.Distance(front[9], front[1]);
+            float sin = (front[9].X - front[1].X) / Vector2.Distance(front[9], front[1]);
+            float c = (front[1].Y - front[9].Y) / Vector2.Distance(front[9], front[1]);
             back.Add(Intersec(back[3], new Vector2(back[3].X - c, back[3].Y + sin), back[0], A1)); //точка для рисования горловины спинки (18)
 
-            if (clasptype== "Застежка на пуговицы до талии")
+            if (clasptype.Contains("Застежка"))
             {
                 front.Add(front[0]);//17
                 front.Add(front[11]);//18
 
                 front.Add(front[0] + Vector2.UnitX * boardwidth);//19
                 front.Add(front[11] + Vector2.UnitX * boardwidth);//20
-                front[0] += Vector2.UnitX*boardwidth*3;
-                front[11] += Vector2.UnitX*boardwidth*3;
-
-            }
-            if (clasptype == "Застежка на пуговицы до низа")
-            {
-                front.Add(front[0]); //19
-                front.Add(front[11]); //20
-                front.Add(front[0] + Vector2.UnitX * boardwidth);//21
-                front.Add(front[11] + Vector2.UnitX * boardwidth);//22
-
                 front[0] += Vector2.UnitX * boardwidth * 3;
                 front[11] += Vector2.UnitX * boardwidth * 3;
+            }
+            //if (clasptype== "Застежка на пуговицы до талии")
+            //{
+            //    //front.Add(front[0]);//17
+            //    //front.Add(front[11]);//18
+
+            //    //front.Add(front[0] + Vector2.UnitX * boardwidth);//19
+            //    //front.Add(front[11] + Vector2.UnitX * boardwidth);//20
+            //    //front[0] += Vector2.UnitX * boardwidth * 3;
+            //    //front[11] += Vector2.UnitX * boardwidth * 3;
+
+            //}
+            if (clasptype == "Застежка на пуговицы до низа")
+            {
+                //front.Add(front[0]); //19
+                //front.Add(front[11]); //20
+                //front.Add(front[0] + Vector2.UnitX * boardwidth);//21
+                //front.Add(front[11] + Vector2.UnitX * boardwidth);//22
+
+                //front[0] += Vector2.UnitX * boardwidth * 3;
+                //front[11] += Vector2.UnitX * boardwidth * 3;
                 skirtfront.Add(skirtfront[4]);//8
                 skirtfront.Add(skirtfront[3]);//9
                 skirtfront.Add(skirtfront[4] + Vector2.UnitX * boardwidth);//10
@@ -421,12 +434,72 @@ namespace PatternConstructor.Data
                 sleeve.Add(new Vector2(sleeve[3].X + 0.5f, sleeve[3].Y)); //14
                 sleeve.Add(new Vector2(sleeve[1].X - 0.5f, sleeve[1].Y)); //15
             }
-            else if (sleevetype == "Епископ с резинкой")
+            //else if (sleevetype == "Епископ с резинкой")
+            //{
+            //    sleeve.Add(new Vector2(sleeve[1].X - 0.5f, sleeve[1].Y));
+            //    sleeve.Add(new Vector2(sleeve[3].X + 0.5f, sleeve[3].Y));
+            //    sleeve.Add(new Vector2(sleeve[2].X - 0.5f, sleeve[0].Y + dr));
+            //    sleeve.Add(new Vector2(sleeve[4].X + 0.5f, sleeve[0].Y + dr));
+            //    List<int> list = new List<int>() { 1, 2, 13, 11, 5, 10 };
+            //    for (int i = 0; i < list.Count; i++)
+            //        sleeve[list[i]] = RotatedVector(sleeve[list[i]], 0.174533, sleeve[0]);
+            //    list = new List<int>() { 10, 2, 13, 11 };
+            //    for (int i = 0; i < list.Count; i++)
+            //        sleeve[list[i]] = RotatedVector(sleeve[list[i]], 0.174533, sleeve[1]);
+            //    list = new List<int>() { 6, 3, 12, 4, 14, 9 };
+            //    for (int i = 0; i < list.Count; i++)
+            //        sleeve[list[i]] = RotatedVector(sleeve[list[i]], -0.174533, sleeve[0]);
+            //    list = new List<int>() { 12, 4, 14, 9 };
+            //    for (int i = 0; i < list.Count; i++)
+            //        sleeve[list[i]] = RotatedVector(sleeve[list[i]], -0.174533, sleeve[3]);
+
+            //    sleeve.Add(new Vector2(sleeve[0].X, sleeve[0].Y + dr + 7)); //(15)
+            //}
+            //else if (sleevetype == "Епископ с манжетой")
+            //{
+            //    sleeve.Add(new Vector2(sleeve[1].X - 0.5f, sleeve[1].Y));
+            //    sleeve.Add(new Vector2(sleeve[3].X + 0.5f, sleeve[3].Y));
+
+            //    sleeve.Add(new Vector2(sleeve[2].X - 0.5f, sleeve[0].Y + dr - 5));
+            //    sleeve.Add(new Vector2(sleeve[4].X + 0.5f, sleeve[0].Y + dr - 5));
+            //    List<int> list = new List<int>() { 1, 2, 13, 11, 5, 10 };
+            //    for (int i = 0; i < list.Count; i++)
+            //        sleeve[list[i]] = RotatedVector(sleeve[list[i]], 0.174533, sleeve[0]);
+            //    list = new List<int>() { 10, 2, 13, 11 };
+            //    for (int i = 0; i < list.Count; i++)
+            //        sleeve[list[i]] = RotatedVector(sleeve[list[i]], 0.174533, sleeve[1]);
+            //    list = new List<int>() { 6, 3, 12, 4, 14, 9 };
+            //    for (int i = 0; i < list.Count; i++)
+            //        sleeve[list[i]] = RotatedVector(sleeve[list[i]], -0.174533, sleeve[0]);
+            //    list = new List<int>() { 12, 4, 14, 9 };
+            //    for (int i = 0; i < list.Count; i++)
+            //        sleeve[list[i]] = RotatedVector(sleeve[list[i]], -0.174533, sleeve[3]);
+            //    sleeve.Add(new Vector2(sleeve[0].X, sleeve[0].Y + dr - 5 + 7)); //(15)
+            //    cuff.Add(Vector2.Zero);
+            //    cuff.Add(new Vector2(0, 10));
+            //    cuff.Add(new Vector2(oz + 5, 10));
+            //    cuff.Add(new Vector2(oz + 5, 0));
+            //    cuff.Add(new Vector2(0, 5));
+            //    cuff.Add(new Vector2(oz + 5, 5));
+            //}
+            else if (sleevetype.Contains( "Епископ"))
             {
+                int cuffLen = 0;
+                if (sleevetype == "Епископ с манжетой")
+                {
+                    cuffLen = 5;
+                    cuff.Add(Vector2.Zero);
+                    cuff.Add(new Vector2(0, 10));
+                    cuff.Add(new Vector2(oz + 5, 10));
+                    cuff.Add(new Vector2(oz + 5, 0));
+                    cuff.Add(new Vector2(0, 5));
+                    cuff.Add(new Vector2(oz + 5, 5));
+                }
                 sleeve.Add(new Vector2(sleeve[1].X - 0.5f, sleeve[1].Y));
                 sleeve.Add(new Vector2(sleeve[3].X + 0.5f, sleeve[3].Y));
-                sleeve.Add(new Vector2(sleeve[2].X - 0.5f, sleeve[0].Y + dr));
-                sleeve.Add(new Vector2(sleeve[4].X + 0.5f, sleeve[0].Y + dr));
+
+                sleeve.Add(new Vector2(sleeve[2].X - 0.5f, sleeve[0].Y + dr - cuffLen));
+                sleeve.Add(new Vector2(sleeve[4].X + 0.5f, sleeve[0].Y + dr - cuffLen));
                 List<int> list = new List<int>() { 1, 2, 13, 11, 5, 10 };
                 for (int i = 0; i < list.Count; i++)
                     sleeve[list[i]] = RotatedVector(sleeve[list[i]], 0.174533, sleeve[0]);
@@ -439,35 +512,7 @@ namespace PatternConstructor.Data
                 list = new List<int>() { 12, 4, 14, 9 };
                 for (int i = 0; i < list.Count; i++)
                     sleeve[list[i]] = RotatedVector(sleeve[list[i]], -0.174533, sleeve[3]);
-
-                sleeve.Add(new Vector2(sleeve[0].X, sleeve[0].Y + dr + 7)); //(15)
-            }
-            else if (sleevetype == "Епископ с манжетой")
-            {
-                sleeve.Add(new Vector2(sleeve[1].X - 0.5f, sleeve[1].Y));
-                sleeve.Add(new Vector2(sleeve[3].X + 0.5f, sleeve[3].Y));
-
-                sleeve.Add(new Vector2(sleeve[2].X - 0.5f, sleeve[0].Y + dr - 5));
-                sleeve.Add(new Vector2(sleeve[4].X + 0.5f, sleeve[0].Y + dr - 5));
-                List<int> list = new List<int>() { 1, 2, 13, 11, 5, 10 };
-                for (int i = 0; i < list.Count; i++)
-                    sleeve[list[i]] = RotatedVector(sleeve[list[i]], 0.174533, sleeve[0]);
-                list = new List<int>() { 10, 2, 13, 11 };
-                for (int i = 0; i < list.Count; i++)
-                    sleeve[list[i]] = RotatedVector(sleeve[list[i]], 0.174533, sleeve[1]);
-                list = new List<int>() { 6, 3, 12, 4, 14, 9 };
-                for (int i = 0; i < list.Count; i++)
-                    sleeve[list[i]] = RotatedVector(sleeve[list[i]], -0.174533, sleeve[0]);
-                list = new List<int>() { 12, 4, 14, 9 };
-                for (int i = 0; i < list.Count; i++)
-                    sleeve[list[i]] = RotatedVector(sleeve[list[i]], -0.174533, sleeve[3]);
-                sleeve.Add(new Vector2(sleeve[0].X, sleeve[0].Y + dr - 5 + 7)); //(15)
-                cuff.Add(Vector2.Zero);
-                cuff.Add(new Vector2(0, 10));
-                cuff.Add(new Vector2(oz + 5, 10));
-                cuff.Add(new Vector2(oz + 5, 0));
-                cuff.Add(new Vector2(0, 5));
-                cuff.Add(new Vector2(oz + 5, 5));
+                sleeve.Add(new Vector2(sleeve[0].X, sleeve[0].Y + dr - cuffLen + 7)); //(15)
             }
         }
         private void Collar(Vector2 A1)
@@ -540,11 +585,16 @@ namespace PatternConstructor.Data
             collar.Add(new Vector2(total, standcollarwidth)); //4
             collar.Add(new Vector2(total-boardwidth, 0)); //5
             collar.Add(new Vector2(total, 0)); //6
-            float sin = 3/total;
-            float cos = (float)Math.Sqrt(1 - sin * sin);
-            collar[4] = RotatedVector(collar[4], sin, cos, collar[2]);
-            collar[5] = RotatedVector(collar[5], sin, cos, collar[2]);
-            collar[6] = RotatedVector(collar[6], sin, cos, collar[2]);
+            //float sin = 3/total;
+            //float cos = (float)Math.Sqrt(1 - sin * sin);
+            double angle = Math.Atan(3/total);
+            collar[4] = RotatedVector(collar[4], angle, collar[2]);
+            collar[5] = RotatedVector(collar[5], angle, collar[2]);
+            collar[6] = RotatedVector(collar[6], angle, collar[2]);
+
+            //collar[4] = RotatedVector(collar[4], sin, cos, collar[2]);
+            //collar[5] = RotatedVector(collar[5], sin, cos, collar[2]);
+            //collar[6] = RotatedVector(collar[6], sin, cos, collar[2]);
         }
         private void FrontD()
         {
@@ -1524,11 +1574,11 @@ namespace PatternConstructor.Data
                     {
                         if (sleevetype == "Короткий")
                         {
-                            collaroff = new Vector2(offsetB.X + rightborder - cleft.X, sleeveoff.Y + sleevebottomShort - (ctop.Y));
+                            collaroff = new Vector2(offsetB.X + rightborder - cleft.X, sleeveoff.Y + sleevebottomShort - ctop.Y);
                         }
                         if (sleevetype == "Епископ с резинкой")
                         {
-                            collaroff = new Vector2(offsetB.X + rightborder - cleft.X, sleeveoff.Y + sleevebottomBishop - (ctop.Y));
+                            collaroff = new Vector2(offsetB.X + rightborder - cleft.X, sleeveoff.Y + sleevebottomBishop - ctop.Y);
                         }
                     }
                     else if (sleeve.Count == 0) //нет рукава
@@ -1554,7 +1604,7 @@ namespace PatternConstructor.Data
                     if (isLecal)
                     {
                         ctop = collarD[6];
-                        cright = collarD[7];
+                        cright = collarD[8];
                         cleft = collarD[1];
                         cbottom = collarD[1];
                     }

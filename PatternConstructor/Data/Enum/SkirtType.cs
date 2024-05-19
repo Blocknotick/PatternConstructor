@@ -2,8 +2,8 @@
 {
     public enum SkirtType
     {
-        Straight,
-        Tulipe,
+        Pencil,
+        Tulip,
         Sun,
         HalfSun
     }

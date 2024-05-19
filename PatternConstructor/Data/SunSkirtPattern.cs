@@ -5,20 +5,15 @@ namespace PatternConstructor.Data
 {
     public class SunSkirtPattern : Pattern
     {
-        double skirtlength; double waist; bool isLecal; double beltwitdth; int degrees; double waistp=2;
+        double skirtlength; 
+        double waist; 
+        bool isLecal; 
+        double beltwitdth; 
+        int degrees; 
+        double waistp=2;
         bool hasButtons;
-        string skirtType = "Sun";
+        SkirtType skirtType = SkirtType.Sun;
 
-        public SunSkirtPattern(double _skirtlength, double _waist, double _beltwitdth, bool _isLecal, int _degrees, bool _hasButtons, double _waistP)
-        {
-            skirtlength = _skirtlength;
-            waist = _waist;
-            isLecal = _isLecal;
-            beltwitdth = _beltwitdth;
-            hasButtons = _hasButtons;
-            degrees = _degrees; // 180 - полусолнце, 360 - солнце
-            waistp = _waistP;
-        }
         public SunSkirtPattern(SunSkirtConstructModel model)
         {
             skirtlength = model.Length;
@@ -31,30 +26,30 @@ namespace PatternConstructor.Data
         }
         public SunSkirtPattern(SkirtConstructModel skirtConstructModel)
         {
-            skirtlength = CountLength(skirtConstructModel.SkirtCombinationModel.Length, skirtConstructModel.WaistFloorFrontLength);
+            skirtlength = CountLength(SkirtEnum.lengthDict[skirtConstructModel.SkirtCombinationModel.Length], skirtConstructModel.WaistFloorFrontLength);
 
             waist = skirtConstructModel.WaistGirth + waistp; //припуск на свободу облегания
             isLecal = skirtConstructModel.SkirtCombinationModel.DoubleContour;
 
-            double belt = 0;
-            for (int i = 0; i < skirtConstructModel.SkirtCombinationModel.Belts.Length; i++)
-            {
-                if (skirtConstructModel.SkirtCombinationModel.Belt == skirtConstructModel.SkirtCombinationModel.Belts[i])
-                    belt = i + 3;
-            }
-            beltwitdth = belt;
+            beltwitdth = (int)SkirtEnum.beltTypeDict[skirtConstructModel.SkirtCombinationModel.Belt];
+            hasButtons = SkirtEnum.claspDict[skirtConstructModel.SkirtCombinationModel.Clasp];
+            skirtType = SkirtEnum.skirtTypeDict[skirtConstructModel.SkirtCombinationModel.Type];
 
-            hasButtons = skirtConstructModel.SkirtCombinationModel.Clasp == "Пуговицы и молния";
-
-            if (skirtConstructModel.SkirtCombinationModel.Type == "Солнце")
+            switch (skirtType)
             {
-                degrees = 360;
-                skirtType = "Sun";
-            }
-            if (skirtConstructModel.SkirtCombinationModel.Type == "Полусолнце")
-            {
-                degrees = 180;
-                skirtType = "HalfSun";
+                case SkirtType.Pencil:
+                    break;
+                case SkirtType.Tulip:
+                    break;
+                case SkirtType.Sun:
+                    degrees = 360;
+                    break;
+                case SkirtType.HalfSun:
+                    degrees = 180;
+                    skirtType = SkirtType.Tulip;
+                    break;
+                default:
+                    break;
             }
 
         }

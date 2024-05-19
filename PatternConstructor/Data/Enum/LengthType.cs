@@ -1,9 +1,8 @@
 ﻿namespace PatternConstructor.Data.Enum
 {
-    public enum Length
+    public enum LengthType
     {
         Mini,
-        Uppernee,
         Knee,
         Midi
     }

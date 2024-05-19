@@ -1,9 +1,9 @@
 ﻿namespace PatternConstructor.Data.Enum
 {
-    public enum BeltWidth
+    public enum SilhouetteType
     {
-        Narrow,
-        Medium,
+        Middle,
+        Tight,
         Wide
     }
 }

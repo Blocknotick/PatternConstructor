@@ -299,12 +299,12 @@ namespace PatternConstructor.Controllers
             return RedirectToAction("History","Account");
         }
 
-        public void createPdf(string file, List<string> HTML){
+        public void createPdf(string file, List<string> PDF){
             iTextSharp.text.Document document = new iTextSharp.text.Document();
             PdfCopy copy = new PdfCopy(document, new FileStream(file, FileMode.Create, FileAccess.Write));
             document.Open();
             iTextSharp.text.pdf.PdfReader reader;
-            foreach (var html in HTML)
+            foreach (var html in PDF)
             {
                 reader = new iTextSharp.text.pdf.PdfReader(html);
                 copy.AddDocument(reader);

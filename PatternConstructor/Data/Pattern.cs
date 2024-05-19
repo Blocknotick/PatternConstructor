@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+﻿using Aspose.Html.Drawing;
+using PatternConstructor.Data.Enum;
+using System.Numerics;
 using static iTextSharp.awt.geom.Point2D;
 
 namespace PatternConstructor.Data
@@ -29,6 +31,26 @@ namespace PatternConstructor.Data
                     break;
             }
             return coef*Front;
+        }
+
+        protected double CountLength(LengthType length, double Front)
+        {
+            double coef = 1;
+            switch (length)
+            {
+                case LengthType.Mini:
+                    coef *= 4.0 / 9;
+                    break;
+                case LengthType.Knee:
+                    coef *= 5.0 / 9;
+                    break;
+                case LengthType.Midi:
+                    coef *= 13.0 / 18;
+                    break;
+                default:
+                    break;
+            }
+            return coef * Front;
         }
 
         //пересечение двух прямых, заданных точками

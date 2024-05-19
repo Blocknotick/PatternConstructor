@@ -1,4 +1,5 @@
-﻿using PatternConstructor.ViewModels;
+﻿using PatternConstructor.Data.Enum;
+using PatternConstructor.ViewModels;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
@@ -10,17 +11,17 @@ namespace PatternConstructor.Data
         float skirtlengthFront; 
         float waist; 
         bool isLecal; 
-        float beltwitdth;
+        int beltwitdth;
         float hips; 
         float hipsHeight;
         float skirtlengthSide;
         float skirtlengthBack;
         bool hasButtons;
-        string skirtType = "Pencil";
+        SkirtType skirtType = SkirtType.Pencil;
 
         public PencilSkirt(SkirtConstructModel skirtConstructModel)
         {
-            skirtlengthFront = (float)CountLength(skirtConstructModel.SkirtCombinationModel.Length, skirtConstructModel.WaistFloorFrontLength);
+            skirtlengthFront = (float)CountLength(SkirtEnum.lengthDict[skirtConstructModel.SkirtCombinationModel.Length], skirtConstructModel.WaistFloorFrontLength);
             skirtlengthSide = (float)(skirtConstructModel.WaistFloorSideLength - skirtConstructModel.WaistFloorFrontLength + skirtlengthFront);
             skirtlengthBack = (float)(skirtConstructModel.WaistFloorBackLength - skirtConstructModel.WaistFloorFrontLength + skirtlengthFront);
 
@@ -30,24 +31,11 @@ namespace PatternConstructor.Data
 
             isLecal = skirtConstructModel.SkirtCombinationModel.DoubleContour;
 
-            double belt = 0;
-            for (int i = 0; i < skirtConstructModel.SkirtCombinationModel.Belts.Length; i++)
-            {
-                if (skirtConstructModel.SkirtCombinationModel.Belt == skirtConstructModel.SkirtCombinationModel.Belts[i])
-                    belt = i + 3;
-            }
-            beltwitdth = (float)belt;
+            beltwitdth = (int)SkirtEnum.beltTypeDict[skirtConstructModel.SkirtCombinationModel.Belt];
 
-            hasButtons = skirtConstructModel.SkirtCombinationModel.Clasp == "Пуговицы и молния";
+            hasButtons = SkirtEnum.claspDict[skirtConstructModel.SkirtCombinationModel.Clasp];
 
-            if (skirtConstructModel.SkirtCombinationModel.Type == "Прямая")
-            {
-                skirtType = "Pencil";
-            }
-            if (skirtConstructModel.SkirtCombinationModel.Type == "Тюльпан")
-            {
-                skirtType = "Tulip";
-            }
+            skirtType = SkirtEnum.skirtTypeDict[skirtConstructModel.SkirtCombinationModel.Type];
         }
 
         public override string GenerateContent()
@@ -99,16 +87,24 @@ namespace PatternConstructor.Data
             back.Add(new Vector2((CH+2)/2-1, back[1].Y)); //делим на переднее и заднее полотнище
             front.Add(new Vector2(back[2].X, back[2].Y));
 
-            if (skirtType == "Pencil")
+            switch (skirtType)
             {
-                back.Add(new Vector2(back[2].X,skirtlengthSide));
-                front.Add(new Vector2(back[2].X, skirtlengthSide));
+                case SkirtType.Pencil:
+                    back.Add(new Vector2(back[2].X, skirtlengthSide));
+                    front.Add(new Vector2(back[2].X, skirtlengthSide));
+                    break;
+                case SkirtType.Tulip:
+                    back.Add(new Vector2(back[2].X - 1.5f, skirtlengthSide));
+                    front.Add(new Vector2(back[2].X + 1.5f, skirtlengthSide));
+                    break;
+                case SkirtType.Sun:
+                    break;
+                case SkirtType.HalfSun:
+                    break;
+                default:
+                    break;
             }
-            else if (skirtType == "Tulip")
-            {
-                back.Add(new Vector2(back[2].X-1.5f, skirtlengthSide));
-                front.Add(new Vector2(back[2].X + 1.5f, skirtlengthSide));
-            }
+            
 
             back[0] = new Vector2(0, skirtlengthSide - skirtlengthBack); // середина спинки, верх
             front.Add(new Vector2(front[0].X, skirtlengthSide - skirtlengthFront)); // середина переда, верх
@@ -161,14 +157,23 @@ namespace PatternConstructor.Data
                 backD.Add(back[5] + Vector2.UnitX);//9
                 backD.Add(back[2] + Vector2.UnitX);//10
                 backD[8] = Intersec(backD[9], backD[10], backD[7], backD[8]);
-                if (skirtType == "Pencil")
-                    backD.Add(back[3] + Vector2.One);//11
-                else if (skirtType == "Tulip")
+                switch (skirtType)
                 {
-                    backD.Add(Normal(back[3], back[2], true) + back[3]);//11
-                    backD[10] = Normal(back[3], back[2], true) + back[2];
-                    backD[11] = Intersec(backD[10], backD[11], backD[1], backD[1] + Vector2.UnitX);
-                    backD[10] = Intersec(backD[10], backD[11], backD[9], backD[9] + Vector2.UnitY);
+                    case SkirtType.Pencil:
+                        backD.Add(back[3] + Vector2.One);//11
+                        break;
+                    case SkirtType.Tulip:
+                        backD.Add(Normal(back[3], back[2], true) + back[3]);//11
+                        backD[10] = Normal(back[3], back[2], true) + back[2];
+                        backD[11] = Intersec(backD[10], backD[11], backD[1], backD[1] + Vector2.UnitX);
+                        backD[10] = Intersec(backD[10], backD[11], backD[9], backD[9] + Vector2.UnitY);
+                        break;
+                    case SkirtType.Sun:
+                        break;
+                    case SkirtType.HalfSun:
+                        break;
+                    default:
+                        break;
                 }
 
                 frontD.Add(front[3] - Vector2.UnitY);//0
@@ -187,14 +192,23 @@ namespace PatternConstructor.Data
                 frontD.Add(front[5] - Vector2.UnitX);//9
                 frontD.Add(front[1] - Vector2.UnitX);//10
                 frontD[8] = Intersec(frontD[9], frontD[10], frontD[7], frontD[8]);
-                if (skirtType == "Pencil")
-                    frontD.Add(front[2] - Vector2.UnitX + Vector2.UnitY);//11
-                else if (skirtType == "Tulip")
+                switch (skirtType)
                 {
-                    frontD.Add(Normal(front[1], front[2], true) + front[2]);//11
-                    frontD[10] = Normal(front[1], front[2], true) + front[1];
-                    frontD[11] = Intersec(frontD[10], frontD[11], frontD[1], frontD[1] + Vector2.UnitX);
-                    frontD[10] = Intersec(frontD[10], frontD[11], frontD[9], frontD[9] + Vector2.UnitY);
+                    case SkirtType.Pencil:
+                        frontD.Add(front[2] - Vector2.UnitX + Vector2.UnitY);//11
+                        break;
+                    case SkirtType.Tulip:
+                        frontD.Add(Normal(front[1], front[2], true) + front[2]);//11
+                        frontD[10] = Normal(front[1], front[2], true) + front[1];
+                        frontD[11] = Intersec(frontD[10], frontD[11], frontD[1], frontD[1] + Vector2.UnitX);
+                        frontD[10] = Intersec(frontD[10], frontD[11], frontD[9], frontD[9] + Vector2.UnitY);
+                        break;
+                    case SkirtType.Sun:
+                        break;
+                    case SkirtType.HalfSun:
+                        break;
+                    default:
+                        break;
                 }
             }
             

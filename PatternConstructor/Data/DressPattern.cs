@@ -54,11 +54,11 @@ namespace PatternConstructor.Data
             pspr, // прибавка на свободу проймы
             pop; // прибавка к обхвату плеча
 
-        NeckType neckType = NeckType.Standard;
-        CollarType collartype = CollarType.None;
-        SleeveType sleevetype = SleeveType.None;
-        FrontClaspType clasptype = FrontClaspType.None;
-        WaistType waisttype = WaistType.Whole; // параметры горловины, воротника, рукава, застежки полочки, талии
+        public readonly NeckType neckType = NeckType.Standard;
+        public readonly CollarType collartype = CollarType.None;
+        public readonly SleeveType sleevetype = SleeveType.None;
+        public readonly FrontClaspType clasptype = FrontClaspType.None;
+        public readonly WaistType waisttype = WaistType.Whole; // параметры горловины, воротника, рукава, застежки полочки, талии
         bool isLecal; // наличие двойных контуров
         public DressPattern(BasicDressConstructModel model)
         {

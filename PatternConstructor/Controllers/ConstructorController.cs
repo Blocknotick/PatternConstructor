@@ -1,6 +1,4 @@
-﻿//using iText.Kernel.Pdf;
-using iTextSharp.text.pdf;
-using iText.Html2pdf;
+﻿using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +8,8 @@ using PatternConstructor.Models;
 using PatternConstructor.ViewModels;
 using iText.Kernel.Pdf;
 using iText.Kernel.Geom;
-using iText.Svg.Processors;
-using iText.Svg.Processors.Impl;
 using iText.Svg.Converter;
-using System.Text;
+using PatternConstructor.Data.Enum;
 
 namespace PatternConstructor.Controllers
 {
@@ -48,7 +44,6 @@ namespace PatternConstructor.Controllers
                 WaistGirth = measure.WaistGirth
             };
 
-
             var s_measures = _context.standartMeasures.ToList();
             ViewBag.Types = s_measures.Select(c => new SelectListItem { Text = "Размер " + c.Size + " Рост " + c.Height, Value = c.Id.ToString() }).ToList();
 
@@ -60,7 +55,6 @@ namespace PatternConstructor.Controllers
         public async Task<IActionResult> BasicSunAsync(SunSkirtConstructModel sunSkirtConstructModel)
         {
             if (!ModelState.IsValid) return RedirectToAction("BasicSun");
-            //создание файлов выкройки
 
             var user = await _userManager.GetUserAsync(User);
             var createdFile = new CreatedFile
@@ -69,18 +63,10 @@ namespace PatternConstructor.Controllers
             };
             await _context.AddAsync(createdFile);
             _context.SaveChanges();
-
             string FileName = user.Id + createdFile.Id.ToString() + ".pdf";
-
-            //Здесь должна быть функция, которая генерирует выкройку
-
-            //Pattern skirtPattern = new SunSkirtPattern(sunSkirtConstructModel.Length, sunSkirtConstructModel.WaistGirth, 0, false, sunSkirtConstructModel.Degree, false, sunSkirtConstructModel.WaistP);
+            
             Pattern skirtPattern = new SunSkirtPattern(sunSkirtConstructModel);
-
-
             string documentContent = skirtPattern.GenerateContent();
-
-
 
             using (iText.Kernel.Pdf.PdfDocument doc =
                 new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfWriter(new FileStream("wwwroot/skirts/" + FileName, FileMode.OpenOrCreate),
@@ -88,16 +74,13 @@ namespace PatternConstructor.Controllers
             {
                 doc.AddNewPage(new PageSize((float)(0.75 * skirtPattern.widthcm), (float)(0.75 * skirtPattern.heightcm)));
                 SvgConverter.DrawOnDocument(documentContent, doc, 1);
-
             }
-
 
             createdFile.PatternLink = "/skirts/" + FileName;
             createdFile.Name = sunSkirtConstructModel.Name;
             _context.Update(createdFile);
             _context.SaveChanges();
 
-            //переход к странице созданных файлов
             return RedirectToAction("History", "Account");
 
         }
@@ -146,8 +129,6 @@ namespace PatternConstructor.Controllers
         public async Task<ActionResult> BasicDressAsync(BasicDressConstructModel basicDressModel)
         {
             if (!ModelState.IsValid) return RedirectToAction("BasicDress");
-            //создание файлов выкройки
-
             var user = await _userManager.GetUserAsync(User);
             var createdFile = new CreatedFile
             {
@@ -155,16 +136,11 @@ namespace PatternConstructor.Controllers
             };
             await _context.AddAsync(createdFile);
             _context.SaveChanges();
-
             string FileName = user.Id + createdFile.Id.ToString() + ".pdf";
 
-            //Здесь должна быть функция, которая генерирует выкройку
 
             Pattern dressPattern = new DressPattern(basicDressModel);
-
             string documentContent = dressPattern.GenerateContent();
-
-
 
             using (iText.Kernel.Pdf.PdfDocument doc =
                 new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfWriter(new FileStream("wwwroot/dresses/" + FileName, FileMode.OpenOrCreate),
@@ -172,16 +148,13 @@ namespace PatternConstructor.Controllers
             {
                 doc.AddNewPage(new PageSize((float)(0.75 * dressPattern.widthcm), (float)(0.75 * dressPattern.heightcm)));
                 SvgConverter.DrawOnDocument(documentContent, doc, 1);
-
             }
-
 
             createdFile.PatternLink = "/dresses/" + FileName;
             createdFile.Name = basicDressModel.Name;
             _context.Update(createdFile);
             _context.SaveChanges();
 
-            //переход к странице созданных файлов
             return RedirectToAction("History", "Account");
         }
 
@@ -197,7 +170,6 @@ namespace PatternConstructor.Controllers
         public ActionResult SkirtCombination(SkirtCombinationModel skirtCombination)
         {
             if (!ModelState.IsValid) return View(skirtCombination);
-
             return RedirectToAction("Skirt", skirtCombination);
         }
 
@@ -239,23 +211,15 @@ namespace PatternConstructor.Controllers
             };
             await _context.AddAsync(createdFile);
             _context.SaveChanges();
-
-            string dataDir = "wwwroot/skirts/";
             string FileName = user.Id + createdFile.Id.ToString() + ".pdf";
 
-            //Здесь должна быть функция, которая генерирует выкройку
-
             Pattern skirtPattern = new Pattern();
-            if (skirtConstructModel.SkirtCombinationModel.Type == "Солнце" || skirtConstructModel.SkirtCombinationModel.Type == "Полусолнце")
-            {
+            if (SkirtEnum.skirtTypeDict[skirtConstructModel.SkirtCombinationModel.Type] == SkirtType.Sun 
+                || SkirtEnum.skirtTypeDict[skirtConstructModel.SkirtCombinationModel.Type] == SkirtType.HalfSun)
                 skirtPattern = new SunSkirtPattern(skirtConstructModel);
-            }
             else
                 skirtPattern = new PencilSkirt(skirtConstructModel);
-
             string documentContent = skirtPattern.GenerateContent();
-
-
 
             using (iText.Kernel.Pdf.PdfDocument doc =
                 new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfWriter(new FileStream("wwwroot/skirts/" + FileName, FileMode.OpenOrCreate),
@@ -263,39 +227,36 @@ namespace PatternConstructor.Controllers
             {
                 doc.AddNewPage(new PageSize((float)(0.75*skirtPattern.widthcm),(float)(0.75*skirtPattern.heightcm)));
                 SvgConverter.DrawOnDocument(documentContent, doc, 1);
-
             }
 
-
-            var htmldocs = new List<string>();
-
-            htmldocs.Add("wwwroot/DescriptionUnits/skirts/decatification.pdf");
-            htmldocs.Add("wwwroot/DescriptionUnits/skirts/cutting.pdf");
-            htmldocs.Add("wwwroot/DescriptionUnits/skirts/interfacing.pdf");
-            if (skirtConstructModel.SkirtCombinationModel.Type == "Прямая" || skirtConstructModel.SkirtCombinationModel.Type == "Тюльпан")
+            var descrUnits = new List<string>
             {
-                htmldocs.Add("wwwroot/DescriptionUnits/skirts/darts.pdf");
-                htmldocs.Add("wwwroot/DescriptionUnits/skirts/sideSeamsStraightSkirt.pdf");
+                "wwwroot/DescriptionUnits/skirts/decatification.pdf",
+                "wwwroot/DescriptionUnits/skirts/cutting.pdf",
+                "wwwroot/DescriptionUnits/skirts/interfacing.pdf"
+            };
+            if (SkirtEnum.skirtTypeDict[skirtConstructModel.SkirtCombinationModel.Type] == SkirtType.Pencil 
+                || SkirtEnum.skirtTypeDict[skirtConstructModel.SkirtCombinationModel.Type] == SkirtType.Tulip)
+            {
+                descrUnits.Add("wwwroot/DescriptionUnits/skirts/darts.pdf");
+                descrUnits.Add("wwwroot/DescriptionUnits/skirts/sideSeamsStraightSkirt.pdf");
             }
-            if (skirtConstructModel.SkirtCombinationModel.Type == "Солнце")
-                htmldocs.Add("wwwroot/DescriptionUnits/skirts/sideSeams.pdf");
-            else htmldocs.Add("wwwroot/DescriptionUnits/skirts/middleSeam.pdf");
+            if (SkirtEnum.skirtTypeDict[skirtConstructModel.SkirtCombinationModel.Type] == SkirtType.Sun)
+                descrUnits.Add("wwwroot/DescriptionUnits/skirts/sideSeams.pdf");
+            else descrUnits.Add("wwwroot/DescriptionUnits/skirts/middleSeam.pdf");
             
-            if (skirtConstructModel.SkirtCombinationModel.Clasp == "Потайная молния")
-                htmldocs.Add("wwwroot/DescriptionUnits/skirts/beltbeforezipper.pdf");
+            if (!SkirtEnum.claspDict[skirtConstructModel.SkirtCombinationModel.Clasp])
+                descrUnits.Add("wwwroot/DescriptionUnits/skirts/beltbeforezipper.pdf");
             else
-                htmldocs.Add("wwwroot/DescriptionUnits/skirts/zipperbeforebelt.pdf");
-            htmldocs.Add("wwwroot/DescriptionUnits/skirts/BottomSeam.pdf");
+                descrUnits.Add("wwwroot/DescriptionUnits/skirts/zipperbeforebelt.pdf");
+            descrUnits.Add("wwwroot/DescriptionUnits/skirts/BottomSeam.pdf");
 
-            createPdf("wwwroot/descr/" + FileName, htmldocs);
-            //GenerateDescription(htmldocs, "wwwroot/descr/" + FileName);
+            createPdf("wwwroot/descr/" + FileName, descrUnits);
             createdFile.PatternLink = "/skirts/" + FileName;
             createdFile.DescribtionLink = "/descr/" + FileName;
             createdFile.Name = skirtConstructModel.Name;
             _context.Update(createdFile);
             _context.SaveChanges();
-
-            //переход к странице созданных файлов
             return RedirectToAction("History","Account");
         }
 
@@ -304,14 +265,13 @@ namespace PatternConstructor.Controllers
             PdfCopy copy = new PdfCopy(document, new FileStream(file, FileMode.Create, FileAccess.Write));
             document.Open();
             iTextSharp.text.pdf.PdfReader reader;
-            foreach (var html in PDF)
+            foreach (var pdf in PDF)
             {
-                reader = new iTextSharp.text.pdf.PdfReader(html);
+                reader = new iTextSharp.text.pdf.PdfReader(pdf);
                 copy.AddDocument(reader);
                 reader.Close();
             }
             document.Close();
-
         }
 
         [Authorize]
@@ -398,7 +358,6 @@ namespace PatternConstructor.Controllers
             return View(skirtConstructModel);
         }
 
-
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> DressAsync(DressConstructModel dressConstructModel)
@@ -412,13 +371,8 @@ namespace PatternConstructor.Controllers
             await _context.AddAsync(createdFile);
             _context.SaveChanges();
 
-
             string FileName = user.Id + createdFile.Id.ToString() + ".pdf";
-
-
-            Pattern skirtPattern = new DressPattern(dressConstructModel);
-            
-
+            DressPattern skirtPattern = new DressPattern(dressConstructModel);
             string documentContent = skirtPattern.GenerateContent();
 
             using (iText.Kernel.Pdf.PdfDocument doc =
@@ -427,78 +381,78 @@ namespace PatternConstructor.Controllers
             {
                 doc.AddNewPage(new PageSize((float)(0.75 * skirtPattern.widthcm), (float)(0.75 * skirtPattern.heightcm)));
                 SvgConverter.DrawOnDocument(documentContent, doc, 1);
-
             }
 
-
-            var htmldocs = new List<string>();
-
-            htmldocs.Add("wwwroot/DescriptionUnits/skirts/decatification.pdf");
-            htmldocs.Add("wwwroot/DescriptionUnits/skirts/cutting.pdf");
-            htmldocs.Add("wwwroot/DescriptionUnits/skirts/interfacing.pdf");
-            htmldocs.Add("wwwroot/DescriptionUnits/dresses/ShouldersAndSides.pdf");
-            if (dressConstructModel.DressCombinationModel.Waist== "Отрезноe по талии")
+            var descrUnits = new List<string>
             {
-                htmldocs.Add("wwwroot/DescriptionUnits/dresses/SidesSkirt.pdf");
-                htmldocs.Add("wwwroot/DescriptionUnits/dresses/WaistSeam.pdf");
-            }
-            if (dressConstructModel.DressCombinationModel.Clasp == "Застежка на пуговицы до талии")
-                htmldocs.Add("wwwroot/DescriptionUnits/dresses/SideSeamZipper.pdf");
+                "wwwroot/DescriptionUnits/skirts/decatification.pdf",
+                "wwwroot/DescriptionUnits/skirts/cutting.pdf",
+                "wwwroot/DescriptionUnits/skirts/interfacing.pdf",
+                "wwwroot/DescriptionUnits/dresses/ShouldersAndSides.pdf"
+            };
 
-            if (dressConstructModel.DressCombinationModel.Sleeve == "Без рукава")
-                htmldocs.Add("wwwroot/DescriptionUnits/dresses/ArmHole.pdf");
+            if (skirtPattern.waisttype == WaistType.Separated)
+            {
+                descrUnits.Add("wwwroot/DescriptionUnits/dresses/SidesSkirt.pdf");
+                descrUnits.Add("wwwroot/DescriptionUnits/dresses/WaistSeam.pdf");
+            }
+            if (skirtPattern.clasptype == FrontClaspType.ButtonsWaist)
+                descrUnits.Add("wwwroot/DescriptionUnits/dresses/SideSeamZipper.pdf");
+
+            if (skirtPattern.sleevetype == SleeveType.None)
+                descrUnits.Add("wwwroot/DescriptionUnits/dresses/ArmHole.pdf");
             else
             {
-                if (dressConstructModel.DressCombinationModel.Sleeve == "Короткий")
-                    htmldocs.Add("wwwroot/DescriptionUnits/dresses/ShortSleeve.pdf");
-                else if (dressConstructModel.DressCombinationModel.Sleeve == "Епископ с резинкой")
-                    htmldocs.Add("wwwroot/DescriptionUnits/dresses/Bishop1.pdf");
-                else if (dressConstructModel.DressCombinationModel.Sleeve == "Епископ с манжетой")
-                    htmldocs.Add("wwwroot/DescriptionUnits/dresses/Bishop2.pdf");
-                htmldocs.Add("wwwroot/DescriptionUnits/dresses/AllSleeves.pdf");
+                if (skirtPattern.sleevetype == SleeveType.Short)
+                    descrUnits.Add("wwwroot/DescriptionUnits/dresses/ShortSleeve.pdf");
+                else if (skirtPattern.sleevetype == SleeveType.BishopRibbon)
+                    descrUnits.Add("wwwroot/DescriptionUnits/dresses/Bishop1.pdf");
+                else if (skirtPattern.sleevetype == SleeveType.BishopCuff)
+                    descrUnits.Add("wwwroot/DescriptionUnits/dresses/Bishop2.pdf");
+                descrUnits.Add("wwwroot/DescriptionUnits/dresses/AllSleeves.pdf");
             }
 
+            bool hasButtons = skirtPattern.clasptype == FrontClaspType.ButtonsWaist || skirtPattern.clasptype == FrontClaspType.ButtonsWhole;
 
-            if (dressConstructModel.DressCombinationModel.Collar == "Без воротника" 
-                && dressConstructModel.DressCombinationModel.Clasp== "Без застежки" 
+            if (skirtPattern.collartype == CollarType.None 
+                && skirtPattern.clasptype == FrontClaspType.None
                 ||
-                dressConstructModel.DressCombinationModel.Collar == "Без воротника" 
-                && dressConstructModel.DressCombinationModel.Clasp == "Центральный шов полочки")
-                htmldocs.Add("wwwroot/DescriptionUnits/dresses/biasAndZipper.pdf");
+                skirtPattern.collartype == CollarType.None
+                && skirtPattern.clasptype == FrontClaspType.CentralSeam)
+                descrUnits.Add("wwwroot/DescriptionUnits/dresses/biasAndZipper.pdf");
 
-            if (dressConstructModel.DressCombinationModel.Neck == "V-горловина" 
-                && dressConstructModel.DressCombinationModel.Collar == "Без воротника" 
-                && !dressConstructModel.DressCombinationModel.Clasp.Contains("Застежка"))
-                htmldocs.Add("wwwroot/DescriptionUnits/dresses/VneckBias.pdf");
+            if (skirtPattern.neckType == NeckType.Vneck
+                && skirtPattern.collartype == CollarType.None
+                && !hasButtons)
+                descrUnits.Add("wwwroot/DescriptionUnits/dresses/VneckBias.pdf");
 
-            if (dressConstructModel.DressCombinationModel.Collar == "Без воротника"
-                && dressConstructModel.DressCombinationModel.Clasp.Contains("Застежка"))
+            if (skirtPattern.collartype == CollarType.None
+                && hasButtons)
             {
-                if (dressConstructModel.DressCombinationModel.Neck != "V-горловина")
-                    htmldocs.Add("wwwroot/DescriptionUnits/dresses/BiasAndClaps.pdf");
+                if (skirtPattern.neckType != NeckType.Vneck)
+                    descrUnits.Add("wwwroot/DescriptionUnits/dresses/BiasAndClaps.pdf");
                 else
-                    htmldocs.Add("wwwroot/DescriptionUnits/dresses/Facing.pdf");
+                    descrUnits.Add("wwwroot/DescriptionUnits/dresses/Facing.pdf");
             }
 
-            if(dressConstructModel.DressCombinationModel.Collar == "Отложной с прямыми углами")
-                htmldocs.Add("wwwroot/DescriptionUnits/dresses/PeterPanCollar.pdf");
+            if(skirtPattern.collartype == CollarType.PeterPan)
+                descrUnits.Add("wwwroot/DescriptionUnits/dresses/PeterPanCollar.pdf");
 
-            else if(dressConstructModel.DressCombinationModel.Collar == "Стойка с застежкой")
-                htmldocs.Add("wwwroot/DescriptionUnits/dresses/StandingCollar.pdf");
+            else if(skirtPattern.collartype == CollarType.StandingWithClasp)
+                descrUnits.Add("wwwroot/DescriptionUnits/dresses/StandingCollar.pdf");
 
-            htmldocs.Add("wwwroot/DescriptionUnits/dresses/BottomSeam.pdf");
+            descrUnits.Add("wwwroot/DescriptionUnits/dresses/BottomSeam.pdf");
 
-            if (dressConstructModel.DressCombinationModel.Clasp.Contains("Застежка"))
-                htmldocs.Add("wwwroot/DescriptionUnits/dresses/Clasp.pdf");
+            if (hasButtons)
+                descrUnits.Add("wwwroot/DescriptionUnits/dresses/Clasp.pdf");
 
-            createPdf("wwwroot/descr/" + FileName, htmldocs);
+            createPdf("wwwroot/descr/" + FileName, descrUnits);
             createdFile.PatternLink = "/dresses/" + FileName;
             createdFile.DescribtionLink = "/descr/" + FileName;
             createdFile.Name = dressConstructModel.Name;
             _context.Update(createdFile);
             _context.SaveChanges();
 
-            //переход к странице созданных файлов
             return RedirectToAction("History", "Account");
         }
     }

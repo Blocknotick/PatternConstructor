@@ -46,7 +46,7 @@ namespace PatternConstructor.Data
                     break;
                 case SkirtType.HalfSun:
                     degrees = 180;
-                    skirtType = SkirtType.Tulip;
+                    skirtType = SkirtType.HalfSun;
                     break;
                 default:
                     break;

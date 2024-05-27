@@ -152,7 +152,7 @@ namespace PatternConstructor.Controllers
             };
 
             var s_measures = _context.standartMeasures.ToList();
-            ViewBag.Types = s_measures.Select(c => new SelectListItem { Text = "Размер " + c.Size + " Рост " + c.Height, Value = c.Id.ToString() }).ToList();
+            ViewBag.Types = s_measures.OrderBy(x=>x.Height).OrderBy(x=>x.Size).Select(c => new SelectListItem { Text = "Размер " + c.Size + " Рост " + c.Height, Value = c.Id.ToString() }).ToList();
 
             return View(editProfileVM);
         }
@@ -167,7 +167,7 @@ namespace PatternConstructor.Controllers
 
             var s_measures = _context.standartMeasures.ToList();
 
-            ViewBag.Types = s_measures.Select(c => new SelectListItem { Text = "Размер " + c.Size + " Рост " + c.Height, Value = c.Id.ToString() }).Distinct().ToList();
+            ViewBag.Types = s_measures.OrderBy(x => x.Height).OrderBy(x => x.Size).Select(c => new SelectListItem { Text = "Размер " + c.Size + " Рост " + c.Height, Value = c.Id.ToString() }).Distinct().ToList();
 
 
             var user = await _userManager.FindByIdAsync(id);

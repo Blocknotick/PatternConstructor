@@ -25,7 +25,7 @@ namespace PatternConstructor.Controllers
             var s_measures = _context.standartMeasures.ToList();
             var sm = s_measures.First();
             sm.Measure = _context.Measures.FirstOrDefault(m => m.MeasureId == sm.MeasureId);
-            ViewBag.Types = s_measures.Select(c => new SelectListItem { Text = "Размер "+ c.Size+" Рост "+c.Height, Value = c.Id.ToString() }).ToList();
+            ViewBag.Types = s_measures.OrderBy(x=>x.Height).OrderBy(x=>x.Size).Select(c => new SelectListItem { Text = "Размер "+ c.Size+" Рост "+c.Height, Value = c.Id.ToString() }).ToList();
             return View(sm);
         }
 

@@ -1,38 +1,13 @@
-﻿using Aspose.Html.Drawing;
-using PatternConstructor.Data.Enum;
+﻿using PatternConstructor.Data.Enum;
 using System.Numerics;
-using static iTextSharp.awt.geom.Point2D;
 
 namespace PatternConstructor.Data
 {
     public class Pattern
     {
         protected const double pixelsizeincm = 37.795275591;
-        public double widthcm { get; set; }
-        public double heightcm { get; set; }
-        public Pattern()
-        {
-            widthcm = 0;
-            heightcm = 0;
-        }
-        protected double CountLength(string Length, double Front)
-        {
-            double coef=1;
-            switch (Length)
-            {
-                case "Мини":
-                    coef *= 4.0 / 9;
-                    break;
-                case "До колена":
-                    coef *= 5.0 / 9;
-                    break;
-                case "Миди":
-                    coef *= 13.0 / 18;
-                    break;
-            }
-            return coef*Front;
-        }
-
+        public double widthcm { get; set; } = 0;
+        public double heightcm { get; set; } = 0;
         protected double CountLength(LengthType length, double Front)
         {
             double coef = 1;
@@ -52,7 +27,6 @@ namespace PatternConstructor.Data
             }
             return coef * Front;
         }
-
         //пересечение двух прямых, заданных точками
         public Vector2 Intersec(Vector2 pABDot1, Vector2 pABDot2, Vector2 pCDDot1, Vector2 pCDDot2)
         {
@@ -66,7 +40,7 @@ namespace PatternConstructor.Data
 
             return new Vector2((b1 * c2 - b2 * c1) / (a1 * b2 - a2 * b1), (a2 * c1 - a1 * c2) / (a1 * b2 - a2 * b1));
         }
-        //пересечение двух окружностей, заданных точками
+        //пересечение двух окружностей, заданных центрами и радиусами
         public Vector2[] CirclesIntersec(Vector2 O1, double r1, Vector2 O2, double r2)
         {
             double d = Vector2.Distance(O1, O2);
@@ -82,7 +56,6 @@ namespace PatternConstructor.Data
             arr[0] = P1; arr[1] = P2;
             return arr;
         }
-
         public Vector2 RotatedVector(Vector2 v, double angleRad, Vector2 rotationPoint)
         {
             float dx = rotationPoint.X;
@@ -92,7 +65,6 @@ namespace PatternConstructor.Data
             return new Vector2((v.X - dx) * c + ( v.Y - dy) * sin + dx,
                             dy + ((-dy + v.Y) * c) - ((v.X - dx) * sin));
         }
-
         public Vector2 RotatedVector(Vector2 v, float sin, float cos, Vector2 rotationPoint)
         {
             float dx = rotationPoint.X;
@@ -115,9 +87,7 @@ namespace PatternConstructor.Data
             float uu = 4 * (w.X * w.X + w.Y * w.Y);
 
             if (uu < 0.00001)
-            {
                 return (float)Math.Sqrt((c.X - a.X) * (c.X - a.X) + (c.Y - a.Y) * (c.Y - a.Y));
-            }
 
             float vv = 4 * (v.X * w.X + v.Y * w.Y);
             float ww = v.X * v.X + v.Y * v.Y;
